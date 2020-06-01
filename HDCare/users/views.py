@@ -58,24 +58,32 @@ def home(request):
 @login_required
 def profile(request):
     user = User.objects.get(id=request.user.id)
-    form = EditUser(initial={
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'gender': user.gender,
-        'birthdate': user.birthdate,
-        'city': user.city,
-        'phone': user.phone,
+    if request.method == 'POST':
+        form = EditUser(request.POST,instance=request.user)
+        if form.is_valid():
+            form.initial = {
+                'first_name':  request.POST.get('first_name'),
+                'last_name':  request.POST.get('last_name'),
+                'gender':  request.POST.get('gender'),
+                'birthdate': request.POST.get('birthdate'),
+                'city':request.POST.get('city'),
+                'phone':  request.POST.get('phone'),
+            }
+            form.save()
+            messages.success(request, "Your data updated successfully")
+    else:    
+        form = EditUser(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'gender': user.gender,
+            'birthdate': user.birthdate,
+            'city': user.city,
+            'phone': user.phone,
 
-        })
+            })
     return render(request,'personalPage.html', {'form': form})
 
 
-#edit profile
-@login_required
-def edit_user(request):
-    if request.method == 'POST':
-        pass
-    return "yes"
 
 
 

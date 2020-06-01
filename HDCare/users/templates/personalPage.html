@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %} Prpfile {% endblock %}
+{% block title %} Profile {% endblock %}
 {% block styles %}
 <style>
     .card {
@@ -10,6 +10,17 @@
 </style>
 {% endblock %}
 {% block content %}
+<div class="container">
+        {% if messages %}
+        <div class="form-group alert alert-success mt-2" role="alert">
+            {% for message in messages %}
+                <div>
+                   <strong>{{message}} </strong> 
+                </div>
+            {% endfor %}
+        </div>
+    {%endif%}
+
 
 <div class="container mt-5">
     <div class="card">
@@ -21,7 +32,7 @@
             <div class="card-block px-3">
               <h4 class="card-title mt-3">WELCOME {{ request.user.first_name|add:" "|add:request.user.last_name }}</h4>
               <hr/>
-              <form method="POST" action={% url 'edit_user'%}>
+              <form method="POST">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="col form-group">
@@ -62,6 +73,18 @@
                     <button type="submit" class="btn btn-dark btn-block"> Edit Your Profile  </button>
                 </div>   
             </form>
+
+                {% if form.errors %}
+                <div class="form-group alert alert-danger" role="alert">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                        <div>
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {%endif%}
             </div>
           </div>
 
@@ -69,7 +92,7 @@
       </div>
     </div>
   </div>
-
+</div>
 
 
 {% endblock %}
