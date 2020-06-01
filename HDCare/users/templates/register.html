@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} Sign Up {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static '/css/register.css' %}"/>
+    <style>
+        .card {
+        box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
+        }
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+<div class="row mr-5">
+    <div class="col-4"></div>
+<div class="col-8">
+    <div class="row justify-content-end mr-5">
+    <div class="col-md-8">
+    <div class="card mt-4">
+    <header class="card-header">
+        <a href="/users/login" class="float-right btn btn-danger mt-1">Log in</a>
+        <h4 class="card-title mt-1"><strong>Sign up</strong></h4>
+    </header>
+    <article class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{form.username}}
+        </div>
+        <div class="form-row">
+            <div class="col form-group">
+                {{form.first_name}}
+            </div> 
+            <div class="col form-group">
+                {{form.last_name}}
+            </div> 
+        </div>
+        <div class="form-group">
+            {{form.email}}
+        </div>
+        <div class="form-row">
+            <div class="col form-group">
+                {{form.password1}}
+            </div> 
+            <div class="col form-group">
+                {{form.password2}}
+            </div> 
+        </div>
+        <div class="form-row">
+            {% for radio in form.gender %}
+            <div class="col form-group">
+                <span style="margin-left:20px ;"> {{ radio.tag }}</span></span>{{ radio.choice_label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label>Birth date</label>
+            {{form.birthdate}}
+        </div>
+        <div class="form-row">
+            <div class="col form-group">
+                <label>City</label>
+                {{ form.city}}
+            </div> 
+            <div class="col form-group">
+                <label>Phone</label>
+                {{form.phone}}
+            </div> 
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-dark btn-block"> Register  </button>
+        </div>   
+    </form>
+
+    {% if form.errors %}
+    <div class="form-group alert alert-danger" role="alert">
+        {% for field in form %}
+        {% for error in field.errors %}
+            <div>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+      {%endif%}
+
+
+    </article> 
+    </div> 
+    </div>
+    </div>    
+    </div> 
+    </div>
+  
+    
+    
+
+{% endblock %}

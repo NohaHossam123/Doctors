@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} Login {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static '/css/register.css' %}">
+    <style>
+        .card {
+        box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
+        }
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+<div class="row mr-5 mt-5">
+    <div class="col-4"></div>
+<div class="col-8">
+    <div class="row justify-content-end mr-5">
+    <div class="col-md-8">
+    <div class="card mt-4">
+    <header class="card-header">
+        <h4 class="card-title mt-2"><strong>Login</strong></h4>
+    </header>
+    <article class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" placeholder="username...">
+        </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" placeholder="password...">
+            </div> 
+            <br/>
+        <div class="form-group">
+            <button type="submit" class="btn btn-dark btn-block"> Login  </button>
+        </div>   
+    </form>
+
+    {% if messages %}
+        <div class="form-group alert alert-danger" role="alert">
+            {% for message in messages %}
+                <div>
+                    {{message}}
+                </div>
+            {% endfor %}
+        </div>
+    {%endif%}
+
+
+    </article>
+    <div class="border-top card-body text-center">Do not have an account? <a href="/users/signup">Sign Up</a></div>
+
+    </div> 
+    </div>
+    </div>    
+    </div> 
+    </div>
+
+{% endblock %}

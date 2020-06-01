@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} Prpfile {% endblock %}
+{% block styles %}
+<style>
+    .card {
+    box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card">
+      <div class="row">
+        <div class="col-md-5">
+            <img src="{% static 'images/corona.png' %}" class="w-100 h-100">
+          </div>
+          <div class="col-md-7 px-3 mb-4">
+            <div class="card-block px-3">
+              <h4 class="card-title mt-3">WELCOME {{ request.user.first_name|add:" "|add:request.user.last_name }}</h4>
+              <hr/>
+              <form method="POST" action={% url 'edit_user'%}>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col form-group">
+                        <label>First Name</label>
+                        {{form.first_name}}
+                    </div> 
+                    <div class="col form-group">
+                        <label>Last Name</label>
+                        {{form.last_name}}
+                    </div> 
+                </div>
+                <div class="form-row">
+                    <label>Gender</label>
+                    {% for radio in form.gender %}
+                    <div class="col form-group">
+                        <span style="margin-left:20px ;"> {{ radio.tag }}</span>
+                        </span>{{ radio.choice_label }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label>Birth date</label>
+                    {{form.birthdate}}
+                </div>
+                <div class="form-row">
+                    <div class="col form-group">
+                        <label>City</label>
+                        {{ form.city}}
+                    </div> 
+                    <div class="col form-group">
+                        <label>Phone</label>
+                        {{form.phone}}
+                    </div> 
+                </div>
+                <small class="form-text text-muted">pic: About Coronavirus disease (COVID-19), stay safe.. stay home</small>
+                <br/>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark btn-block"> Edit Your Profile  </button>
+                </div>   
+            </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+
