@@ -42,7 +42,9 @@ class Book(models.Model):
         auto_choose=True,
         verbose_name='Specializaiton',
     )
-
+    def __str__(self):
+        return 'Book: %s - %s - %s' % (self.hospital.name , self.specializaiton , str(self.time))
+    
 
 
 
