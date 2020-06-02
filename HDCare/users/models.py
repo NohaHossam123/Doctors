@@ -40,8 +40,6 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="email", unique=True, null=False, blank=False)
     birthdate = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=25, choices= GENDER, null=True, blank=False, default="Male")
-    phone = models.CharField(validators=[phone_regex], max_length=11, null=True, blank=True)
+    phone = models.CharField(validators=[phone_regex], unique=True, max_length=11, null=True, blank=True)
     city = models.CharField(max_length=30, choices=CITIES, null=True, blank=True)
     
-    # def __str__(self):
-        # return  self.first_name.capitalize() +" "+ self.last_name.capitalize()

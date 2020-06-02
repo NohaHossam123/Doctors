@@ -30,7 +30,7 @@
           </div>
           <div class="col-md-7 px-3 mb-4">
             <div class="card-block px-3">
-              <h4 class="card-title mt-3">WELCOME {{ request.user.first_name|add:" "|add:request.user.last_name }}</h4>
+              <h4 class="card-title mt-3">WELCOME {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}</h4>
               <hr/>
               <form method="POST">
                 {% csrf_token %}

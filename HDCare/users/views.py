@@ -71,10 +71,11 @@ def profile(request):
             }
             form.save()
             messages.success(request, "Your data updated successfully")
+            return redirect('profile')
     else:    
         form = EditUser(initial={
-            'first_name': user.first_name,
-            'last_name': user.last_name,
+            'first_name': user.first_name.capitalize(),
+            'last_name': user.last_name.capitalize(),
             'gender': user.gender,
             'birthdate': user.birthdate,
             'city': user.city,
@@ -82,10 +83,6 @@ def profile(request):
 
             })
     return render(request,'personalPage.html', {'form': form})
-
-
-
-
 
 
 @login_required

@@ -13,7 +13,7 @@
     <title>HDCare - {%block title %}{% endblock %}</title>
     {% block styles %}{% endblock %}
     <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="/users/home">
+        <a class="navbar-brand" href="/users/">
             <img src="{% static 'images/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
             <strong> HDCare </strong>
         </a>
@@ -23,7 +23,7 @@
                 <div class='navigation mr-4' ><a href="/users/logout">Log out</a></div>
                 <div class='navigation mr-4' >
                     <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
-                    {{ request.user.first_name|add:" "|add:request.user.last_name }}
+                    {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
                 </div>
                 <div class='navigation mr-4' ><a href="/users/appointments">Appointments</a></div>
                 <div class='navigation mr-4' ><a href="/users/profile">My Profile</a></div>
