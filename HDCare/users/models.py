@@ -42,4 +42,13 @@ class User(AbstractUser):
     gender = models.CharField(max_length=25, choices= GENDER, null=True, blank=False, default="Male")
     phone = models.CharField(validators=[phone_regex], unique=True, max_length=11, null=True, blank=True)
     city = models.CharField(max_length=30, choices=CITIES, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     
+class Activation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation')
+    token = models.CharField(max_length=50, unique=True)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}"

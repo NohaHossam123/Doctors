@@ -79,6 +79,13 @@ LOGOUT_REDIRECT_URL = 'signin'
 
 WSGI_APPLICATION = 'HDCare.wsgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'hdcareproject@gmail.com'
+EMAIL_HOST_PASSWORD = 'crrlpswegtzfofka'
+EMAIL_PORT = 587
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
