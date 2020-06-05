@@ -47,7 +47,7 @@ def signup(request):
             messages.success(request,
                              f'''Congratulations {username}, your account has been created successfully,
                              Please check your email to activate acccount''')
-            return redirect('signup')
+            return redirect('signin')
     else:
         form = RegisterationForm()           
     return render(request, 'register.html', {'form': form})
