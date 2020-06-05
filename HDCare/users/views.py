@@ -53,19 +53,6 @@ def signup(request):
     return render(request, 'register.html', {'form': form})
 
 
-def activate_account(request,token):
-    activate_user = get_object_or_404(Activation, token=token)
-    is_valid = (timezone.now() - activate_user.created_at) < datetime.timedelta(hours=24)
-    if is_valid and not activate_user.is_used:
-        activate_user.is_used = True
-        activate_user.save()
-        activate_user.user.is_active = True
-        activate_user.user.save()
-        messages.success(request, "Congrats, your account has been activated succssefully")
-    else:
-        messages.error(requset, "Sorry, your activation is not valid OR may be used before,Please try again later")
-    return redirect("signin")
-
 #login
 @unauthenticated_user
 def signin(request):
@@ -88,6 +75,20 @@ def signin(request):
 #home
 def home(request):
     return render(request, 'home.html')
+
+
+def activate_account(request, token):
+    activate_user = get_object_or_404(Activation, token=token)
+    is_valid = (timezone.now() - activate_user.created_at) < datetime.timedelta(hours=24)
+    if is_valid and not activate_user.is_used:
+        activate_user.is_used = True
+        activate_user.save()
+        activate_user.user.is_active = True
+        activate_user.user.save()
+        messages.success(request, "Congrats, your account has been activated succssefully")
+    else:
+        messages.error(request, "Sorry, your activation is not valid OR may be used before,Please try again later")
+    return redirect("signin")
 
 #profile
 @login_required
