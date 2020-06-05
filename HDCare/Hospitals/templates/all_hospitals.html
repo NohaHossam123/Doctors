@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} Hospitals {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
+{% endblock %}
+{% block content %}    
+    <section class="banner py-4 " >
+        <div class="container py-5 my-4">
+            <div class="pb-5">
+                <div class="row text-center pb-3">
+                    <div class="col-md-12 mt-4 pb-1">
+                        <h1 class="fonts">Best hospitals where your health comes first</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>  
+                        <div class="container h-50">
+                            <div class="d-flex justify-content-center h-100">
+                              <div class="searchbar">
+                                <input class="search_input" type="text" name="" placeholder="Search...">
+                                <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="sperator"></div>
+    <div class="row m-5">
+        <!-- for filters -->
+        <div class="col-3">
+            {% if hospitals|length != 0%}
+            <div class="card rounded sticky-top">
+                <div class="card-header text-white bg-dark">
+                    <i class="fa fa-filter "></i>  Filter
+                </div>
+                <div class="card-body">
+                    <div class="m-2">All</div>
+                    <hr/>
+                    <div class="m-2">Location</div>
+                    <hr/>
+                    <div class=" m-2">City</div>
+                    <hr/>
+                    <div class=" m-2">Specialization</div>
+
+                </div>
+                <div class="card-footer bg-dark">
+                </div>
+            {% endif%}
+            </div>
+            
+        </div>
+        <!-- for hospitals -->
+        <div class="col-9">
+            <h5>All Hospitals</h5>
+            <hr/>
+            {% for hospital in hospitals %}
+            <div class="card rounded mb-3">
+                <div class="card-body row">
+                    <div class="col-3 text-center">
+                        <img src="/media/{{hospital.image}}" class="rounded" width="100%" height="170px"/>
+                        <a role="button" class="btn btn-dark mt-3 w-100" href="#">More Details</a> 
+                    </div>
+                    <div class="col-9">
+                        <h4 class="text-secondary">{{hospital.name|title}}</h4>
+                        <p>
+                        {% for i in '12345' %}
+                        <i class="fa fa-star"></i>
+                        {%endfor%}
+                        </p>
+                        <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
+                        <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>
+                        <p> <i class="fa fa-stethoscope	text-danger"></i> &nbsp;Available Specilizations:</p>
+                        <ul>
+                        {% for special in hospital.specializaiton_set.all %}
+                        <li>{{special.name| title}}</li>
+                        {%endfor%}
+                        </ul>
+
+                    </div>
+
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
+{% endblock %}

@@ -31,23 +31,23 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            token = get_random_string(length=40)
-            Activation.objects.create(token=token, user=user)
-            email_subject = "First, you must to activate your account"
-            message = f'''
-                Thank you for your registration,
-                please click this link below to confirm your email.
-                http://127.0.0.1:8000/{token}
-            '''
-            from_email = settings.EMAIL_HOST_USER
-            to_list = [request.POST['email'], from_email]
-            send_mail(email_subject, message, from_email, to_list, fail_silently=True)
+            # token = get_random_string(length=40)
+            # Activation.objects.create(token=token, user=user)
+            # email_subject = "First, you must to activate your account"
+            # message = f'''
+            #     Thank you for your registration,
+            #     please click this link below to confirm your email.
+            #     http://127.0.0.1:8000/{token}
+            # '''
+            # from_email = settings.EMAIL_HOST_USER
+            # to_list = [request.POST['email'], from_email]
+            # send_mail(email_subject, message, from_email, to_list, fail_silently=True)
 
-            username = form.cleaned_data.get('username')
-            messages.success(request,
-                             f'''Congratulations {username}, your account has been created successfully,
-                             Please check your email to activate acccount''')
-            return redirect('signin')
+            # username = form.cleaned_data.get('username')
+            # messages.success(request,
+            #                  f'''Congratulations {username}, your account has been created successfully,
+            #                  Please check your email to activate acccount''')
+            # return redirect('signin')
     else:
         form = RegisterationForm()           
     return render(request, 'register.html', {'form': form})

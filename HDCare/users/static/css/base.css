@@ -6,7 +6,7 @@
 }
 
 .navigation > a:hover{
-    color: blue;
+    color: red;
     font-weight:bold;
     text-decoration: none;
 
@@ -16,3 +16,12 @@
     color: white;
     font-weight:bold;
 }
+
+nav {
+    background-color: #292b2c;
+}
+
+.card {
+    box-shadow: 0.5px 1px 1px 0.5px hsla(0, 0%, 60%, 0.253) !important;  
+}
+

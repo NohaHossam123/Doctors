@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>HDCare - {%block title %}{% endblock %}</title>
     {% block styles %}{% endblock %}
     <nav class="navbar navbar-dark bg-dark">
@@ -17,7 +18,7 @@
             <img src="{% static 'images/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
             <strong> HDCare </strong>
         </a>
-
+    
         <div class='d-flex flex-row-reverse align-items-center '>
             {% if user.is_authenticated %}
                 <div class='navigation mr-4' ><a href="/users/logout">Log out</a></div>
@@ -31,6 +32,9 @@
                 <div class='navigation mr-4'><a href="/users/signup">Register</a></div>
                 <div class='navigation mr-4'><a href="/users/login">Login</a></div>
             {% endif %}
+            
+            <div class='navigation mr-4'><a href="#">Doctors</a></div>
+            <div class='navigation mr-4' ><a href="/hospitals">Hospitals</a></div>
         </div>
          
     </nav>
