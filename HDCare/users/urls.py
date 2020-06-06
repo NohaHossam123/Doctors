@@ -10,5 +10,5 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
     path('', home, name='home'),
     path('appointments/', appointments, name='appointments'),
-    path('<str:token>', activate_account, name="activate"),
+    path('activate/<str:token>', activate_account, name="activate"),
 ]
