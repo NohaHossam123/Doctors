@@ -61,14 +61,18 @@
                 <div class="card-body row">
                     <div class="col-3 text-center">
                         <img src="/media/{{hospital.image}}" class="rounded" width="100%" height="170px"/>
-                        <a role="button" class="btn btn-dark mt-3 w-100" href="#">More Details</a> 
+                        <a role="button" class="btn btn-dark mt-3 w-100" href="/hospitals/h/{{hospital.id}}">More Details</a> 
                     </div>
                     <div class="col-9">
-                        <h4 class="text-secondary">{{hospital.name|title}}</h4>
+                        <a class="text-secondary h4 mb-2" href="/hospitals/h/{{hospital.id}}">{{hospital.name|title}}</a>
                         <p>
-                        {% for i in '12345' %}
-                        <i class="fa fa-star"></i>
-                        {%endfor%}
+                            {% for i in '12345'%}
+                                {% if i|add:0 <=  hospital.avg_rate %} 
+                                    <span class="fa fa-star text-warning"></span>
+                                {%else%}
+                                    <span class="fa fa-star"></span>
+                                {% endif %}
+                            {% endfor%}  
                         </p>
                         <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
                         <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>
