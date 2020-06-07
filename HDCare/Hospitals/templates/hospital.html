@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Hospitals {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
+{% endblock %}
+{% block content %}  
+
+    <div class="row mt-5 mx-5 ">
+        <div class="col-3 text-center">
+            <img src="/media/{{hospital.image}}" class="rounded-circle" width="100%" height="270px"/>
+        </div>
+        <div class="col-9">
+            <h2 class="text-secondary mt-4">{{hospital.name|title}}</h2>
+            <p>
+                {% for i in '12345'%}
+                    {% if i|add:0 <=  hospital.avg_rate %} 
+                        <span class="fa fa-star text-warning"></span>
+                    {%else%}
+                        <span class="fa fa-star"></span>
+                    {% endif %}
+                {% endfor%}  
+            </p>
+            <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
+            <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-8 ml-4">
+            <div class="card rounded m-3 px-3">
+                <div class="card-body row">
+                    <p class="h5 text-secondary">
+                        <i class="fa fa-info text-danger"></i> &nbsp;
+                        <strong>About the hospital :</strong>
+                    </p>
+                    <p>{{hospital.about}}</p>
+                </div>
+            </div>
+            <div class="card rounded m-3 px-3">
+                <div class="card-body row">
+                    <p class="h5 text-secondary">
+                        <i class="fa fa-stethoscope text-danger"></i> &nbsp;
+                        <strong>Available Specilizations:</strong>
+                    </p>
+                    <ul>
+                        {% for special in hospital.specializaiton_set.all %}
+                            <li>{{special.name| title}}</li>
+                        {%endfor%}
+                    </ul> 
+                </div>
+            </div>
+            <div class="card rounded m-3 px-3">
+                <div class="card-body row">
+                    <p class="h5 text-secondary">
+                        <i class="fa fa-newspaper-o	text-danger"></i> &nbsp;
+                        <strong>Patients Reviews:</strong>
+                    </p>
+                    <!-- reviews section -->
+                </div>
+            </div>
+        </div>
+
+  <div class="col-3">
+            <div class="card rounded px-3">
+            <div class="card-body row">
+                <p class="h5 text-secondary">
+                    <i class="fa fa-calendar text-danger"></i> &nbsp;
+                    <strong>Book An Appointment:</strong>
+                </p>
+                <p>Choose a specilization to book your appointment:</p>
+                {% for special in hospital.specializaiton_set.all %}
+                <a role="button" class="btn btn-dark mt-3 w-100" href="/hospitals/books/{{special.id}}">{{special.name| title}}</a> 
+            {%endfor%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

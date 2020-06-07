@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Hospital-books {% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}  
+    <div class="m-4">
+        {% if books|length == 0%}
+            <h4>No available books for this specialization right now!</h4>
+        {% else %}
+            <p class="text-secondary">Book your appointments</p>
+            <p class="h4 text-danger">
+                <i class="fa fa-hospital-o text-danger"></i> &nbsp;
+                Hospital:
+                    <a href="/hospitals/h/{{books.0.hospital.id}}">
+                    {{books.0.hospital.name|title}}</a>
+
+            </p>
+            <p class="h4 text-danger">
+                <i class="fa fa-stethoscope text-danger"></i> &nbsp;
+                Specialization:  <span class="text-dark">{{books.0.specializaiton.name|title}}</span>
+            </p>
+            <div class="mx-5 row">
+                {% for book in books %}
+                    <div class="card rounded text-center m-4">
+                        <div class="card-header bg-dark text-white">
+                            <p>Booking Informations</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-secondary mr-5">
+                                <i class="fa fa-money text-danger"></i>&nbsp;
+                                Fees : <span class="text-dark">{{book.fees}}</span> L.E
+                            </div>
+                            <hr/>
+
+                            <div class="text-secondary">
+                                <i class="fa fa-user-md	text-danger"></i>&nbsp;
+                                Doctor : <span class="text-dark">{{book.doctor|title}}</span>
+                            </div>
+                            <hr/>
+
+                            <div class="text-secondary mr-5">
+                                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                                Time : <span class="text-dark">{{book.time}}</span>
+                            </div>
+                            <hr/>
+
+                            <div class="text-secondary">
+                                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                                Waiting time : <span class="text-dark">{{book.waiting_time}}</span> Min
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer bg-dark text-white">
+                            <a href="">Book Now</a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        {%endif%}
+    </div>
+
+{%endblock%}
