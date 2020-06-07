@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def doctor_page(request):
+    return render(request, 'doctorProfile.html')
