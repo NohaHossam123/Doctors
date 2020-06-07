@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import  MaxValueValidator , MinValueValidator
 from users.models import User
+from django.db.models import Avg
 from smart_selects.db_fields import ChainedForeignKey 
 
 # Create your models here.
@@ -14,6 +15,11 @@ class Hospital(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @property
+    def avg_rate(self):
+        rate = Rating.objects.filter(hospital_id = self.id).aggregate(Avg('rate'))
+        return rate['rate__avg']
+    
 
 
 class Specializaiton(models.Model):
