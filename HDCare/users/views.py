@@ -37,7 +37,7 @@ def signup(request):
             message = f'''
                 Thank you for your registration,
                 please click this link below to confirm your email.
-                http://127.0.0.1:8000/{token}
+                http://127.0.0.1:8000/activate/{token}
             '''
             from_email = settings.EMAIL_HOST_USER
             to_list = [request.POST['email'], from_email]
