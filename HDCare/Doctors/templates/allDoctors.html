@@ -1,21 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Doctor Profile {% endblock %}
+{% block title %} Doctors {% endblock %}
+
 {% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
 <style>
-    .card {
-    box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
-    }
+  .card {
+  box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
+  }
 </style>
 {% endblock %}
+
 {% block content %}
-  <div class="container mt-4">
-    <h1>All Specialities</h1>
+<section class="banner py-4 " >
+  <div class="container py-5 my-4">
+      <div class="pb-5">
+          <div class="row text-center pb-3">
+              <div class="col-md-12 mt-4 pb-1">
+                  <h1 class="fonts">Best doctors where your health comes first</h1>
+                  <p>We are caring about you and with us no worries, if you need a doctor you will find the most profissional doctors with us</p>  
+                  <div class="container h-50">
+                      <div class="d-flex justify-content-center h-100">
+                        <div class="searchbar">
+                          <input class="search_input" type="text" name="" placeholder="Search...">
+                          <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<div class="sperator"></div>
+<div class="row m-5">
+
+    <!-- for filters -->
+    <div class="col-3">
+      {% if doctors|length != 0%}
+        <div class="card rounded sticky-top">
+            <div class="card-header text-white bg-dark">
+                <i class="fa fa-filter "></i>  Filter
+            </div>
+            <div class="card-body">
+                <div class="m-2">All</div>
+                <hr/>
+                <div class="m-2">Location</div>
+                <hr/>
+                <div class=" m-2">Specialization</div>
+
+            </div>
+            <div class="card-footer bg-dark">
+            </div>
+        </div>
+        {% endif%}
+    </div>
+
+  <div class="col-9 ">
+    <h5>All Doctors</h5>
+    <hr/>
     {% for doctor in doctors %}
     <div class="card mt-4 p-4">
       <div class="row">
-        <div class="col-md">
-          <img class="rounded-circle" src="/media/{{ doctor.image }}" alt="No image">
+        <div class="col-3">
+          <img src="/media/{{ doctor.image }}" class="rounded" width="100%" height="180px" alt="No image">
+          <a role="button" class="btn btn-dark mt-3 w-100" href="/doctors/doctor/{{doctor.id}}">More Details</a>
         </div>
         <div class="col-md">
           <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
@@ -27,9 +76,13 @@
           </div>
           <div><i class="fa fa-stethoscope text-info" aria-hidden="true"></i> {{ doctor.specialization }}</div>
           <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
-          <div><i class="fa fa-money text-info" aria-hidden="true"></i><span class="text-info"> Fees:</span> </div>
-          <div><i class="fas fa-clock text-info"></i> <span class="text-info">Waiting Time:</span> </div>
-          <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"> Phone:</span>{{ doctor.phone }}</div>
+          {% with doctor.doctors.all as doctor %}
+          {% for doctor_book in doctor %}
+          <div><i class="fa fa-money text-info" aria-hidden="true"></i><span class="text-info"> Fees:</span> {{ doctor_book.fees }} EGP</div>
+          <div><i class="fas fa-clock text-info"></i> <span class="text-info">Waiting Time:</span> {{ doctor_book.waiting_time}}</div>
+          {% endfor %}
+          {% endwith %}
+          <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
         </div>
         <div class="col-3">
           <p>books available in doctors time</p>

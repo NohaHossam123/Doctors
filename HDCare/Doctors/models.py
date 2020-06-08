@@ -21,7 +21,7 @@ class Doctor_Book(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     waiting_time = models.CharField(max_length=20)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors')
 
     def __str__(self):
         return self.waiting_time

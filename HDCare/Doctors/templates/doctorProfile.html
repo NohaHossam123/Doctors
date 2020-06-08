@@ -1,15 +1,15 @@
-{% block title %} Doctor Profile {% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Doctor Profile{% endblock %}
+
+{% block styles %}
+<style>
+    .card {
+    box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            Featured
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-    </div>
-</div>
+<h1>Doctor Page</h1>
 {% endblock %}
