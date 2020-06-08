@@ -44,14 +44,18 @@
     </form>
 
     {% if messages %}
-        <div class="form-group alert alert-danger" role="alert">
-            {% for message in messages %}
+        {% for message in messages %}
+            {% if 'success' in message.tags %}
+                <div class="form-group alert alert-success" role="alert">
+            {% else %}
+                <div class="form-group alert alert-danger" role="alert">
+            {% endif %}
                 <div>
                     {{message}}
                 </div>
+            </div>
             {% endfor %}
-        </div>
-    {%endif%}
+    {% endif %}
 
 
     </article>
