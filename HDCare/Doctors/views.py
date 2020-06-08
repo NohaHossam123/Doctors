@@ -10,6 +10,7 @@ def doctors_page(request):
 
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
-    context = {'doctor':doctor}
+    rating = [1,2,3,4,5]
+    context = {'doctor':doctor,'rating':rating}
     return render(request, 'doctorProfile.html', context)
 

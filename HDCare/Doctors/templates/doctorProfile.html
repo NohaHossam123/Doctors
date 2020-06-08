@@ -9,7 +9,77 @@
     }
 </style>
 {% endblock %}
-
 {% block content %}
-<h1>Doctor Page</h1>
+<div class="container col-12">
+    <div class="row m-5">
+        <div class="col-7">
+                <div class="row">
+                    <div class="col-3">
+                        <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px" alt="No image">
+                    </div>
+                    <div class="col-md mx-3">
+                        <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
+                        <div>{{ doctor.specialization }}</div>
+                        <div>
+                            {% for i in rating %}
+                            <i class="fa fa-star"></i>
+                            {%endfor%}
+                        </div>
+                        <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
+                        <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card rounded m-4 px-3 col-md">
+                        <div class="card-body row">
+                            <div>
+                                <i class="fa fa-info text-info"></i>&nbsp;<strong class="text-secondary"> About the doctor : </strong> 
+                                {{ doctor.bio }}
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card rounded m-4 px-3 col-md">
+                        <div class="card-body row">
+                            <div>
+                                <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+                            </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+        <div class="col-5">
+            <div class="card rounded px-3">
+                <div class="card-body row">
+                    <div class="text-secondary">
+                        <i class="fa fa-calendar text-info"></i> &nbsp;
+                        <strong>Booking information</strong>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body row">
+                    <div class="row">
+                        {% with doctor.doctors.all as doctor %}
+                        {% for book in doctor %}
+                        <div class="col-sm">
+                            <i class="fa fa-money text-info" aria-hidden="true"></i><br>
+                            <span class="text-secondary"> Fees:</span> {{book.fees }} EGP
+                        </div>
+                        <div class="col-sm">
+                            <i class="fas fa-clock text-info"></i><br>
+                            <span class="text-secondary">WaitingTime:</span>{{ book.waiting_time }}
+                        </div>
+                        {% endfor %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body row">
+                    <span>Choose your appointment </span>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

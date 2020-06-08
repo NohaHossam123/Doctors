@@ -33,7 +33,7 @@ def signup(request):
             user.save()
             token = get_random_string(length=40)
             Activation.objects.create(token=token, user=user)
-            email_subject = "First, you must to activate your account"
+            email_subject = "Activate your account"
             message = f'''
                 Thank you for your registration,
                 please click this link below to confirm your email.

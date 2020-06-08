@@ -67,7 +67,7 @@
           <a role="button" class="btn btn-dark mt-3 w-100" href="/doctors/doctor/{{doctor.id}}">More Details</a>
         </div>
         <div class="col-md">
-          <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
+          <strong class="text-info">Doctor </strong><a href="/doctors/doctor/{{ doctor.id }}">{{ doctor.first_name |add:" "|add:doctor.last_name }}</a>
           <div>{{ doctor.bio }}</div>
           <div>
             {% for i in rating %}
@@ -91,4 +91,5 @@
     </div>
     {% endfor %}
   </div>
+</div>
 {% endblock %}
