@@ -37,7 +37,7 @@ class Comment(models.Model):
     context = models.TextField(blank=True , null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors_comment')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -50,7 +50,7 @@ class Rate(models.Model):
     rate = models.IntegerField(validators=[MaxValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors_rate')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -61,7 +61,7 @@ class Complain(models.Model):
     contain = models.TextField(blank=True , null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors_complain')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
