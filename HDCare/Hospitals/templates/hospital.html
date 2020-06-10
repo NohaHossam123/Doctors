@@ -73,7 +73,7 @@
                     <form action={% url 'add_review' hospital.id %} method="POST" class="form-inline">
                           {% csrf_token %}
                           <textarea name="context" rows="3"  cols="90" class="form-control m-3" placeholder="Your Review..."></textarea>
-                          <button class="btn btn-primary m-3" type="submit">Add comment</button>
+                          <button class="btn btn-info m-3" type="submit">Add comment</button>
                     </form>
                 </div>
             </div>
