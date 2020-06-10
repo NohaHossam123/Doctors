@@ -11,6 +11,8 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 from django.utils.crypto import get_random_string
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 def unauthenticated_user(view_func):
@@ -98,8 +100,10 @@ def profile(request):
         form = EditUser(request.POST,instance=request.user)
         if form.is_valid():
             form.initial = {
+                'username':  request.POST.get('userame'),
                 'first_name':  request.POST.get('first_name'),
                 'last_name':  request.POST.get('last_name'),
+                'email': request.POST.get('email'),
                 'gender':  request.POST.get('gender'),
                 'birthdate': request.POST.get('birthdate'),
                 'city':request.POST.get('city'),
@@ -110,8 +114,10 @@ def profile(request):
             return redirect('profile')
     else:    
         form = EditUser(initial={
+            'username': user.username,
             'first_name': user.first_name.capitalize(),
             'last_name': user.last_name.capitalize(),
+            'email': user.email,
             'gender': user.gender,
             'birthdate': user.birthdate,
             'city': user.city,
@@ -119,6 +125,23 @@ def profile(request):
 
             })
     return render(request,'personalPage.html', {'form': form})
+
+
+@login_required
+def password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change-password.html', {'form': form})
+
 
 
 @login_required

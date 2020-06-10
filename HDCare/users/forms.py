@@ -34,11 +34,12 @@ class RegisterationForm(UserCreationForm):
 class EditUser(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name','last_name','phone','birthdate','city','gender']
-        readonly_fields = ['email','username']
+        fields = ['first_name','last_name','phone','birthdate','city','gender','email','username']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'birthdate': forms.SelectDateWidget(attrs={'class':'custom-select','style': 'width: 20%; display: inline-block;'}, years = range(2022, 1930, -1)),
             'gender': forms.RadioSelect(attrs={'class':'form-check-input mr-2'}),
             'city': forms.Select(attrs={'class': 'custom-select'}),
