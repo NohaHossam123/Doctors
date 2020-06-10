@@ -58,3 +58,7 @@
         background-color: #292b2c ;
         height: 55px;
     }
+
+    .card{
+        width: fit-content
+    }
