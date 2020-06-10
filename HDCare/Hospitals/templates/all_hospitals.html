@@ -16,8 +16,8 @@
                         <div class="container h-50">
                             <div class="d-flex justify-content-center h-100">
                               <div class="searchbar">
-                                <input class="search_input" type="text" name="" placeholder="Search...">
-                                <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                                <input id="hospitals-search" class="search_input" type="text" placeholder="Search by name...">
+                                <div class="search_icon" id="h-search-icon"><i class="fas fa-search"></i></div>
                               </div>
                             </div>
                           </div>
@@ -28,67 +28,13 @@
     </section>
 
     <div class="sperator"></div>
-    <div class="row m-5">
-        <!-- for filters -->
-        <div class="col-3">
-            {% if hospitals|length != 0%}
-            <div class="card rounded sticky-top">
-                <div class="card-header text-white bg-dark">
-                    <i class="fa fa-filter "></i>  Filter
-                </div>
-                <div class="card-body">
-                    <div class="m-2">All</div>
-                    <hr/>
-                    <div class="m-2">Location</div>
-                    <hr/>
-                    <div class=" m-2">City</div>
-                    <hr/>
-                    <div class=" m-2">Specialization</div>
-
-                </div>
-                <div class="card-footer bg-dark">
-                </div>
-            {% endif%}
-            </div>
-            
-        </div>
-        <!-- for hospitals -->
-        <div class="col-9">
-            <h5>All Hospitals</h5>
-            <hr/>
-            {% for hospital in hospitals %}
-            <div class="card rounded mb-3">
-                <div class="card-body row">
-                    <div class="col-3 text-center">
-                        <img src="/media/{{hospital.image}}" class="rounded" width="100%" height="170px"/>
-                        <a role="button" class="btn btn-dark mt-3 w-100" href="/hospitals/h/{{hospital.id}}">More Details</a> 
-                    </div>
-                    <div class="col-9">
-                        <a class="text-secondary h4 mb-2" href="/hospitals/h/{{hospital.id}}">{{hospital.name|title}}</a>
-                        <p>
-                            {% for i in '12345'%}
-                                {% if i|add:0 <=  hospital.avg_rate %} 
-                                    <span class="fa fa-star text-warning"></span>
-                                {%else%}
-                                    <span class="fa fa-star"></span>
-                                {% endif %}
-                            {% endfor%}  
-                        </p>
-                        <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
-                        <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>
-                        <p> <i class="fa fa-stethoscope	text-danger"></i> &nbsp;Available Specilizations:</p>
-                        <ul>
-                        {% for special in hospital.specializaiton_set.all %}
-                        <li>{{special.name| title}}</li>
-                        {%endfor%}
-                        </ul>
-
-                    </div>
-
-                </div>
-            </div>
-            {%endfor%}
-        </div>
+    <div id="h-replaceable-content">
+        {% include 'hospitals-partial.html' %}
     </div>
 
 {% endblock %}
+
+
+{% block footer %}
+    <script type="text/javascript" src="{% static '/javascript/ajax.js' %}"></script>
+{% endblock %} 

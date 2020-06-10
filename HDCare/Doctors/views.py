@@ -3,12 +3,36 @@ from users.models import *
 from .models import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 def doctors_page(request):
-    doctors = Doctor.objects.all()
     rating = [1,2,3,4,5]
+
+    # search:
+    url_parameter = request.GET.get('q')
+    print(url_parameter)
+    if url_parameter:
+        doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
+    else:
+        doctors = Doctor.objects.all()
+
     context = {'doctors': doctors ,"rating": rating}
+
+    if request.is_ajax():
+        html = render_to_string(
+
+            template_name="doctors-partial.html", 
+            context={'doctors': doctors ,"rating": rating}
+        )
+
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
+
     return render(request, 'allDoctors.html', context)
+
+
 
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
