@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Hospitals {% endblock %}
+{% block title %} {{hospital.name|title}} {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{% static '/css/style.css' %}">
 {% endblock %}
