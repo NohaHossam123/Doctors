@@ -86,6 +86,7 @@
             </div>
 
             <!-- patients reviews -->
+            {% if reviews %}
              <div class="card rounded mb-3 mr-5 px-3">
                 <div class="card-body">
                     <div>
@@ -114,6 +115,9 @@
                     {% endfor %}
                 </div>
             </div>
+            {% else %}
+            <br/><br/>
+            {%endif%}
 
     </div>        
     <!-- books section -->
