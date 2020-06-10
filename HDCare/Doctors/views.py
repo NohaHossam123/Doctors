@@ -37,7 +37,7 @@ def doctors_page(request):
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
     rating = [1,2,3,4,5]
-    comments = Comment.objects.order_by("-id")
+    comments = Comment.objects.order_by("-id").filter(doctor=id)
     context = {'doctor':doctor,'rating':rating , 'comments':comments}
     return render(request, 'doctorProfile.html', context)
 

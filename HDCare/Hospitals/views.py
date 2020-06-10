@@ -32,7 +32,7 @@ def hospitals(request):
 
 def hospital(request, id):
     hospital = Hospital.objects.get(id=id)
-    reviews = Review.objects.order_by("-id")
+    reviews = Review.objects.order_by("-id").filter(hospital=id)
     context = {'hospital': hospital , 'reviews':reviews}
     
     return render(request,'hospital.html', context)

@@ -10,102 +10,107 @@
 </style>
 {% endblock %}
 {% block content %}
+
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-danger col-5 m-2">
+        {{message}}    
+    </div>
+{% endfor %}
+{% endif %}
+
 <div class="container col-12">
-    {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-danger col-5 m-2">
-            {{message}}    
-        </div>
-    {% endfor %}
-    {% endif %}
     <div class="row m-5">
         <div class="col-7">
-                <div class="row">
-                    <div class="col-3">
-                        <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px" alt="No image">
+            <div class="row">
+                <div class="col-3">
+                    <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px" alt="No image">
+                </div>
+                <div class="col-md mx-3">
+                    <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
+                    <div>{{ doctor.specialization }}</div>
+                    <div>
+                        {% for i in rating %}
+                        <i class="fa fa-star"></i>
+                        {%endfor%}
                     </div>
-                    <div class="col-md mx-3">
-                        <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
-                        <div>{{ doctor.specialization }}</div>
+                    <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
+                    <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card rounded m-4 px-3 col-md">
+                    <div class="card-body row">
                         <div>
-                            {% for i in rating %}
-                            <i class="fa fa-star"></i>
-                            {%endfor%}
-                        </div>
-                        <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
-                        <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="card rounded m-4 px-3 col-md">
-                        <div class="card-body">
-                            <div>
-                                <i class="fa fa-info text-info"></i>&nbsp;<strong class="text-secondary"> About the doctor : </strong> 
-                                {{ doctor.bio }}
-                            </div>
-                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="card rounded m-4 px-3 col-md">
-                        <div class="card-body">
-                            <div>
-                                <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Your Review: </strong> 
-                            </div>
+                            <i class="fa fa-info text-info"></i>&nbsp;<strong class="text-secondary"> About the doctor : </strong> 
+                            {{ doctor.bio }}
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4 px-3">
-                    <div class="card rounded sticky-top">
-                        <div class="card-header text-white bg-dark">
-                            <h5 class="p-2">Leave your comment</h5>
-                          </div>
-                          <div class="card-body p-0 mt-2">
-                              <form action={% url 'add_comment' doctor.id %} method="POST" class="form-inline">
-                                    {% csrf_token %}
-                                    <textarea name="context" rows="3"  cols="90" class="form-control m-3" placeholder="Your Comment..."></textarea>
-                                    <button class="btn btn-primary m-3" type="submit">Add comment</button>
-                              </form>
+            </div>
+            <div class="row">
+                <div class="card rounded m-4 px-3 col-md">
+                    <div class="card-body row">
+                        <div>
+                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Your Review: </strong> 
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="card rounded m-4 px-3 col-md">
-                        <div class="card-body">
-                            <div>
-                                <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+            </div>
+            <div class="row mt-4 px-3">
+                <div class="card rounded sticky-top">
+                    <div class="card-header text-white bg-dark">
+                        <h5 class="p-2">Leave your comment</h5>
+                    </div>
+                    <div class="card-body p-0 mt-2">
+                        <form action={% url 'add_comment' doctor.id %} method="POST" class="form-inline">
+                            {% csrf_token %}
+                            <textarea name="context" rows="3"  cols="90" class="form-control m-3" placeholder="Your Comment..."></textarea>
+                            <button class="btn btn-info m-3" type="submit">Add comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card rounded m-4 px-3 col-md">
+                    <div class="card-body">
+                        <div>
+                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+                        </div>
+                        <hr>
+                        {% for comment in comments %}
+                        <div class="row">
+                            <div class="col-md"> 
+                                {{ comment.context }}
+                                <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
                             </div>
-                            <hr>
-                            {% for comment in comments %}
-                            <div class="row">
-                                <div class="col-md"> 
-                                    {{ comment.context }}  
-                                    <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
-                                </div>
-                                    {%if user.id == comment.user_id %}
+                            {%if user.id == comment.user_id %}
                                 <div class="col-md">
                                     <a href= "{% url 'remove_comment' comment.id %}"><i class="fa fa-trash text-danger"></i></a>&nbsp; &nbsp;
                                     <a class="fa fa-edit text-info" href="#"></a>
-                                    {%endif%}
                                 </div>
-                            
-                            </div>
-                            <hr>
-                            {% endfor %}
+                            {%endif%}
                         </div>
+                        <hr>
+                        {% endfor %}
                     </div>
                 </div>
+            </div>
+
+
+
+
         </div>
         <div class="col-5">
             <div class="card rounded px-3">
-                <div class="card-body">
+                <div class="card-body row">
                     <div class="text-secondary">
                         <i class="fa fa-calendar text-info"></i> &nbsp;
                         <strong>Booking information</strong>
                     </div>
                 </div>
                 <hr>
-                <div class="card-body">
+                <div class="card-body row">
                     <div class="row">
                         {% with doctor.doctors.all as doctor %}
                         {% for book in doctor %}
@@ -122,11 +127,12 @@
                     </div>
                 </div>
                 <hr>
-                <div class="card-body">
+                <div class="card-body row">
                     <span>Choose your appointment </span>
-            </div>
+                </div>
             </div>
         </div>
     </div>
+        
 </div>
 {% endblock %}
