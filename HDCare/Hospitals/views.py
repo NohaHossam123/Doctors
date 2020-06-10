@@ -3,11 +3,30 @@ from .models import *
 from users.views import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+
+
 
 def hospitals(request):
-    hospitals = Hospital.objects.all()
+    url_parameter = request.GET.get('q')
+    print(url_parameter)
+    if url_parameter:
+        hospitals = Hospital.objects.filter(name__icontains=url_parameter)
+    else:
+        hospitals = Hospital.objects.all()
+
     context = {'hospitals': hospitals}
-    
+
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="hospitals-partial.html", 
+            context={'hospitals': hospitals}
+        )
+
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
+
     return render(request,'all_hospitals.html', context)
 
 
