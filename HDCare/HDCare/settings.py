@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Doctors',
     'Hospitals',
     'smart_selects',
+    'social_django',  # <-- Here social-auth-app-django
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <-- Here
 ]
 
 ROOT_URLCONF = 'HDCare.urls'
@@ -65,10 +67,28 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # <-- Here
+                'social_django.context_processors.login_redirect',  # <-- Here
             ],
         },
     },
 ]
+
+
+SOCIAL_AUTH_USER_FIELDS = ['email', 'username']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email'}
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
+
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -149,3 +169,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 STATIC_URL = '/static/'
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '164179598240061'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '26b48812fafd52ad102644c7e518d5bd'  # App Secret

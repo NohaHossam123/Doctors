@@ -10,6 +10,8 @@ urlpatterns = [
     path('change-password/', password, name='password'),
     path('logout/', user_logout, name='logout'),
     path('', home, name='home'),
+    # login with facebook
+    path('oauth/', include('social_django.urls', namespace='social')),
     path('appointments/', appointments, name='appointments'),
     path('activate/<str:token>', activate_account, name="activate"),
 ]
