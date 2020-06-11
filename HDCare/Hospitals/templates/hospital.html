@@ -66,12 +66,76 @@
                 <div class="card-body row">
                     <p class="h5 text-secondary">
                         <i class="fa fa-newspaper-o	text-danger"></i> &nbsp;
-                        <strong>Reviews:</strong>
+                        <strong>Review:</strong>
                     </p>
                 </div>
             </div>
 
+            <!-- patients reviews -->
+            {% if reviews %}
+            <div class="card rounded mb-3 mr-5 px-3">
+            <div class="card-body">
+                <div>
+                    <i class="fa fa-newspaper-o	text-danger"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+                </div>
+                <hr>
+                {% for review in reviews %}
+                <div>
+                    <div class="row">
+                        <div class="col-8 text-secondary">
+                            {{review.user.first_name|title}}&nbsp;{{review.user.last_name|title}}
+                        </div>
+                        {%if user.id == review.user_id %}
+                        <div class=" col-4 text-center">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editReview" data-action="{% url 'edit_review' review.id %}"
+                            data-message="{{ review.context }}" data-header="Edit Review" data-button="save changes"><i  class="fa fa-edit"></i></button>
+                            
+                            <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_review' review.id %}">
+                            <i class="fa fa-trash"></i></a>
+                        </div>
+                        {%endif%}
+                    </div>
+                    <div>
+                        {{ review.context }}  
+                    </div>
+                    <div class="text-secondary">{{ review.updated_at|default_if_none:review.created_at }}</div>    
+                </div>
+                <hr/>
+                {% endfor %}
+
+                <div class="modal fade" id="editReview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="header"></h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form  method="POST" id="form" action="">
+                            <div class="form-group">
+                              <label for="review" class="col-form-label" id="text_label"></label>
+                              <textarea class="form-control" id="review" name="context"></textarea>
+                              {% csrf_token %}
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-info" id="edit_button" form="form"></button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            {% else %}
+            <br/><br/>
+            {%endif%}
             <!-- review form -->
+            {% if user.is_authenticated %}
              <div class="card rounded mb-3 mr-5">
                 <div class="card-header text-white bg-dark">
                     <p class="h6"><strong>Leave your Review</strong></p>
@@ -84,41 +148,25 @@
                     </form>
                 </div>
             </div>
-
-            <!-- patients reviews -->
-            {% if reviews %}
-             <div class="card rounded mb-3 mr-5 px-3">
-                <div class="card-body">
-                    <div>
-                        <i class="fa fa-newspaper-o	text-danger"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+            <div class="card rounded mb-3 mr-5" style="margin-top:5em;">
+                <div class="card-body row ml-2">
+                    If you face any problem with any hospital, please tell us to improve our website and don't worry only admins read it
+                </div>
+                <hr>
+                <div class="card ml-4 mr-4 mb-4">
+                    <div class="card-header text-white bg-danger">
+                        <p class="h6"><strong>Leave your complain</strong></p>
                     </div>
-                    <hr>
-                    {% for review in reviews %}
-                    <div>
-                        <div class="row">
-                            <div class="col-10 text-secondary">
-                                {{review.user.first_name|title}}&nbsp;{{review.user.last_name|title}}
-                            </div>
-                            {%if user.id == review.user_id %}
-                            <div class="col-2 text-center">
-                                <a class="fa fa-edit text-info" href="#"></a>&nbsp; &nbsp;
-                                <a href= "{% url 'remove_review' review.id %}"><i class="fa fa-trash text-danger"></i></a>
-                            </div>
-                            {%endif%}
-                        </div>
-                        <div>
-                            {{ review.context }}  
-                        </div>
-                        <div class="text-secondary">{{ review.updated_at|default_if_none:review.created_at }}</div>    
+                    <div class="card-body">
+                        <form action={% url 'add_complaint' hospital.id %} method="POST">
+                            {% csrf_token %}
+                            <textarea name="context" rows="3" class="form-control" placeholder="Your Complain..."></textarea>
+                            <button class="btn btn-danger mt-2" type="submit">Send complain</button>
+                        </form>
                     </div>
-                    <hr/>
-                    {% endfor %}
                 </div>
             </div>
-            {% else %}
-            <br/><br/>
-            {%endif%}
-
+            {% endif %}
     </div>        
     <!-- books section -->
     <div class="col-3 ">
@@ -136,4 +184,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript" src="{% static '/javascript/hospitalBtns.js' %}"></script>
 {% endblock %}

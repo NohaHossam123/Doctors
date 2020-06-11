@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Doctor Profile{% endblock %}
+{% block title %} Doctor {{ doctor.first_name |add:" "|add:doctor.last_name }} {% endblock %}
 
 {% block styles %}
 <style>
@@ -13,7 +13,7 @@
 
 {% if messages %}
 {% for message in messages %}
-    <div class="alert alert-danger col-5 m-2">
+    <div class="alert alert-danger m-2">
         {{message}}    
     </div>
 {% endfor %}
@@ -24,7 +24,7 @@
         <div class="col-7">
             <div class="row">
                 <div class="col-3">
-                    <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px" alt="No image">
+                    <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px">
                 </div>
                 <div class="col-md mx-3">
                     <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
@@ -52,11 +52,12 @@
                 <div class="card rounded m-4 px-3 col-md">
                     <div class="card-body row">
                         <div>
-                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Your Review: </strong> 
+                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Review: </strong> 
                         </div>
                     </div>
                 </div>
             </div>
+            {% if comments %}
             <div class="row">
                 <div class="card rounded m-4 px-3 col-md">
                     <div class="card-body">
@@ -66,14 +67,21 @@
                         <hr>
                         {% for comment in comments %}
                         <div class="row">
-                            <div class="col-md"> 
+                            <div class="col-9"> 
+                                <div class= "text-secondary">
+                                    {{ comment.user.first_name }}&nbsp;{{ comment.user.last_name }}
+                                </div>
                                 {{ comment.context }}
                                 <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
                             </div>
                             {%if user.id == comment.user_id %}
-                                <div class="col-md">
-                                    <a href= "{% url 'remove_comment' comment.id %}"><i class="fa fa-trash text-danger"></i></a>&nbsp; &nbsp;
-                                    <a class="fa fa-edit text-info" href="#"></a>
+                                <div>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editComment" data-action="{% url 'edit_comment' comment.id %}"
+                                    data-message="{{ comment.context }}" data-header="Edit Comment" data-button="save changes"><i  class="fa fa-edit"></i></button>
+
+                                    <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_comment' comment.id %}">
+                                    <i class="fa fa-trash"></i></a>
+                                    
                                 </div>
                             {%endif%}
                         </div>
@@ -82,6 +90,34 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            
+            <div class="modal fade" id="editComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="header"></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form  method="POST" id="form" action="">
+                        <div class="form-group">
+                          <label for="comment" class="col-form-label" id="text_label"></label>
+                          <textarea class="form-control" id="comment" name="context"></textarea>
+                          {% csrf_token %}
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-info" id="submit_button" form="form"></button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
             <div class="row mt-4 px-3">
                 <div class="card rounded sticky-top">
                     <div class="card-header text-white bg-dark">
@@ -97,9 +133,9 @@
                 </div>
             </div>
             
-            <div class="card rounded px-3" style="margin-top: 7em;font-size: 20px;">
+            <div class="card rounded px-3" style="margin-top:4em;font-size: 20px;">
                 <div class="card-body row">
-                    <div>If you face any problem, please tell us to improve our website and don't worry only admins read it</div>
+                    <div>If you face any problem with any doctor, please tell us to improve our website and don't worry only admins read it</div>
                 </div>
                 <hr>
                 <div class="card-body row">
@@ -117,6 +153,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
         <div class="col-5">
             <div class="card rounded px-3">
@@ -135,7 +172,7 @@
                             <i class="fa fa-money text-info" aria-hidden="true"></i><br>
                             <span class="text-secondary"> Fees:</span> {{book.fees }} EGP
                         </div>
-                        <div class="col-sm">
+                        <div class="md">
                             <i class="fas fa-clock text-info"></i><br>
                             <span class="text-secondary">WaitingTime:</span>{{ book.waiting_time }}
                         </div>
@@ -152,4 +189,8 @@
     </div>
         
 </div>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript" src="{% static '/javascript/doctorBtns.js' %}"></script>
 {% endblock %}

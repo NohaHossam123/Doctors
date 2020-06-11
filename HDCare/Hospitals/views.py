@@ -33,7 +33,8 @@ def hospitals(request):
 def hospital(request, id):
     hospital = Hospital.objects.get(id=id)
     reviews = Review.objects.order_by("-id").filter(hospital=id)
-    context = {'hospital': hospital , 'reviews':reviews}
+    complains = Complaint.objects.all()
+    context = {'hospital': hospital , 'reviews':reviews , "complains": complains}
     
     return render(request,'hospital.html', context)
 
@@ -44,7 +45,6 @@ def hospital_books(request, id):
 
     return render(request,'books.html',context)
 
-@login_required
 def add_review(request,id):
     if request.method == 'POST':
         if request.POST.get('context') == '':
@@ -60,3 +60,23 @@ def remove_review(request, id):
     hospital_id = review.hospital.id
     review.delete()
     return redirect('hospital', hospital_id)
+
+def edit_review(request, id):
+    if request.method == 'POST':
+        review = Review.objects.get(id=id)
+        review.context = request.POST.get('context')
+        if review.context == '':
+            messages.error(request, "Invalid review,review can't be empty")
+        else:  
+            review.save()
+    return redirect('hospital', review.hospital.id)
+
+def add_complaint(request,id):
+    if request.method == 'POST':
+        if request.POST.get('context') == '':
+            messages.error(request, "Invalid complain,Complain can't be empty")
+        else:
+            user_id = request.user.id
+            context = request.POST.get('context')
+            Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
+    return redirect('hospital', id)

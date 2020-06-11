@@ -42,7 +42,6 @@ def doctor_profile(request,id):
     context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains}
     return render(request, 'doctorProfile.html', context)
 
-@login_required
 def add_comment(request,id):
     if request.method == 'POST':
         if request.POST.get('context') == '':
@@ -55,9 +54,19 @@ def add_comment(request,id):
 
 def remove_comment(request, id):
     comment = Comment.objects.get(id=id)
-    doctor_id = comment.doctor.id
+    user_id = comment.doctor.id
     comment.delete()
-    return redirect('doctor', doctor_id)
+    return redirect('doctor', user_id)
+
+def edit_comment(request, id):
+    if request.method == 'POST':
+        comment = Comment.objects.get(id=id)
+        comment.context = request.POST.get('context')
+        if comment.context == '':
+            messages.error(request, "Invalid complain,Complain can't be empty")
+        else:  
+            comment.save()
+    return redirect('doctor', comment.doctor.id)
 
 def add_complain(request,id):
     if request.method == 'POST':
@@ -68,6 +77,5 @@ def add_complain(request,id):
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
     return redirect('doctor', id)
-
 
 

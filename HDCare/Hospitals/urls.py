@@ -8,5 +8,7 @@ urlpatterns = [
     path('books/<id>',hospital_books , name='hospital_books'),
     path('<id>/addReview',add_review,name="add_review"),
     path('<id>/removeReview',remove_review,name="remove_review"),
+    path('<id>/editReview',edit_review,name="edit_review"),
+    path('<id>/addComplaint',add_complaint,name="add_complaint"),
 
 ]

@@ -58,3 +58,16 @@
         background-color: #292b2c ;
         height: 55px;
     }
+
+    .delete-link {
+        background-color: red;
+        color: white;
+        border: 1px solid white;
+        cursor: pointer;
+        padding: 3px;
+      }
+      #result {
+        margin: 20px;
+        padding: 10px;
+        border: 1px solid orange;
+      }
