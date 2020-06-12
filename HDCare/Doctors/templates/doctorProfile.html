@@ -3,6 +3,7 @@
 {% block title %} Doctor {{ doctor.first_name |add:" "|add:doctor.last_name }} {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="{% static '/css/rating.css' %}">
 <style>
     .card {
     box-shadow: 1px 3px 3px 1px hsla(0, 0%, 22%, 0.253) !important;  
@@ -170,18 +171,14 @@
                 <hr>
                 <div class="card-body row">
                     <div class="row">
-                        {% with doctor.doctors.all as doctor %}
-                        {% for book in doctor %}
                         <div class="col-sm">
                             <i class="fa fa-money text-info" aria-hidden="true"></i><br>
-                            <span class="text-secondary"> Fees:</span> {{book.fees }} EGP
+                            <span class="text-secondary"> Fees:</span> {{doctor.fees }} EGP
                         </div>
                         <div class="md">
                             <i class="fas fa-clock text-info"></i><br>
-                            <span class="text-secondary">WaitingTime:</span>{{ book.waiting_time }}
+                            <span class="text-secondary">WaitingTime:</span>{{ doctor.waiting_time }}
                         </div>
-                        {% endfor %}
-                        {% endwith %}
                     </div>
                 </div>
                 <hr>

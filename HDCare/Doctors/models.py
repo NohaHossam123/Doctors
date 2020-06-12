@@ -12,15 +12,16 @@ class Doctor(models.Model):
     specialization = models.CharField(max_length=60)
     bio = models.TextField()
     clinic_address = models.CharField(max_length=100)
+    waiting_time = models.CharField(max_length=20, null=True)
+    fees = models.IntegerField(null=True)
+
 
     def __str__(self):
         return f"{self.first_name}{self.last_name}"
 
 class Doctor_Book(models.Model):
-    fees = models.IntegerField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    waiting_time = models.CharField(max_length=20)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors')
 
     def __str__(self):
