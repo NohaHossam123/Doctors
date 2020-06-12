@@ -9,9 +9,13 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-danger mx-5 mt-1">
-                {{message}}    
-            </div>
+        {% if 'success' in message.tags %}
+            <div class="alert alert-success mx-5 mt-1">{{message}}</div>
+        {% elif 'info' in message.tags %}
+            <div class="alert alert-info mx-5 mt-1">{{message}}</div>
+        {% else %}
+        <div class="alert alert-danger mx-5 mt-1">{{message}} </div>
+        {% endif %}
         {% endfor %}
     {% endif %}
 

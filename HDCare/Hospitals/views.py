@@ -46,13 +46,16 @@ def hospital_books(request, id):
     return render(request,'books.html',context)
 
 def add_review(request,id):
-    if request.method == 'POST':
-        if request.POST.get('context') == '':
-            messages.error(request, "Invalid review,Review can't be empty")
-        else:
-            user_id = request.user.id
-            context= request.POST.get('context')
-            Review.objects.create(context= context,user_id = user_id, hospital_id = id)
+    try:
+        if request.method == 'POST':
+            if request.POST.get('context') == '':
+                messages.error(request, "Invalid review,Review can't be empty")
+            else:
+                user_id = request.user.id
+                context= request.POST.get('context')
+                Review.objects.create(context= context,user_id = user_id, hospital_id = id)
+    except:
+        messages.error(request, "You have already commented to this doctor before!")
     return redirect('hospital', id)
 
 def remove_review(request, id):
@@ -79,4 +82,5 @@ def add_complaint(request,id):
             user_id = request.user.id
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
+            messages.info(request,"we have received your complain")
     return redirect('hospital', id)

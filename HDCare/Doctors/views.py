@@ -43,20 +43,23 @@ def doctor_profile(request,id):
     return render(request, 'doctorProfile.html', context)
 
 def add_comment(request,id):
-    if request.method == 'POST':
-        if request.POST.get('context') == '':
-            messages.error(request, "Invalid comment,Comment can't be empty")
-        else:
-            user_id = request.user.id
-            context= request.POST.get('context')
-            Comment.objects.create(context= context,user_id = user_id, doctor_id = id)
+    try:
+        if request.method == 'POST':
+            if request.POST.get('context') == '':
+                messages.error(request, "Invalid comment,Comment can't be empty")
+            else:
+                user_id = request.user.id
+                context= request.POST.get('context')
+                Comment.objects.create(context= context,user_id = user_id, doctor_id = id)
+    except:
+        messages.error(request , "You have already commented to this doctor before!")
     return redirect('doctor', id)
 
 def remove_comment(request, id):
     comment = Comment.objects.get(id=id)
-    user_id = comment.doctor.id
+    doctor_id = comment.doctor.id
     comment.delete()
-    return redirect('doctor', user_id)
+    return redirect('doctor', doctor_id)
 
 def edit_comment(request, id):
     if request.method == 'POST':
@@ -76,6 +79,7 @@ def add_complain(request,id):
             user_id = request.user.id
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
+            messages.info(request,"we have received your complain")
     return redirect('doctor', id)
 
 
