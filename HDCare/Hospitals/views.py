@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -15,9 +16,22 @@ def hospitals(request):
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
     else:
         hospitals = Hospital.objects.all()
-
+    
+    page = request.GET.get('page', 1)
+    paginator = Paginator(hospitals, 6)
+    
+    try:
+        hospitals = paginator.page(page)
+    
+    except PageNotAnInteger:
+        hospitals = paginator.page(1)
+    
+    except EmptyPage:
+        hospitals = paginator.page(paginator.num_pages)
+    
     context = {'hospitals': hospitals}
 
+    # ajax search
     if request.is_ajax():
         html = render_to_string(
             template_name="hospitals-partial.html", 
@@ -50,6 +64,7 @@ def hospital_books(request, id):
 
     return render(request,'books.html',context)
 
+
 def add_review(request,id):
     try:
         if request.method == 'POST':
@@ -62,6 +77,7 @@ def add_review(request,id):
     except:
         messages.error(request, "You have already commented to this doctor before!")
     return redirect('hospital', id)
+
 
 def remove_review(request, id):
     review = Review.objects.get(id=id)

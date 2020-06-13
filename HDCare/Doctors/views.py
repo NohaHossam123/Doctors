@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q , Avg
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 def doctors_page(request):
     rating = [1,2,3,4,5]
@@ -17,7 +20,20 @@ def doctors_page(request):
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
     else:
         doctors = Doctor.objects.all()
-    context = {'doctors': doctors ,"rating": rating }
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(doctors, 6)
+    
+    try:
+        doctors = paginator.page(page)
+    
+    except PageNotAnInteger:
+        doctors = paginator.page(1)
+    
+    except EmptyPage:
+        doctors = paginator.page(paginator.num_pages)
+
+    context = {'doctors': doctors ,"rating": rating}
 
     if request.is_ajax():
         html = render_to_string(
