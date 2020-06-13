@@ -36,17 +36,18 @@
   <div>{{ doctor.bio }}</div>
   <div>
     {% for i in rating %}
-    <i class="fa fa-star"></i>
-    {%endfor%}
+    {% if i|add:0 <=  doctor.avg_rating %} 
+        <span class="fa fa-star text-warning"></span>
+    {%else%}
+        <span class="fa fa-star"></span>
+    {% endif %}
+    {% endfor%} 
   </div>
   <div><i class="fa fa-stethoscope text-info" aria-hidden="true"></i> {{ doctor.specialization }}</div>
   <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
   <div><i class="fa fa-money text-info" aria-hidden="true"></i><span class="text-info"> Fees:</span> {{ doctor.fees }} EGP</div>
   <div><i class="fas fa-clock text-info"></i> <span class="text-info">Waiting Time:</span> {{ doctor.waiting_time}}</div>
   <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
-</div>
-<div class="col-3">
-  <p>books available in doctors time</p>
 </div>
 </div>
 </div>

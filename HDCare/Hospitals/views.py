@@ -32,9 +32,14 @@ def hospitals(request):
 
 def hospital(request, id):
     hospital = Hospital.objects.get(id=id)
+    rating = hospital.rating_set.only("rate")
+    try:
+        user_rate = hospital.rating_set.get(user_id=request.user.id).rate
+    except:
+        user_rate = 0
     reviews = Review.objects.order_by("-id").filter(hospital=id)
     complains = Complaint.objects.all()
-    context = {'hospital': hospital , 'reviews':reviews , "complains": complains}
+    context = {'hospital': hospital , 'reviews':reviews , "complains": complains , "user_rate":user_rate}
     
     return render(request,'hospital.html', context)
 
@@ -83,4 +88,15 @@ def add_complaint(request,id):
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
             messages.info(request,"we have received your complain")
+    return redirect('hospital', id)
+
+def rate_hospital(request,id):
+    try:
+        if request.method == 'POST':
+            rate = request.POST.get('rate')
+            Rating.objects.create(user_id=request.user.id, hospital_id=id, rate=rate) 
+    except:
+        rate = Rating.objects.get(user_id= request.user.id,hospital_id=id)
+        rate.rate = request.POST.get('rate') 
+        rate.save()
     return redirect('hospital', id)

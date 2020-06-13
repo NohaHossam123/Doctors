@@ -9,6 +9,7 @@ urlpatterns = [
     path('<id>/addReview',add_review,name="add_review"),
     path('<id>/removeReview',remove_review,name="remove_review"),
     path('<id>/editReview',edit_review,name="edit_review"),
+    path('<id>/rate',rate_hospital,name="rate_hospital"),
     path('<id>/addComplaint',add_complaint,name="add_complaint"),
 
 ]

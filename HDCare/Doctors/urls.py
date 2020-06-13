@@ -8,5 +8,6 @@ urlpatterns = [
     path('<id>/addComment',add_comment,name="add_comment"),
     path('<id>/removeComment',remove_comment,name="remove_comment"),
     path('<id>/editComment',edit_comment,name="edit_comment"),
+    path('<id>/rate',rate_doctor,name="rate_doctor"),
     path('<id>/addComplain',add_complain,name="add_complain"),
 ]

@@ -3,7 +3,7 @@ from users.models import *
 from .models import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q , Avg
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
@@ -17,8 +17,7 @@ def doctors_page(request):
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
     else:
         doctors = Doctor.objects.all()
-
-    context = {'doctors': doctors ,"rating": rating}
+    context = {'doctors': doctors ,"rating": rating }
 
     if request.is_ajax():
         html = render_to_string(
@@ -37,9 +36,14 @@ def doctors_page(request):
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
     rating = [1,2,3,4,5]
+    rate = doctor.rate_set.only("rate")
+    try:
+        user_rate = doctor.rate_set.get(user_id=request.user.id).rate
+    except:
+        user_rate = 0
     comments = Comment.objects.order_by("-id").filter(doctor=id)
-    complains = Complain.objects.order_by("-id").filter(doctor=id)
-    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains}
+    complains = Complain.objects.all()
+    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate}
     return render(request, 'doctorProfile.html', context)
 
 def add_comment(request,id):
@@ -80,6 +84,17 @@ def add_complain(request,id):
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
             messages.info(request,"we have received your complain")
+    return redirect('doctor', id)
+
+def rate_doctor(request,id):
+    try:
+        if request.method == 'POST':
+            rate = int(request.POST.get('rate'))
+            Rate.objects.create(user_id=request.user.id, doctor_id=id, rate=rate) 
+    except:
+        rate = Rate.objects.get(user_id= request.user.id,doctor_id=id)
+        rate.rate = int(request.POST.get('rate')) 
+        rate.save()
     return redirect('doctor', id)
 
 
