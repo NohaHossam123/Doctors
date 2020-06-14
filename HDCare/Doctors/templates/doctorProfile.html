@@ -177,13 +177,13 @@
                         </div>
                         <div class="md">
                             <i class="fas fa-clock text-info"></i><br>
-                            <span class="text-secondary">WaitingTime:</span>{{ doctor.waiting_time }}
+                            <span class="text-secondary">WaitingTime:</span>{{ doctor.waiting_time }} minutes
                         </div>
                     </div>
                 </div>
                 <hr>
                 <div class="card-body row">
-                    <span>Choose your appointment </span>
+                    <a href="/doctors/doctor/{{ doctor.id }}/appointment" class="btn btn-primary btn-block">Book Appointment</a>
                 </div>
             </div>
         </div>

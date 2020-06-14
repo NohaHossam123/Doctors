@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.utils import timezone
+from datetime import date
+from django.contrib.auth import get_user
 
 def doctors_page(request):
     rating = [1,2,3,4,5]
@@ -82,4 +85,31 @@ def add_complain(request,id):
             messages.info(request,"we have received your complain")
     return redirect('doctor', id)
 
+def book_appointment(request,id):
+    doctor = Doctor.objects.get(id=id)
+    user = get_user(request)
+    books = user.userbook_set.all()
+    books = [i.doctor_book_id for i in books]
+    book_info = Doctor_Book.objects.filter(
+        doctor_id=id, end_time__date__gte = date.today()
+    )
+    context = {'book_info': book_info, "books": books}
+
+    return render(request, 'book.html', context)
+
+def book_redirect(request,id):
+    user = request.user
+    UserBook.objects.create(user=user, doctor_book_id=id)
+    book_id = Doctor_Book.objects.get(id=id)
+    messages.info(request,"your book has been placed susccessfully")
+
+    return redirect('appointment', book_id.doctor_id)
+
+def delete_appointment(request, id):
+    user = request.user
+    appointment = UserBook.objects.get(user=user, doctor_book_id=id)
+    appointment.delete()
+    book_id = Doctor_Book.objects.get(id=id)
+    
+    return redirect('appointment', book_id.doctor_id)
 

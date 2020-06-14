@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Appointments {% endblock %}
+
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+    {% if 'success' in message.tags %}
+    <div class="alert alert-success m-2">{{message}} </div>
+    {% elif 'info' in message.tags %}
+    <div class="alert alert-info m-2">{{message}} </div>
+    {% else %}
+    <div class="alert alert-danger m-2">{{message}} </div>
+    {% endif %}
+{% endfor %}
+{% endif %} 
+
+<div class="container mt-5">
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+        
+        <h2><i class="fa fa-briefcase"></i>Available appointments this week</h2>
+    </div>
+    
+    <div class="text-center" style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+      <h2><img src="/static/images/copoun.png" width="50px">for the first book</h2>
+    </div> 
+    
+  <div class="card-deck mt-2">
+  {% for book in book_info %}
+      <div class="card bg-white">
+          <div class="card-header text-center bg-dark" style="color: white;">
+            {{ book.end_time | date:"l d M" }}
+            {% if book.id in books %}
+            <a href="/doctors/doctor/{{ book.id }}/cancelAppointment" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
+            {% endif %}
+          </div>
+        <div class="card-body text-center">
+          From <p class="card-text">{{ book.start_time | date:"h:i a" }}</p>
+          To <p class="card-text">{{ book.end_time | date:"h:i a" }}</p>
+        </div>
+        <div class="card-footer text-center bg-dark">
+            {% if not book.id in books %}
+              <a href="/doctors/doctor/{{ book.id }}/book" class="btn btn-primary btn-block">Book</a>
+            {% else %}
+              <a href="javascript:void(0)" class="btn btn-danger btn-block">Already booked</a>
+            {% endif %}
+        </div>
+      </div> 
+      {% empty %}
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i>There is no available appointments right now</h2>
+  {% endfor %}
+</div>
+</div>
+
+{% endblock %}

@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator , MaxValueValidator , MinValueValidator
 from users.models import User
-
+from datetime import date
+from users.models import User
 
 class Doctor(models.Model):
     image = models.ImageField(null=True, blank=True)
@@ -24,8 +25,9 @@ class Doctor_Book(models.Model):
     end_time = models.DateTimeField()
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE , related_name='doctors')
 
-    def __str__(self):
-        return self.waiting_time
+    @property
+    def is_expired(self):
+        return date.today() > self.end_time.date()
 
 class UserBook(models.Model):
     doctor_book = models.ForeignKey(Doctor_Book, on_delete=models.CASCADE)
@@ -67,3 +69,12 @@ class Complain(models.Model):
 
     def __str__(self):
         return self.contain
+
+class Copoun(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='copoun')
+    token = models.CharField(max_length=10, unique=True)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}"
