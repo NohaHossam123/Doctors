@@ -25,6 +25,10 @@ class Doctor(models.Model):
         rate = Rate.objects.filter(doctor_id = self.id).aggregate(Avg('rate'))
         return rate['rate__avg']
 
+    @property
+    def count_rating(self):
+        return self.rate_set.all().count()
+
 class Doctor_Book(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()

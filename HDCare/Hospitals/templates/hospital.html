@@ -33,6 +33,7 @@
                     <span class="fa fa-star"></span>
                     {% endif %}
                     {% endfor%}
+                    <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
             <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
             <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
         </div>
@@ -167,9 +168,9 @@
                     </form>
                 </div>
             </div>
-            <div class="card rounded mb-3 mr-5" style="margin-top:5em;">
+            <div class="card rounded mb-3 mr-5" style="margin-top:5em; font-size: 20px;">
                 <div class="card-body row ml-2">
-                    If you face any problem with any hospital, please tell us to improve our website and don't worry only admins read it
+                    If you have any ploblem, please tell us and don't worry only admins read it
                 </div>
                 <hr>
                 <div class="card ml-4 mr-4 mb-4">

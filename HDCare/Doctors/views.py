@@ -3,7 +3,7 @@ from users.models import *
 from .models import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q , Avg
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
