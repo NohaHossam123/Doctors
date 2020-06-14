@@ -1,7 +1,54 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Home {% endblock %}
 {% block styles %}
+<link rel="stylesheet" href="{% static '/css/home.css' %}">
 {% endblock %}
 {% block content %}
-<h1>Home page</h1>
+<section class="imgs">
+    <img src="{% static 'images/doctors.jpg' %}" class="slider">
+    <img src="{% static 'images/hospital.jpg' %}" class="slider">
+    <img src="{% static 'images/doctor.jpg' %}" class="slider">
+    <img src="{% static 'images/hosptal.jpg' %}" class="slider">
+    <div class="imgs-header">
+        <h1>Hospitals and Doctors in your pocket</h1>
+        <h3>We are here for you</h3>
+    </div>
+</section>
+
+<div class="sperator"></div>
+
+<div class="container">
+        <div class="row col-12 m-5">
+            <div class="col-6">
+                <i class="fa fa-search text-info icon" aria-hidden="true"></i>
+            </div>
+            <div class="col-6">
+                <i class="fa fa-calendar text-info icon" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-6 font">
+                Search for doctors and hospital
+            </div>
+            <div class="col-6 font">
+                Book your appointment
+            </div>
+        </div>
+</div>
+
+<footer>
+    <div class="row col-12">
+        <div class="col-8 mt-5">
+            <p class="paragraph">Copyright HDCare ITI <i class="fa fa-copyright"></i> 2020.All Rights Reserved. </p>
+        </div>
+        <div class="col-4 mt-3">
+            <p>Contact Us</p>
+            <p class="text-info"><i class="far fa-envelope"></i> hdcareproject@gmail.com</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+{% block footer %}
+    <script type="text/javascript" src="{% static '/javascript/home.js' %}"></script>
 {% endblock %}

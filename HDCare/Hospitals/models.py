@@ -20,7 +20,9 @@ class Hospital(models.Model):
         rate = Rating.objects.filter(hospital_id = self.id).aggregate(Avg('rate'))
         return rate['rate__avg']
     
-
+    @property
+    def count_rating(self):
+        return self.rating_set.all().count()
 
 class Specializaiton(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)

@@ -9,6 +9,9 @@ from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date
 from django.contrib.auth import get_user
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 def doctors_page(request):
     rating = [1,2,3,4,5]
@@ -20,6 +23,18 @@ def doctors_page(request):
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
     else:
         doctors = Doctor.objects.all()
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(doctors, 6)
+    
+    try:
+        doctors = paginator.page(page)
+    
+    except PageNotAnInteger:
+        doctors = paginator.page(1)
+    
+    except EmptyPage:
+        doctors = paginator.page(paginator.num_pages)
 
     context = {'doctors': doctors ,"rating": rating}
 
@@ -40,9 +55,14 @@ def doctors_page(request):
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
     rating = [1,2,3,4,5]
+    rate = doctor.rate_set.only("rate")
+    try:
+        user_rate = doctor.rate_set.get(user_id=request.user.id).rate
+    except:
+        user_rate = 0
     comments = Comment.objects.order_by("-id").filter(doctor=id)
-    complains = Complain.objects.order_by("-id").filter(doctor=id)
-    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains}
+    complains = Complain.objects.all()
+    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate}
     return render(request, 'doctorProfile.html', context)
 
 def add_comment(request,id):
@@ -112,4 +132,15 @@ def delete_appointment(request, id):
     book_id = Doctor_Book.objects.get(id=id)
     
     return redirect('appointment', book_id.doctor_id)
+def rate_doctor(request,id):
+    try:
+        if request.method == 'POST':
+            rate = int(request.POST.get('rate'))
+            Rate.objects.create(user_id=request.user.id, doctor_id=id, rate=rate) 
+    except:
+        rate = Rate.objects.get(user_id= request.user.id,doctor_id=id)
+        rate.rate = int(request.POST.get('rate')) 
+        rate.save()
+    return redirect('doctor', id)
+
 

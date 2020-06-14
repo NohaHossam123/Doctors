@@ -3,6 +3,8 @@ from django.core.validators import RegexValidator , MaxValueValidator , MinValue
 from users.models import User
 from datetime import date
 from users.models import User
+from django.db.models import Avg
+
 
 class Doctor(models.Model):
     image = models.ImageField(null=True, blank=True)
@@ -19,6 +21,15 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f"{self.first_name}{self.last_name}"
+
+    @property
+    def avg_rating(self):
+        rate = Rate.objects.filter(doctor_id = self.id).aggregate(Avg('rate'))
+        return rate['rate__avg']
+
+    @property
+    def count_rating(self):
+        return self.rate_set.all().count()
 
 class Doctor_Book(models.Model):
     start_time = models.DateTimeField()

@@ -26,7 +26,7 @@
 
 <div class="container col-12">
     <div class="row m-5">
-        <div class="col-7">
+        <div class="col-9">
             <div class="row">
                 <div class="col-3">
                     <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px">
@@ -35,10 +35,15 @@
                     <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
                     <div>{{ doctor.specialization }}</div>
                     <div>
-                        {% for i in rating %}
-                        <i class="fa fa-star"></i>
-                        {%endfor%}
+                        {% for i in rating%}
+                        {% if i|add:0 <=  doctor.avg_rating %} 
+                            <span class="fa fa-star text-warning"></span>
+                        {%else%}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                        {% endfor%} 
                     </div>
+                    <span>Overall Rating From {{ doctor.count_rating }} Visitors</span>
                     <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
                     <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
                 </div>
@@ -53,21 +58,38 @@
                     </div>
                 </div>
             </div>
+            {% if user.is_authenticated %}
             <div class="row">
                 <div class="card rounded m-4 px-3 col-md">
                     <div class="card-body row">
-                        <div>
-                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Review: </strong> 
-                        </div>
+                            <span><i class="fa fa-star text-info"></i><strong class="text-secondary"> Review: </strong> &nbsp;&nbsp;
+                                <div class="star-rating">
+                                    <form action={% url 'rate_doctor' doctor.id %} id="rate_form" method="POST">
+                                        {% csrf_token %}
+                                        {% for i in '54321'%}
+                                        <input id="star-{{i}}" type="radio" name="rate" value="{{i}}"
+                                        {% if i|add:0 == user_rate %} checked {% endif %}/>
+                                        <label for="star-{{i}}" title="{{i}} star">
+                                          <i class="active fa fa-star" aria-hidden="true"></i>
+                                        </label>
+                                        {% endfor%}
+                                        <input id="star-0" type="radio" name="rate" value="0" />
+                                        <label for="star-0" title="0 star">
+                                          <i class="active fa fa-star vs" aria-hidden="true"></i>
+                                        </label>  
+                                    </form>
+                                </div>
+                            </span>
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% if comments %}
             <div class="row">
                 <div class="card rounded m-4 px-3 col-md">
                     <div class="card-body">
                         <div>
-                            <i class="fa fa-newspaper-o	text-info"></i><strong class="text-secondary"> Patients Reviews: </strong> 
+                            <i class="fa fa-comments text-info"></i><strong class="text-secondary"> Patients Reviews: </strong> 
                         </div>
                         <hr>
                         {% for comment in comments %}
@@ -76,7 +98,7 @@
                                 <div class= "text-secondary">
                                     {{ comment.user.first_name }}&nbsp;{{ comment.user.last_name }}
                                 </div>
-                                {{ comment.context }}
+                                <div>{{ comment.context }}</div>
                                 <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
                             </div>
                             {%if user.id == comment.user_id %}
@@ -95,9 +117,40 @@
                     </div>
                 </div>
             </div>
+            {% endif %}  
+            {% if user.is_authenticated %}
+                <div class="card rounded mt-4">
+                    <div class="card-header text-white bg-dark">
+                        <h5 class="p-2">Leave your comment</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action={% url 'add_comment' doctor.id %} method="POST" class="form-inline">
+                            {% csrf_token %}
+                            <textarea name="context" rows="3"  cols="150" class="form-control m-3" placeholder="Your Comment..."></textarea>
+                            <button class="btn btn-info m-3" type="submit">Add comment</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card rounded" style="margin-top:4em;font-size: 20px;">
+                        <div class="card-body row ml-2">
+                            If you have any ploblem, please tell us and don't worry only admins read it
+                        </div>
+                        <hr>
+                        <div class="card ml-4 mr-4 mb-4">
+                            <div class="card-header text-white bg-danger">
+                                <h5 class="p-2">Leave your complain</h5>
+                            </div>
+                            <div class="card-body">
+                                <form action={% url 'add_complain' doctor.id %} method="POST" class="form-inline">
+                                    {% csrf_token %}
+                                    <textarea name="contain" rows="3"  cols="150" class="form-control m-3" placeholder="Your Complain..."></textarea>
+                                <button class="btn btn-danger mt-3" type="submit">Send complain</button>
+                            </form>
+                            </div>
+                        </div>
+                </div>
             {% endif %}
-            
-            <div class="modal fade" id="editComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -122,45 +175,8 @@
                   </div>
                 </div>
             </div>
-            {% if user.is_authenticated %}
-            <div class="row mt-4 px-3">
-                <div class="card rounded sticky-top">
-                    <div class="card-header text-white bg-dark">
-                        <h5 class="p-2">Leave your comment</h5>
-                    </div>
-                    <div class="card-body p-0 mt-2">
-                        <form action={% url 'add_comment' doctor.id %} method="POST" class="form-inline">
-                            {% csrf_token %}
-                            <textarea name="context" rows="3"  cols="90" class="form-control m-3" placeholder="Your Comment..."></textarea>
-                            <button class="btn btn-info m-3" type="submit">Add comment</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card rounded px-3" style="margin-top:4em;font-size: 20px;">
-                <div class="card-body row">
-                    <div>If you face any problem with any doctor, please tell us to improve our website and don't worry only admins read it</div>
-                </div>
-                <hr>
-                <div class="card-body row">
-                    <div class="card rounded sticky-top">
-                        <div class="card-header text-white bg-danger">
-                            <h5 class="p-2">Leave your complain</h5>
-                        </div>
-                        <div class="card-body p-0 mt-2">
-                            <form action={% url 'add_complain' doctor.id %} method="POST" class="form-inline">
-                                {% csrf_token %}
-                                <textarea name="contain" rows="3"  cols="90" class="form-control m-3" placeholder="Your Complain..."></textarea>
-                                <button class="btn btn-danger m-3" type="submit">Send complain</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
         </div>
-        <div class="col-5">
+        <div class="col-3">
             <div class="card rounded px-3">
                 <div class="card-body row">
                     <div class="text-secondary">
@@ -188,10 +204,11 @@
             </div>
         </div>
     </div>
-        
 </div>
 {% endblock %}
 
 {% block footer %}
     <script type="text/javascript" src="{% static '/javascript/doctorBtns.js' %}"></script>
+    <script type="text/javascript" src="{% static '/javascript/rating.js' %}"></script>
+
 {% endblock %}

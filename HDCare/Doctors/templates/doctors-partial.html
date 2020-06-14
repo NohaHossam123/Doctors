@@ -36,8 +36,12 @@
   <div>{{ doctor.bio }}</div>
   <div>
     {% for i in rating %}
-    <i class="fa fa-star"></i>
-    {%endfor%}
+    {% if i|add:0 <=  doctor.avg_rating %} 
+        <span class="fa fa-star text-warning"></span>
+    {%else%}
+        <span class="fa fa-star"></span>
+    {% endif %}
+    {% endfor%} 
   </div>
   <div><i class="fa fa-stethoscope text-info" aria-hidden="true"></i> {{ doctor.specialization }}</div>
   <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
@@ -45,14 +49,42 @@
   <div><i class="fas fa-clock text-info"></i> <span class="text-info">Waiting Time:</span> {{ doctor.waiting_time}} minutes</div>
   <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
 </div>
-<div class="col-3">
-  <p>books available in doctors time</p>
-</div>
 </div>
 </div>
 {% endfor %}
 </div>
 </div>
+
+
+  {% if doctors.has_other_pages %}
+    <div class="d-flex justify-content-center">    
+
+      <ul class="pagination">
+              {% if doctors.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ doctors.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                  <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+              {% endif %}
+
+              {% for i in doctors.paginator.page_range %}
+                  {% if users.number == i %}
+                      <li class="page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+              {% endfor %}
+
+              {% if users.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ doctors.next_page_number }}">&raquo;</a></li>
+              {% else %}
+                  <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+              {% endif %}
+          </ul>
+
+    </div>
+  {% endif %}
+
+
 {% else %}
 
 <div class="m-5">
