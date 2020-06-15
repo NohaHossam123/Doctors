@@ -26,7 +26,7 @@
 
 <div class="container col-12">
     <div class="row m-5">
-        <div class="col-9">
+        <div class="col-7">
             <div class="row">
                 <div class="col-3">
                     <img src="/media/{{doctor.image}}" class="rounded" width="100%" height="180px">
@@ -43,7 +43,9 @@
                         {% endif %}
                         {% endfor%} 
                     </div>
+                    {% if rate %}
                     <span>Overall Rating From {{ doctor.count_rating }} Visitors</span>
+                    {% endif %}
                     <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
                     <div><i class="fa fa-phone text-info" aria-hidden="true"></i><span class="text-info"></span> {{ doctor.phone }}</div>
                 </div>
@@ -96,7 +98,7 @@
                         <div class="row">
                             <div class="col-9"> 
                                 <div class= "text-secondary">
-                                    {{ comment.user.first_name }}&nbsp;{{ comment.user.last_name }}
+                                    {{ comment.user.first_name| title }}&nbsp;{{ comment.user.last_name| title }}
                                 </div>
                                 <div>{{ comment.context }}</div>
                                 <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
@@ -176,7 +178,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-5">
             <div class="card rounded px-3">
                 <div class="card-body row">
                     <div class="text-secondary">
@@ -191,9 +193,9 @@
                             <i class="fa fa-money text-info" aria-hidden="true"></i><br>
                             <span class="text-secondary"> Fees:</span> {{doctor.fees }} EGP
                         </div>
-                        <div class="md">
+                        <div class="col-md">
                             <i class="fas fa-clock text-info"></i><br>
-                            <span class="text-secondary">WaitingTime:</span>{{ doctor.waiting_time }} minutes
+                            <span class="text-secondary">WaitingTime:</span>{{ doctor.waiting_time }}
                         </div>
                     </div>
                 </div>

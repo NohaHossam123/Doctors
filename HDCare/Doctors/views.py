@@ -65,7 +65,7 @@ def doctor_profile(request,id):
         user_rate = 0
     comments = Comment.objects.order_by("-id").filter(doctor=id)
     complains = Complain.objects.all()
-    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate}
+    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate, "rate":rate}
     return render(request, 'doctorProfile.html', context)
 
 def add_comment(request,id):

@@ -17,7 +17,7 @@
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: rgb(221, 205, 205);
 }
-.imgs h3{
+.imgs h2{
     font-family: fantasy;
     font-weight: bold;
     -webkit-text-stroke-width: 1px;
@@ -60,4 +60,7 @@ footer {
 .paragraph{
     text-align: center;
 }
-
+.copy{
+    display: flex;
+    justify-content:space-evenly;
+}
