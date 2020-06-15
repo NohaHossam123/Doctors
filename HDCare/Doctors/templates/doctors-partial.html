@@ -35,13 +35,15 @@
   <strong class="text-info">Doctor </strong><a href="/doctors/doctor/{{ doctor.id }}">{{ doctor.first_name |add:" "|add:doctor.last_name }}</a>
   <div>{{ doctor.bio }}</div>
   <div>
+    {% if doctor.avg_rating %}
     {% for i in rating %}
     {% if i|add:0 <=  doctor.avg_rating %} 
         <span class="fa fa-star text-warning"></span>
     {%else%}
         <span class="fa fa-star"></span>
     {% endif %}
-    {% endfor%} 
+    {% endfor %}
+    {% endif %} 
   </div>
   <div><i class="fa fa-stethoscope text-info" aria-hidden="true"></i> {{ doctor.specialization }}</div>
   <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>
