@@ -10,7 +10,8 @@ urlpatterns = [
     path('<id>/editComment', edit_comment,name="edit_comment"),
     path('<id>/rate',rate_doctor,name="rate_doctor"),
     path('<id>/addComplain', add_complain,name="add_complain"),
-    path('doctor/<id>/appointment', book_appointment,name="appointment"),
-    path('doctor/<id>/book', book_redirect,name="book_redirect"),
-    path('doctor/<id>/cancelAppointment', delete_appointment,name="delete_appointment"),
+    path('doctor/<int:id>/appointment', book_appointment,name="appointment"),
+    path('doctor/<int:id>/book', book_redirect,name="book_redirect"),
+    path('doctor/<int:id>/cancelAppointment', delete_appointment,name="delete_appointment"),
+    path('<slug:token>/activate', copoun_activation,name="activate_copoun"),
 ]

@@ -24,7 +24,13 @@
     </div>
     
     <div class="text-center" style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
-      <h2><img src="/static/images/copoun.png" width="50px">for the first book</h2>
+      <h2>
+        {% if books_count == 0 %}
+        <img src="/static/images/copoun.png" width="50px">for the first book
+        {% elif books_count == 1 %}
+         <a href="{% url 'activate_copoun' token %}" class="btn btn-primary">Activate discount now</a>
+        {% endif %}
+      </h2>
     </div> 
     
   <div class="card-deck mt-2">

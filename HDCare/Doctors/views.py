@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from users.models import *
 from .models import *
 from django.contrib import messages
@@ -8,8 +8,11 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth import get_user
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.crypto import get_random_string
 
 
 
@@ -106,19 +109,31 @@ def add_complain(request,id):
     return redirect('doctor', id)
 
 def book_appointment(request,id):
-    doctor = Doctor.objects.get(id=id)
-    user = get_user(request)
-    books = user.userbook_set.all()
-    books = [i.doctor_book_id for i in books]
-    book_info = Doctor_Book.objects.filter(
-        doctor_id=id, end_time__date__gte = date.today()
-    )
-    context = {'book_info': book_info, "books": books}
+    if request.user.is_authenticated:
+        doctor = Doctor.objects.get(id=id)
+        user = get_user(request)
+        books = user.userbook_set.all()
+        books = [i.doctor_book_id for i in books]
+        books_count = len(books)
+        book_info = Doctor_Book.objects.filter(
+            doctor_id=id, end_time__date__gte = date.today()
+        )
+        copoun = user.copoun.last()
+        token = None
+        if copoun:
+            token = copoun.token
+        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token}
 
-    return render(request, 'book.html', context)
+        return render(request, 'book.html', context)
+    else:
+        return redirect('signin')
 
 def book_redirect(request,id):
-    user = request.user
+    user = get_user(request)
+    obj = UserBook.objects.filter(user=user)
+    if not obj:
+        token = get_random_string(length=6)
+        Copoun.objects.create(token=token, user=user)
     UserBook.objects.create(user=user, doctor_book_id=id)
     book_id = Doctor_Book.objects.get(id=id)
     messages.info(request,"your book has been placed susccessfully")
@@ -132,6 +147,21 @@ def delete_appointment(request, id):
     book_id = Doctor_Book.objects.get(id=id)
     
     return redirect('appointment', book_id.doctor_id)
+
+def copoun_activation(request, token):
+    user = get_user(request)
+    book = user.userbook_set.first()
+    fees = book.doctor_book.doctor.fees
+    copoun = Copoun.objects.filter(user=user, token=token).last()
+    if copoun and not copoun.is_used:
+        copoun.is_used = True
+        copoun.save()
+        new_fees = fees * 0.8
+        messages.info(request, f"your book has been placed susccessfully, the old fees is {fees} and the new one is {new_fees}")
+    else:
+        messages.info(request, "Sorry, your copoun is not valid OR may be used before,Please try again later")
+    return redirect("appointment", book.doctor_book.doctor.id)
+
 def rate_doctor(request,id):
     try:
         if request.method == 'POST':
