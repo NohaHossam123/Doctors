@@ -33,7 +33,9 @@
                     <span class="fa fa-star"></span>
                     {% endif %}
                     {% endfor%}
+                    {% if rating %}
                     <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
+                    {% endif %}
             <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
             <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
         </div>

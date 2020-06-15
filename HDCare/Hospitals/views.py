@@ -53,7 +53,7 @@ def hospital(request, id):
         user_rate = 0
     reviews = Review.objects.order_by("-id").filter(hospital=id)
     complains = Complaint.objects.all()
-    context = {'hospital': hospital , 'reviews':reviews , "complains": complains , "user_rate":user_rate}
+    context = {'hospital': hospital , 'reviews':reviews , "complains": complains , "user_rate":user_rate,"rating":rating}
     
     return render(request,'hospital.html', context)
 
