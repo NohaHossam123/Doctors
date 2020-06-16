@@ -36,13 +36,15 @@
                     <div class="col-9">
                         <a class="text-secondary h4 mb-2" href="/hospitals/h/{{hospital.id}}">{{hospital.name|title}}</a>
                         <p>
+                            {% if hospital.avg_rate %}
                             {% for i in '12345'%}
                                 {% if i|add:0 <=  hospital.avg_rate %} 
                                     <span class="fa fa-star text-warning"></span>
-                                {%else%}
+                                {% else %}
                                     <span class="fa fa-star"></span>
                                 {% endif %}
-                            {% endfor%}  
+                            {% endfor %}  
+                            {% endif %}
                         </p>
                         <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
                         <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>

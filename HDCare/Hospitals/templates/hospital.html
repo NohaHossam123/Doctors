@@ -26,13 +26,15 @@
         </div>
         <div class="col-9">
             <h2 class="text-secondary mt-4">{{hospital.name|title}}</h2>
+                    {% if hospital.avg_rate %}
                     {% for i in '12345'%}
                     {% if i|add:0 <=  hospital.avg_rate %} 
                     <span class="fa fa-star text-warning"></span>
                     {% else %}
                     <span class="fa fa-star"></span>
                     {% endif %}
-                    {% endfor%}
+                    {% endfor %}
+                    {% endif %}
                     {% if rating %}
                     <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
                     {% endif %}

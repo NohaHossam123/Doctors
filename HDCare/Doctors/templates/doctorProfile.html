@@ -35,13 +35,15 @@
                     <span><strong class="text-info">Doctor </strong>{{ doctor.first_name |add:" "|add:doctor.last_name }}</span>
                     <div>{{ doctor.specialization }}</div>
                     <div>
+                        {% if doctor.avg_rating %}
                         {% for i in rating%}
                         {% if i|add:0 <=  doctor.avg_rating %} 
                             <span class="fa fa-star text-warning"></span>
                         {%else%}
                             <span class="fa fa-star"></span>
                         {% endif %}
-                        {% endfor%} 
+                        {% endfor %} 
+                        {% endif %}
                     </div>
                     {% if rate %}
                     <span>Overall Rating From {{ doctor.count_rating }} Visitors</span>

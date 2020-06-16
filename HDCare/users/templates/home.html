@@ -5,40 +5,40 @@
 <link rel="stylesheet" href="{% static '/css/home.css' %}">
 {% endblock %}
 {% block content %}
-<section class="imgs">
-    <img src="{% static 'images/doctors.jpg' %}" class="slider">
-    <img src="{% static 'images/hospital.jpg' %}" class="slider">
-    <img src="{% static 'images/doctor.jpg' %}" class="slider">
-    <img src="{% static 'images/hosptal.jpg' %}" class="slider">
-    <div class="imgs-header">
-        <h1>Hospitals and Doctors in your pocket</h1>
-        <h2>We are here for you</h2>
+<div class="container col-12">
+    <div class="row imgs">
+        <img src="{% static 'images/doctors.jpg' %}" class="slider">
+        <img src="{% static 'images/hospital.jpg' %}" class="slider">
+        <img src="{% static 'images/doctor.jpg' %}" class="slider">
+        <img src="{% static 'images/hosptal.jpg' %}" class="slider">
+        <div class="imgs-header">
+            <h1>Hospitals and Doctors in your pocket</h1>
+            <h2>We are here for you</h2>
+        </div>
     </div>
-</section>
-
-<div class="sperator"></div>
-
-<div class="container">
-        <div class="row col-12 m-5">
-            <div class="col-6">
-                <i class="fa fa-search text-info icon" aria-hidden="true"></i>
-            </div>
-            <div class="col-6">
-                <i class="fa fa-calendar text-info icon" aria-hidden="true"></i>
-            </div>
-        </div>
-        <div class="row col-12">
-            <div class="col-6 font">
-                Search for doctors and hospital
-            </div>
-            <div class="col-6 font">
-                Book your appointment
-            </div>
-        </div>
+    <div class="row sperator"></div>
 </div>
+<div class="container">
 
-<footer>
-    <div class="row col-12 allFooter">
+    <div class="row m-5">
+        <div class="col-6">
+            <i class="fa fa-search text-info icon" aria-hidden="true"></i>
+        </div>
+        <div class="col-6">
+            <i class="fa fa-calendar text-info icon" aria-hidden="true"></i>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="col-6 font">
+            Search for doctors and hospital
+        </div>
+        <div class="col-6 font">
+            Book your appointment
+        </div>
+    </div>
+</div>
+<div class="container col-12 footer">
+    <div class="row col-12">
         <div class="col-8 mt-5 copy">
             <div>
                 <img src="{% static 'images/facebook.png' %} " width="25" height="25">
@@ -52,7 +52,7 @@
             <p class="text-info"><i class="far fa-envelope"></i> hdcareproject@gmail.com</p>
         </div>
     </div>
-</footer>
+</div>
 {% endblock %}
 {% block footer %}
     <script type="text/javascript" src="{% static '/javascript/home.js' %}"></script>
