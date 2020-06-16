@@ -16,7 +16,7 @@ from django.utils.crypto import get_random_string
 
 
 
-def doctors_page(request):
+def doctors_page(request,sort=1):
     rating = [1,2,3,4,5]
 
     # search:
@@ -25,7 +25,12 @@ def doctors_page(request):
     if url_parameter:
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
     else:
-        doctors = Doctor.objects.all()
+        if sort == "location":
+            doctors = Doctor.objects.all().order_by('clinic_address')
+        elif sort == "specialization":
+            doctors = Doctor.objects.all().order_by('specialization')
+        else:
+            doctors = Doctor.objects.all()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(doctors, 6)

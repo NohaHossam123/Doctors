@@ -1,3 +1,6 @@
+<style>
+    
+</style>
 <!-- search result -->
 {% if doctors|length != 0 %}
 <div class="row m-5">
@@ -9,12 +12,11 @@
         <i class="fa fa-filter "></i>  Filter
     </div>
     <div class="card-body">
-        <div class="m-2">All</div>
+        <a href="{% url 'doctors' %}" class="btn btn-primary btn-md btn-block">All</a>
         <hr/>
-        <div class="m-2">Location</div>
+        <a href="/doctors/location" class="btn btn-primary btn-md btn-block">Location</a>
         <hr/>
-        <div class=" m-2">Specialization</div>
-
+        <a href="/doctors/Specialization" class="btn btn-primary btn-md btn-block">Specialization</a>
     </div>
     <div class="card-footer bg-dark">
     </div>
