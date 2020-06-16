@@ -98,7 +98,18 @@
                         <hr>
                         {% for comment in comments %}
                         <div class="row">
-                            <div class="col-9"> 
+                            <div class="col-9">
+                                {% for every_rate in rate %}
+                                    {% if every_rate.user_id == comment.user.id %}
+                                        {% for i in rating %}
+                                            {% if i|add:0 <= every_rate.rate %}
+                                            <span class="fa fa-star text-warning"></span>
+                                            {% else %}
+                                            <span class="fa fa-star"></span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
                                 <div class= "text-secondary">
                                     {{ comment.user.first_name| title }}&nbsp;{{ comment.user.last_name| title }}
                                 </div>
