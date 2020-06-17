@@ -59,6 +59,17 @@
     text-align: center;
 }
 .copy{
-    display: flex;
-    justify-content:space-evenly;
+    margin-top: 5em;
+}
+.center{
+    margin-left: 10em;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: fantasy;
+}
+.links{
+    color: white;
+}
+.footer .row{
+    margin-left: 5em;
 }

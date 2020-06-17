@@ -21,6 +21,9 @@
 <div class="container">
 
     <div class="row m-5">
+        <p class="center">How To Book with HDCare?</p>
+    </div>
+    <div class="row m-5">
         <div class="col-6">
             <i class="fa fa-search text-info icon" aria-hidden="true"></i>
         </div>
@@ -30,7 +33,7 @@
     </div>
     <div class="row col-12">
         <div class="col-6 font">
-            Search for doctors and hospital
+            Search for doctors and hospitals
         </div>
         <div class="col-6 font">
             Book your appointment
@@ -38,19 +41,29 @@
     </div>
 </div>
 <div class="container col-12 footer">
-    <div class="row col-12">
-        <div class="col-8 mt-5 copy">
-            <div>
-                <img src="{% static 'images/facebook.png' %} " width="25" height="25">
-                <img src="{% static 'images/twitter.png' %} " width="25" height="25">
-                <img src="{% static 'images/linkedin.png' %} " width="25" height="25">
-            </div>
+    <div class="row col-12-md">
+        <div class="col-3 mt-4">
+            <p class="text-info">About Us</p>
+            <p>HDCare is a website that help you to find the best doctors and hospitals and you can book the doctors in just one minute. </p>
+        </div>
+        <div class="col-4 copy">
             <div class="paragraph">Copyright HDCare ITI <i class="fa fa-copyright"></i> 2020.All Rights Reserved. </div>
         </div>
-        <div class="col-4 mt-3">
-            <p>Contact Us</p>
-            <p class="text-info"><i class="far fa-envelope"></i> hdcareproject@gmail.com</p>
-        </div>
+            <div class="col-md-5 mt-4">
+                <div class="row col-12-md">
+                    <div class="col-md mt-2">
+                        <p class="text-info">Contact Us</p>
+                        <p><i class="far fa-envelope text-info"></i>&nbsp;&nbsp;hdcareproject@gmail.com</p>
+                        <a href="/facebook"><img src="{% static 'images/facebook.png' %} " width="25" height="25"></a>
+                        <a href="/twitter"><img src="{% static 'images/twitter.png' %} " width="25" height="25"></a>
+                    </div>
+                    <div class="col-md">
+                        <p class="text-info">Links</p>
+                        <p><a href="/doctors" class="links">Doctors</a></p>
+                        <p><a href="/hospitals" class="links">Hospitals</a></p>
+                    </div>
+                </div>
+            </div>
     </div>
 </div>
 {% endblock %}
