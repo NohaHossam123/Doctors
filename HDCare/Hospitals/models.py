@@ -38,7 +38,8 @@ class Specializaiton(models.Model):
 
 class Book(models.Model):
     fees = models.FloatField(validators = [MinValueValidator(0.0)], null=False, blank=False)
-    time = models.DateTimeField(null=False, blank=False)
+    start_time = models.DateTimeField(null=False, blank=False)
+    end_time = models.DateTimeField(null=False, blank=False)
     waiting_time = models.IntegerField(null=True)
     doctor = models.CharField(max_length=60,null=False,blank=False)
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)

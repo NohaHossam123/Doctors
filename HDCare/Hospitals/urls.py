@@ -11,5 +11,7 @@ urlpatterns = [
     path('<id>/editReview',edit_review,name="edit_review"),
     path('<id>/rate',rate_hospital,name="rate_hospital"),
     path('<id>/addComplaint',add_complaint,name="add_complaint"),
-
+    path('doctor/<int:id>/appointment', book_appointment,name="appointment"),
+    path('doctor/<int:id>/book', book_redirect,name="book_redirect"),
+    path('doctor/<int:id>/cancelAppointment', delete_appointment,name="delete_appointment"),
 ]
