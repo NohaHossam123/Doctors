@@ -21,14 +21,14 @@
                 <i class="fa fa-stethoscope text-danger"></i> &nbsp;
                 Specialization:  <span class="text-dark">{{books.0.specializaiton.name|title}}</span>
             </p>
-            <div class="mx-5 row">
+            <div class="row">
                 {% for book in books %}
                     <div class="card rounded text-center m-4">
                         <div class="card-header bg-dark text-white">
                             <p>Booking Informations</p>
                         </div>
                         <div class="card-body">
-                            <div class="text-secondary mr-5">
+                            <div class="text-secondary">
                                 <i class="fa fa-money text-danger"></i>&nbsp;
                                 Fees : <span class="text-dark">{{book.fees}}</span> L.E
                             </div>
@@ -40,10 +40,26 @@
                             </div>
                             <hr/>
 
-                            <div class="text-secondary mr-5">
-                                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
-                                Time : <span class="text-dark">{{book.time}}</span>
+                            <div class="text-secondary row col-12">
+                                <div class="col-6">
+                                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                                    <small>Start Time</small> 
+                                </div>
+                                <div class="col-6">
+                                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                                    <small>Start Time</small>
+                                </div>
+
                             </div>
+                            <div class="text-secondary row col-12">
+                                <div class="col-6 text-center">
+                                 <small class="text-dark">{{book.start_time}}</small>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <small class="text-dark">{{book.end_time}}</small>
+                                </div>
+                            </div>
+
                             <hr/>
 
                             <div class="text-secondary">

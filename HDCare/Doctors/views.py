@@ -63,14 +63,14 @@ def doctors_page(request,sort=1):
 def doctor_profile(request,id):
     doctor = Doctor.objects.get(id=id)
     rating = [1,2,3,4,5]
-    rate = doctor.rate_set.only("rate")
+    rate = doctor.rate_set.all().values()
     try:
         user_rate = doctor.rate_set.get(user_id=request.user.id).rate
     except:
         user_rate = 0
     comments = Comment.objects.order_by("-id").filter(doctor=id)
     complains = Complain.objects.all()
-    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate}
+    context = {'doctor':doctor,'rating':rating , 'comments':comments , 'complains':complains , "user_rate": user_rate ,"rate":rate}
     return render(request, 'doctorProfile.html', context)
 
 def add_comment(request,id):

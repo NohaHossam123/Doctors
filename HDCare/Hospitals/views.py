@@ -46,14 +46,14 @@ def hospitals(request):
 
 def hospital(request, id):
     hospital = Hospital.objects.get(id=id)
-    rating = hospital.rating_set.only("rate")
+    rate = hospital.rating_set.all().values()
     try:
         user_rate = hospital.rating_set.get(user_id=request.user.id).rate
     except:
         user_rate = 0
     reviews = Review.objects.order_by("-id").filter(hospital=id)
     complains = Complaint.objects.all()
-    context = {'hospital': hospital , 'reviews':reviews , "complains": complains , "user_rate":user_rate}
+    context = {'hospital': hospital , 'reviews':reviews , "complains": complains , "user_rate":user_rate , "rate":rate}
     
     return render(request,'hospital.html', context)
 

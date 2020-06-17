@@ -35,7 +35,7 @@
                     {% endif %}
                     {% endfor %}
                     {% endif %}
-                    {% if rating %}
+                    {% if rate %}
                     <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
                     {% endif %}
             <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
@@ -107,6 +107,19 @@
                 {% for review in reviews %}
                 <div>
                     <div class="row">
+                        <div class="col-8 text-secondary">
+                        {% for every_rate in rate %}
+                        {% if every_rate.user_id == review.user.id %}
+                            {% for i in '12345' %}
+                                {% if i|add:0 <= every_rate.rate %}
+                                    <span class="fa fa-star text-warning"></span>
+                                {% else %}
+                                    <span class="fa fa-star"></span>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                        </div>
                         <div class="col-8 text-secondary">
                             {{review.user.first_name|title}}&nbsp;{{review.user.last_name|title}}
                         </div>
