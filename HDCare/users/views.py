@@ -164,3 +164,8 @@ def user_logout(request):
     return redirect('home')
 
 
+def facebook(request):
+    return render(request,'facebook.html')
+
+def twitter(request):
+    return render(request,'twitter.html')
