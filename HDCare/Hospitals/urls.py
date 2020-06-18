@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path('',hospitals , name='hospitals'),
+    path('<sort>',hospitals , name='hospitals'),
     path('h/<id>',hospital , name='hospital'),
     path('books/<id>',hospital_books , name='hospital_books'),
     path('<id>/addReview',add_review,name="add_review"),
@@ -11,7 +12,6 @@ urlpatterns = [
     path('<id>/editReview',edit_review,name="edit_review"),
     path('<id>/rate',rate_hospital,name="rate_hospital"),
     path('<id>/addComplaint',add_complaint,name="add_complaint"),
-    path('doctor/<int:id>/appointment', book_appointment,name="appointment"),
-    path('doctor/<int:id>/book', book_redirect,name="book_redirect"),
-    path('doctor/<int:id>/cancelAppointment', delete_appointment,name="delete_appointment"),
+    path('book_hospital/<int:id>', book_redirect,name="hospital_book_redirect"),
+    path('book_hospital/<int:id>/cancelAppointment', delete_appointment,name="hospital_delete_appointment"),
 ]

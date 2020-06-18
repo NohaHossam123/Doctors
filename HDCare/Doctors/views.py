@@ -13,10 +13,11 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.crypto import get_random_string
+from django.http import HttpResponseRedirect
 
 
 
-def doctors_page(request,sort=1):
+def doctors_page(request):
     rating = [1,2,3,4,5]
 
     # search:
@@ -25,12 +26,7 @@ def doctors_page(request,sort=1):
     if url_parameter:
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
     else:
-        if sort == "location":
-            doctors = Doctor.objects.all().order_by('clinic_address')
-        elif sort == "specialization":
-            doctors = Doctor.objects.all().order_by('specialization')
-        else:
-            doctors = Doctor.objects.all()
+        doctors = Doctor.objects.all()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(doctors, 6)
@@ -115,7 +111,7 @@ def add_complain(request,id):
 
 def book_appointment(request,id):
     if request.user.is_authenticated:
-        doctor = Doctor.objects.get(id=id)
+        # doctor = Doctor.objects.get(id=id)
         user = get_user(request)
         books = user.userbook_set.all()
         books = [i.doctor_book_id for i in books]
@@ -178,4 +174,11 @@ def rate_doctor(request,id):
         rate.save()
     return redirect('doctor', id)
 
+def filter_doctors(request):
+    url_parameter = request.GET.get('q')
+    if url_parameter:
+        doctors = Doctor.objects.filter(bio__icontains=url_parameter)
+        
+    context = {'doctors': doctors}
 
+    return render(request, 'allDoctors.html', context)

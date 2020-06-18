@@ -13,6 +13,9 @@ import datetime
 from django.utils.crypto import get_random_string
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from Doctors.models import *
+from Hospitals.models import *
+from django.contrib.auth import get_user
 
 
 def unauthenticated_user(view_func):
@@ -146,10 +149,18 @@ def password(request):
 
 @login_required
 def appointments(request):
-    return render(request,'appointments.html')
+    user = get_user(request)
+    doctor_book = UserBook.objects.filter(user=user)
+    hospital_book = User_Book.objects.filter(user=user)
+
+    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book}
+
+    return render(request, "appointments.html", context)
 
 
 #logout
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+

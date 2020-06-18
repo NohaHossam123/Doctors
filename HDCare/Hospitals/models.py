@@ -51,10 +51,9 @@ class Book(models.Model):
         auto_choose=True,
         verbose_name='Specializaiton',
     )
-    def __str__(self):
-        return 'Book: %s - %s - %s' % (self.hospital.name , self.specializaiton , str(self.time))
-    
 
+    def __repr__(self):
+        return f"specialization={self.specializaiton.name}"
 
 
 class Rating(models.Model):

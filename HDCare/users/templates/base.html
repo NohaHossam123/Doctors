@@ -27,7 +27,7 @@
                     <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
                     {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
                 </div>
-                <div class='navigation mr-4' ><a href="/appointments">Appointments</a></div>
+                <div class='navigation mr-4' ><a href="/appointments">My Appointments</a></div>
                 <div class='navigation mr-4' ><a href="/profile">My Profile</a></div>
             {% else %}
                 <div class='navigation mr-4'><a href="/signup">Register</a></div>

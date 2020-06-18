@@ -5,9 +5,24 @@
 {% block styles %}
 {% endblock %}
 {% block content %}  
+
+
+{% if messages %}
+{% for message in messages %}
+    {% if 'success' in message.tags %}
+    <div class="alert alert-success m-2">{{message}} </div>
+    {% elif 'info' in message.tags %}
+    <div class="alert alert-info m-2">{{message}} </div>
+    {% else %}
+    <div class="alert alert-danger m-2">{{message}} </div>
+    {% endif %}
+{% endfor %}
+{% endif %} 
+
+
     <div class="m-4">
         {% if books|length == 0%}
-            <h4>No available books for this specialization right now!</h4>
+        <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i>No available books for this specialization right now!</h2>
         {% else %}
             <p class="text-secondary">Book your appointments</p>
             <p class="h4 text-danger">
@@ -24,13 +39,16 @@
             <div class="row">
                 {% for book in books %}
                     <div class="card rounded text-center m-4">
-                        <div class="card-header bg-dark text-white">
-                            <p>Booking Informations</p>
+                        <div class="card-header text-center bg-dark text-white" style="display: flex;flex-direction: row;justify-content: space-around; ">
+                            <p>Book Info</p>
+                            {% if book.id in all_books %}
+                            <a href="{% url 'hospital_delete_appointment' book.id %}" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
+                            {% endif %}
                         </div>
                         <div class="card-body">
                             <div class="text-secondary">
                                 <i class="fa fa-money text-danger"></i>&nbsp;
-                                Fees : <span class="text-dark">{{book.fees}}</span> L.E
+                                Fees : <span class="text-dark">{{book.fees}}</span> EGP
                             </div>
                             <hr/>
 
@@ -47,7 +65,7 @@
                                 </div>
                                 <div class="col-6">
                                     <i class="fa fa-clock-o	text-danger"></i>&nbsp;
-                                    <small>Start Time</small>
+                                    <small>End Time</small>
                                 </div>
 
                             </div>
@@ -69,7 +87,11 @@
                             
                         </div>
                         <div class="card-footer bg-dark text-white">
-                            <a href="">Book Now</a>
+                            {% if not book.id in all_books %}
+                            <a href="{% url 'hospital_book_redirect' book.id %}" class="btn btn-primary btn-sm btn-block">Book Now</a>
+                            {% else %}
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-block">Already booked</a>
+                            {% endif %}
                         </div>
                     </div>
 

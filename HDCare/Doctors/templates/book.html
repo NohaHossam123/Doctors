@@ -48,9 +48,9 @@
         </div>
         <div class="card-footer text-center bg-dark">
             {% if not book.id in books %}
-              <a href="/doctors/doctor/{{ book.id }}/book" class="btn btn-primary btn-block">Book</a>
+              <a href="/doctors/doctor/{{ book.id }}/book" class="btn btn-primary btn-sm btn-block">Book</a>
             {% else %}
-              <a href="javascript:void(0)" class="btn btn-danger btn-block">Already booked</a>
+              <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-block">Already booked</a>
             {% endif %}
         </div>
       </div> 

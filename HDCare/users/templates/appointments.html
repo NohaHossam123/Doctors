@@ -3,5 +3,55 @@
 {% block styles %}
 {% endblock %}
 {% block content %}
-<h1>appointments page</h1>
+<div class="container">
+  {% for book in doctor_book %}
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+          Appointment
+        </div>
+        <div class="card-body">
+          <div class="text-secondary row col-12">
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>Start Time: {{book.doctor_book.start_time}}</small> 
+            </div>
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>End Time: {{book.doctor_book.end_time}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-user-md	text-danger"></i>&nbsp;
+              <small>Doctor: {{book.doctor_book.doctor.first_name}}&nbsp;{{book.doctor_book.doctor.last_name}}</small>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+      {% for book in hospital_book %}
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+          Appointment
+        </div>
+        <div class="card-body">
+          <div class="text-secondary row col-12">
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>Start Time: {{book.book.start_time}}</small> 
+            </div>
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>End Time: {{book.book.end_time}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-hospital-o	text-danger"></i>&nbsp;
+              <small>Hospital: {{book.book.hospital.name}}</small>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      {% endfor %}
+</div>
 {% endblock %}

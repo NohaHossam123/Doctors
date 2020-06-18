@@ -6,16 +6,21 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import get_user
+from datetime import date
+from django.http import HttpResponseRedirect
 
 
-
-def hospitals(request):
+def hospitals(request,sort=1):
     url_parameter = request.GET.get('q')
-    print(url_parameter)
+    # print(url_parameter)
     if url_parameter:
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
     else:
-        hospitals = Hospital.objects.all()
+        if sort == "location":
+            hospitals = Hospital.objects.all().order_by('location')
+        else:
+            hospitals = Hospital.objects.all()
     
     page = request.GET.get('page', 1)
     paginator = Paginator(hospitals, 6)
@@ -59,10 +64,29 @@ def hospital(request, id):
 
 
 def hospital_books(request, id):
-    books = Book.objects.filter(specializaiton_id= id)
-    context = {'books': books}
+    # hospital = Hospital.objects.get(id=id)
+    user = get_user(request)
+    all_books = user.user_book_set.all()
+    all_books = [i.book_id for i in all_books]
+    books = Book.objects.filter(specializaiton_id= id, end_time__date__gte = date.today())
+    context = {'books': books, "all_books": all_books}
 
     return render(request,'books.html',context)
+
+def book_redirect(request, id):
+    user = get_user(request)
+    book = Book.objects.get(id=id)
+    User_Book.objects.create(user=user, book=book)
+    messages.info(request,"your book has been placed susccessfully")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def delete_appointment(request, id):
+    user = request.user
+    appointment = User_Book.objects.get(user=user, book_id=id)
+    appointment.delete()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def add_review(request,id):
@@ -105,47 +129,6 @@ def add_complaint(request,id):
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
             messages.info(request,"we have received your complain")
     return redirect('hospital', id)
-
-
-def book_appointment(request,id):
-    if request.user.is_authenticated:
-        doctor = Doctor.objects.get(id=id)
-        user = get_user(request)
-        books = user.userbook_set.all()
-        books = [i.doctor_book_id for i in books]
-        books_count = len(books)
-        book_info = Doctor_Book.objects.filter(
-            doctor_id=id, end_time__date__gte = date.today()
-        )
-        copoun = user.copoun.last()
-        token = None
-        if copoun:
-            token = copoun.token
-        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token}
-
-        return render(request, 'book.html', context)
-    else:
-        return redirect('signin')
-
-def book_redirect(request,id):
-    user = get_user(request)
-    obj = UserBook.objects.filter(user=user)
-    if not obj:
-        token = get_random_string(length=6)
-        Copoun.objects.create(token=token, user=user)
-    UserBook.objects.create(user=user, doctor_book_id=id)
-    book_id = Doctor_Book.objects.get(id=id)
-    messages.info(request,"your book has been placed susccessfully")
-
-    return redirect('appointment', book_id.doctor_id)
-
-def delete_appointment(request, id):
-    user = request.user
-    appointment = UserBook.objects.get(user=user, doctor_book_id=id)
-    appointment.delete()
-    book_id = Doctor_Book.objects.get(id=id)
-    
-    return redirect('appointment', book_id.doctor_id)
 
 def rate_hospital(request,id):
     try:
