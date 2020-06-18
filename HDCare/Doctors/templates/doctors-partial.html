@@ -70,7 +70,6 @@
 </div>
 <div class="col-md">
   <strong class="text-info">Doctor </strong><a href="/doctors/doctor/{{ doctor.id }}">{{ doctor.first_name |add:" "|add:doctor.last_name }}</a>
-  <div>{{ doctor.bio }}</div>
   <div>
     {% if doctor.avg_rating %}
     {% for i in rating %}
