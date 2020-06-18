@@ -45,8 +45,9 @@
                             Specilizations
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            
                             {% for spcialize in specialize_hospital %}
-                            <a class="dropdown-item" href="/hospitals/filterd?q={{spcialize.name}}">{{spcialize.name}}</a>
+                            <a class="dropdown-item spcialize" href=/hospitals?s={{spcialize.name}} >{{spcialize.name}}</a>
                             {% endfor %}
                         </div>                        
                     </div>

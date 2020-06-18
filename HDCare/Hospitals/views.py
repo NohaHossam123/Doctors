@@ -12,11 +12,19 @@ from django.http import HttpResponseRedirect
 
 
 def hospitals(request):
-    specialize_hospital = Specializaiton.objects.all()
+
+    specialize_hospital = Specializaiton.objects.all().values('name').distinct()
     url_parameter = request.GET.get('q')
-    # print(url_parameter)
+    url_speciality = request.GET.get('s')
+
     if url_parameter:
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
+
+    elif url_speciality:
+
+        ids = Specializaiton.objects.filter(name__icontains = url_speciality).values_list("hospital") 
+        hospitals = Hospital.objects.filter(id__in = ids)
+
     else:
         hospitals = Hospital.objects.all()
     
@@ -47,6 +55,8 @@ def hospitals(request):
     return render(request,'all_hospitals.html', context)
 
 
+
+
 def hospital(request, id):
     hospital = Hospital.objects.get(id=id)
     rate = hospital.rating_set.all().values()
@@ -61,6 +71,7 @@ def hospital(request, id):
     return render(request,'hospital.html', context)
 
 
+
 def hospital_books(request, id):
     # hospital = Hospital.objects.get(id=id)
     user = get_user(request)
@@ -71,6 +82,8 @@ def hospital_books(request, id):
 
     return render(request,'books.html',context)
 
+
+
 def book_redirect(request, id):
     user = get_user(request)
     book = Book.objects.get(id=id)
@@ -79,12 +92,15 @@ def book_redirect(request, id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+
 def delete_appointment(request, id):
     user = request.user
     appointment = User_Book.objects.get(user=user, book_id=id)
     appointment.delete()
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 
 def add_review(request,id):
@@ -101,11 +117,14 @@ def add_review(request,id):
     return redirect('hospital', id)
 
 
+
 def remove_review(request, id):
     review = Review.objects.get(id=id)
     hospital_id = review.hospital.id
     review.delete()
     return redirect('hospital', hospital_id)
+
+
 
 def edit_review(request, id):
     if request.method == 'POST':
@@ -128,6 +147,8 @@ def add_complaint(request,id):
             messages.info(request,"we have received your complain")
     return redirect('hospital', id)
 
+
+
 def rate_hospital(request,id):
     try:
         if request.method == 'POST':
@@ -138,6 +159,8 @@ def rate_hospital(request,id):
         rate.rate = request.POST.get('rate') 
         rate.save()
     return redirect('hospital', id)
+
+
 
 def filter_hospitals(request):
     url_parameter = request.GET.get('q')
