@@ -11,16 +11,14 @@ from datetime import date
 from django.http import HttpResponseRedirect
 
 
-def hospitals(request,sort=1):
+def hospitals(request):
+    specialize_hospital = Specializaiton.objects.all()
     url_parameter = request.GET.get('q')
     # print(url_parameter)
     if url_parameter:
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
     else:
-        if sort == "location":
-            hospitals = Hospital.objects.all().order_by('location')
-        else:
-            hospitals = Hospital.objects.all()
+        hospitals = Hospital.objects.all()
     
     page = request.GET.get('page', 1)
     paginator = Paginator(hospitals, 6)
@@ -34,7 +32,7 @@ def hospitals(request,sort=1):
     except EmptyPage:
         hospitals = paginator.page(paginator.num_pages)
     
-    context = {'hospitals': hospitals}
+    context = {'hospitals': hospitals , 'specialize_hospital':specialize_hospital}
 
     # ajax search
     if request.is_ajax():
@@ -140,3 +138,12 @@ def rate_hospital(request,id):
         rate.rate = request.POST.get('rate') 
         rate.save()
     return redirect('hospital', id)
+
+def filter_hospitals(request):
+    url_parameter = request.GET.get('q')
+    if url_parameter:
+        hospitals = Hospital.objects.filter(location__icontains=url_parameter)
+
+    context = {'hospitals': hospitals}
+
+    return render(request, 'all_hospitals.html', context)

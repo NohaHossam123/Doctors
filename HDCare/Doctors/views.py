@@ -177,8 +177,7 @@ def rate_doctor(request,id):
 def filter_doctors(request):
     url_parameter = request.GET.get('q')
     if url_parameter:
-        doctors = Doctor.objects.filter(bio__icontains=url_parameter)
-        
+        doctors = Doctor.objects.filter(Q(bio__icontains=url_parameter) | Q(specialization__icontains=url_parameter) | Q(clinic_address__icontains=url_parameter))
     context = {'doctors': doctors}
 
     return render(request, 'allDoctors.html', context)

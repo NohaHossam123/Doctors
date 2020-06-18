@@ -8,11 +8,48 @@
                     <i class="fa fa-filter "></i>  Filter
                 </div>
                 <div class="card-body">
-                    <a href="{% url 'hospitals' %}" class="btn btn-primary btn-block">
-                        <i class="fa fa-list text-white" aria-hidden="true"></i> All
-                    </a>
+                    <a href="{% url 'hospitals' %}" class="btn btn-primary btn-block">All</a>
                     <hr/>
-                    <a href="/hospitals/location" class="btn btn-primary btn-block">Location</a>
+                    <div class="dropdown">
+                        <button class="btn btn-primary btn-md btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            City
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Cairo">Cairo</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Giza">Giza</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Alexandria">Alexandria</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Kafr El Sheikh">Kafr El Sheikh</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Ismailia">Ismailia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Gharbia">Gharbia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Dakahlia">Dakahlia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Monufia">Monufia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Damietta">Damietta</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Suez">Suez</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Port Said">Port Said</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Qalyubia">Qalyubia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Sharqia">Sharqia</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Beheira">Beheira</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Aswan">Aswan</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Qena">Qena</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Faiyum">Faiyum</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Minya">Minya</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Sohag">Sohag</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Asyut">Asyut</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Beni Suef">Beni Suef</a>
+                            <a class="dropdown-item" href="/hospitals/filterd?q=Luxor">Luxor</a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="dropdown">
+                        <button class="btn btn-primary btn-md btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Specilizations
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for spcialize in specialize_hospital %}
+                            <a class="dropdown-item" href="/hospitals/filterd?q={{spcialize.name}}">{{spcialize.name}}</a>
+                            {% endfor %}
+                        </div>                        
+                    </div>
                 </div>
                 <div class="card-footer bg-dark">
                 </div>
