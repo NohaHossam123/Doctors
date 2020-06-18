@@ -9,11 +9,13 @@
         <i class="fa fa-filter "></i>  Filter
     </div>
     <div class="card-body">
-        <a href="{% url 'doctors' %}" class="btn btn-primary btn-md btn-block">All</a>
+        <a href="{% url 'doctors' %}" class="btn btn-primary btn-md btn-block">
+          <i class="fa fa-list text-white" aria-hidden="true"></i> All
+        </a>
         <hr/>
         <div class="dropdown">
-            <button class="btn btn-primary btn-md btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Title
+          <button class="btn btn-primary btn-md btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-graduation-cap text-white" aria-hidden="true"></i> Title
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="/doctors/filterd?q=lecturer">lecturer</a>
