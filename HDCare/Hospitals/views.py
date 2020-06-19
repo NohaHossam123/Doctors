@@ -71,7 +71,7 @@ def hospital(request, id):
     return render(request,'hospital.html', context)
 
 
-
+@login_required
 def hospital_books(request, id):
     # hospital = Hospital.objects.get(id=id)
     user = get_user(request)
