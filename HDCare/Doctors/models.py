@@ -12,9 +12,9 @@ class Doctor(models.Model):
     last_name = models.CharField(max_length=60)
     phone_regex = RegexValidator(regex=r'^[\+2]?(01)(0|1|2|5)([0-9]{8})$', message="the format of phone number must be as : +20 111 111 1111")
     phone = models.CharField(validators=[phone_regex], max_length=13, unique=True)
-    specialization = models.CharField(max_length=60)
+    specialization = models.CharField(max_length=255)
     bio = models.TextField()
-    clinic_address = models.CharField(max_length=100)
+    clinic_address = models.CharField(max_length=255)
     waiting_time = models.CharField(max_length=20, null=True)
     fees = models.IntegerField(null=True)
 
