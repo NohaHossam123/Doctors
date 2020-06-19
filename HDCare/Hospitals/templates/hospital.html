@@ -75,7 +75,7 @@
                 <div class="card-body row">
                     <p class="h5 text-secondary">
                         <i class="fa fa-star text-danger"></i>
-                        <strong>Review:</strong> &nbsp;&nbsp;
+                        <strong>Rate the hospital:</strong> &nbsp;&nbsp;
                         <div class="star-rating">
                         <form action={% url 'rate_hospital' hospital.id %} id="rate_form" method="POST">
                             {% csrf_token %}

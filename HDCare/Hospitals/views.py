@@ -16,14 +16,17 @@ def hospitals(request):
     specialize_hospital = Specializaiton.objects.all().values('name').distinct()
     url_parameter = request.GET.get('q')
     url_speciality = request.GET.get('s')
-
+    url_city = request.GET.get('c')
+    
     if url_parameter:
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
 
     elif url_speciality:
-
         ids = Specializaiton.objects.filter(name__icontains = url_speciality).values_list("hospital") 
         hospitals = Hospital.objects.filter(id__in = ids)
+
+    elif url_city:
+        hospitals = Hospital.objects.filter(location__icontains=url_city)
 
     else:
         hospitals = Hospital.objects.all()
@@ -46,7 +49,7 @@ def hospitals(request):
     if request.is_ajax():
         html = render_to_string(
             template_name="hospitals-partial.html", 
-            context={'hospitals': hospitals}
+            context={'hospitals': hospitals , 'specialize_hospital':specialize_hospital}
         )
 
         data_dict = {"html_from_view": html}
