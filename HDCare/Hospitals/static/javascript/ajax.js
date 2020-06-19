@@ -1,6 +1,5 @@
 const user_input = $("#hospitals-search")
 const search_icon = $('#h-search-icon')
-const speciality = $("#options")
 const hospitals = $('#h-replaceable-content')
 const endpoint = '/hospitals/'
 const delay_by_in_ms = 1000

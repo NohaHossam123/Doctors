@@ -22,9 +22,18 @@ def doctors_page(request):
 
     # search:
     url_parameter = request.GET.get('q')
-    print(url_parameter)
+    url_speciality = request.GET.get('s')
+    url_city = request.GET.get('c')
+
     if url_parameter:
         doctors = Doctor.objects.filter(Q(first_name__icontains=url_parameter) |Q(last_name__icontains=url_parameter))
+    
+    elif url_speciality:
+        doctors = Doctor.objects.filter(specialization__icontains = url_speciality)
+
+    elif url_city:
+        doctors = Doctor.objects.filter(clinic_address__icontains=url_city)
+    
     else:
         doctors = Doctor.objects.all()
 
