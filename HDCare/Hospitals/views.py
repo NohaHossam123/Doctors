@@ -165,11 +165,11 @@ def rate_hospital(request,id):
 
 
 
-def filter_hospitals(request):
-    url_parameter = request.GET.get('q')
-    if url_parameter:
-        hospitals = Hospital.objects.filter(location__icontains=url_parameter)
+# def filter_hospitals(request):
+#     url_parameter = request.GET.get('q')
+#     if url_parameter:
+#         hospitals = Hospital.objects.filter(location__icontains=url_parameter)
 
-    context = {'hospitals': hospitals}
+#     context = {'hospitals': hospitals}
 
-    return render(request, 'all_hospitals.html', context)
+#     return render(request, 'all_hospitals.html', context)

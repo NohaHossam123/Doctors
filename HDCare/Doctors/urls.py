@@ -14,5 +14,5 @@ urlpatterns = [
     path('doctor/<int:id>/book', book_redirect,name="book_redirect"),
     path('doctor/<int:id>/cancelAppointment', delete_appointment,name="delete_appointment"),
     path('<slug:token>/activate', copoun_activation,name="activate_copoun"),
-    path('filterd', filter_doctors, name="filterbytitle"),
+    # path('filterd', filter_doctors, name="filterbytitle"),
 ]

@@ -183,10 +183,10 @@ def rate_doctor(request,id):
         rate.save()
     return redirect('doctor', id)
 
-def filter_doctors(request):
-    url_parameter = request.GET.get('q')
-    if url_parameter:
-        doctors = Doctor.objects.filter(Q(specialization__icontains=url_parameter) | Q(clinic_address__icontains=url_parameter))
-    context = {'doctors': doctors}
+# def filter_doctors(request):
+#     url_parameter = request.GET.get('q')
+#     if url_parameter:
+#         doctors = Doctor.objects.filter(Q(specialization__icontains=url_parameter) | Q(clinic_address__icontains=url_parameter))
+#     context = {'doctors': doctors}
 
-    return render(request, 'allDoctors.html', context)
+#     return render(request, 'allDoctors.html', context)
