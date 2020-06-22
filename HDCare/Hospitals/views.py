@@ -91,7 +91,7 @@ def book_redirect(request, id):
     user = get_user(request)
     book = Book.objects.get(id=id)
     User_Book.objects.create(user=user, book=book)
-    messages.info(request,"your book has been placed susccessfully")
+    messages.info(request,"Your book has been placed successfully")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -116,7 +116,7 @@ def add_review(request,id):
                 context= request.POST.get('context')
                 Review.objects.create(context= context,user_id = user_id, hospital_id = id)
     except:
-        messages.error(request, "You have already commented to this doctor before!")
+        messages.error(request, "You have already commented to this hospital before!")
     return redirect('hospital', id)
 
 
@@ -142,12 +142,12 @@ def edit_review(request, id):
 def add_complaint(request,id):
     if request.method == 'POST':
         if request.POST.get('context') == '':
-            messages.error(request, "Invalid complain,Complain can't be empty")
+            messages.error(request, "Invalid complaint,Complaint cannot be empty")
         else:
             user_id = request.user.id
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
-            messages.info(request,"we have received your complain")
+            messages.info(request,"We have received your complaint")
     return redirect('hospital', id)
 
 
@@ -162,14 +162,3 @@ def rate_hospital(request,id):
         rate.rate = request.POST.get('rate') 
         rate.save()
     return redirect('hospital', id)
-
-
-
-# def filter_hospitals(request):
-#     url_parameter = request.GET.get('q')
-#     if url_parameter:
-#         hospitals = Hospital.objects.filter(location__icontains=url_parameter)
-
-#     context = {'hospitals': hospitals}
-
-#     return render(request, 'all_hospitals.html', context)

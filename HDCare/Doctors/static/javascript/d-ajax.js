@@ -9,7 +9,6 @@ let speciality_value = 'Title';
 let city_value = 'City';
 
 
-
 let ajax_call = function (endpoint, request_parameters) {
     $.getJSON(endpoint, request_parameters)
         .done(response => {
@@ -67,7 +66,7 @@ $("body").on('change','#title',function () {
     let request_parameters;
 
     speciality_value = $(this).val()
-    city_value = 'City'; 
+    city_value = 'City';
 
     if($(this).val() == 'Title'){
          request_parameters = {
@@ -97,7 +96,7 @@ $("body").on('change','#city',function () {
     let request_parameters;
     
     city_value = $(this).val()
-    speciality_value = 'Title'; 
+    speciality_value = 'Title';
 
     if($(this).val() == 'City'){
          request_parameters = {

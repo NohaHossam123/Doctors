@@ -14,7 +14,7 @@ from django.contrib.auth import get_user
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.crypto import get_random_string
 from django.http import HttpResponseRedirect
-
+# from django.views.decorators.csrf import csrf_exempt
 
 
 def doctors_page(request):
@@ -88,7 +88,7 @@ def add_comment(request,id):
                 context= request.POST.get('context')
                 Comment.objects.create(context= context,user_id = user_id, doctor_id = id)
     except:
-        messages.error(request , "You have already commented to this doctor before!")
+        messages.error(request ,"You have already commented to this doctor before!")
     return redirect('doctor', id)
 
 def remove_comment(request, id):
@@ -97,12 +97,14 @@ def remove_comment(request, id):
     comment.delete()
     return redirect('doctor', doctor_id)
 
+# @csrf_exempt
 def edit_comment(request, id):
     if request.method == 'POST':
         comment = Comment.objects.get(id=id)
+        # comment.context = request.POST.get('data')
         comment.context = request.POST.get('context')
         if comment.context == '':
-            messages.error(request, "Invalid complain,Complain can't be empty")
+            messages.error(request, "Invalid comment,Comment can't be empty")
         else:  
             comment.save()
     return redirect('doctor', comment.doctor.id)
@@ -110,12 +112,12 @@ def edit_comment(request, id):
 def add_complain(request,id):
     if request.method == 'POST':
         if request.POST.get('contain') == '':
-            messages.error(request, "Invalid complain,Complain can't be empty")
+            messages.error(request, "Invalid complaint,Complaint cannot be empty")
         else:
             user_id = request.user.id
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
-            messages.info(request,"we have received your complain")
+            messages.info(request,"We have received your complaint")
     return redirect('doctor', id)
 
 def book_appointment(request,id):
@@ -146,7 +148,7 @@ def book_redirect(request,id):
         Copoun.objects.create(token=token, user=user)
     UserBook.objects.create(user=user, doctor_book_id=id)
     book_id = Doctor_Book.objects.get(id=id)
-    messages.info(request,"your book has been placed susccessfully")
+    messages.info(request,"Your book has been placed successfully")
 
     return redirect('appointment', book_id.doctor_id)
 
@@ -167,9 +169,9 @@ def copoun_activation(request, token):
         copoun.is_used = True
         copoun.save()
         new_fees = fees * 0.8
-        messages.info(request, f"your book has been placed susccessfully, the old fees is {fees} and the new one is {new_fees}")
+        messages.info(request, f"Your book has been placed successfully, the old fees is {fees} and the new one is {new_fees}")
     else:
-        messages.info(request, "Sorry, your copoun is not valid OR may be used before,Please try again later")
+        messages.info(request, "Sorry, your coupon is not valid OR may be used before,Please try again later")
     return redirect("appointment", book.doctor_book.doctor.id)
 
 def rate_doctor(request,id):
@@ -182,11 +184,3 @@ def rate_doctor(request,id):
         rate.rate = int(request.POST.get('rate')) 
         rate.save()
     return redirect('doctor', id)
-
-# def filter_doctors(request):
-#     url_parameter = request.GET.get('q')
-#     if url_parameter:
-#         doctors = Doctor.objects.filter(Q(specialization__icontains=url_parameter) | Q(clinic_address__icontains=url_parameter))
-#     context = {'doctors': doctors}
-
-#     return render(request, 'allDoctors.html', context)

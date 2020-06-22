@@ -27,6 +27,4 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('appointments/', appointments, name='appointments'),
     path('activate/<str:token>', activate_account, name="activate"),
-    path('facebook', facebook, name="facebook"),
-    path('twitter', twitter, name="twitter"),
 ]

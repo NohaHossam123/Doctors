@@ -84,7 +84,13 @@
                             {% endfor %}  
                             {% endif %}
                         </p>
+                        <p>
+                            {% if hospital.avg_rate %}
+                            <span>Overall Rating From {{ hospital.count_rating }} Visitors</span>
+                            {% endif %}
+                        </p>
                         <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
+                        <p><i class="fas fa-clock text-danger"></i> &nbsp;Open 24 hours</p>
                         <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>
                         <p> <i class="fa fa-stethoscope	text-danger"></i> &nbsp;Available Specilizations:</p>
                         <ul>
