@@ -64,11 +64,16 @@ def hospital(request, id):
 
 
 def hospital_books(request, id):
+    if request.user.is_authenticated:
     # hospital = Hospital.objects.get(id=id)
-    user = get_user(request)
-    all_books = user.user_book_set.all()
-    all_books = [i.book_id for i in all_books]
-    books = Book.objects.filter(specializaiton_id= id, end_time__date__gte = date.today())
+        user = get_user(request)
+        all_books = user.user_book_set.all()
+        all_books = [i.book_id for i in all_books]
+        books = Book.objects.filter(specializaiton_id= id, end_time__date__gte = date.today())
+    
+    else:
+        return redirect("signin")
+    
     context = {'books': books, "all_books": all_books}
 
     return render(request,'books.html',context)
@@ -80,14 +85,6 @@ def book_redirect(request, id):
     messages.info(request,"your book has been placed susccessfully")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-def delete_appointment(request, id):
-    user = request.user
-    appointment = User_Book.objects.get(user=user, book_id=id)
-    appointment.delete()
-    
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 def add_review(request,id):
     try:

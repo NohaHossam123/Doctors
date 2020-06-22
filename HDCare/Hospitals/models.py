@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import  MaxValueValidator , MinValueValidator
+from datetime import date
 from users.models import User
 from django.db.models import Avg
 from smart_selects.db_fields import ChainedForeignKey 
@@ -57,6 +58,10 @@ class Book(models.Model):
 
     def __repr__(self):
         return f"specialization={self.specializaiton.name}"
+
+    @property
+    def is_expired(self):
+        return date.today() > self.end_time.date()
 
 
 class Rating(models.Model):

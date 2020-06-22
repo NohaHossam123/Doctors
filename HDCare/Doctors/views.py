@@ -131,23 +131,21 @@ def book_appointment(request,id):
 
 def book_redirect(request,id):
     user = get_user(request)
+    get_count_book = UserBook.objects.filter(doctor_book_id=id)
+    get_count_book_o = len(get_count_book)
     obj = UserBook.objects.filter(user=user)
     if not obj:
         token = get_random_string(length=6)
         Copoun.objects.create(token=token, user=user)
-    UserBook.objects.create(user=user, doctor_book_id=id)
-    book_id = Doctor_Book.objects.get(id=id)
-    messages.info(request,"your book has been placed susccessfully")
+    if get_count_book_o < 10:
+        UserBook.objects.create(user=user, doctor_book_id=id)
+        # book_id = Doctor_Book.objects.get(id=id)
+        messages.info(request,"your book has been placed susccessfully")
+    else:
+        messages.info(request,"sorry this appointment is fully booked")
 
-    return redirect('appointment', book_id.doctor_id)
-
-def delete_appointment(request, id):
-    user = request.user
-    appointment = UserBook.objects.get(user=user, doctor_book_id=id)
-    appointment.delete()
-    book_id = Doctor_Book.objects.get(id=id)
-    
-    return redirect('appointment', book_id.doctor_id)
+    # return redirect('appointment', book_id.doctor_id)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def copoun_activation(request, token):
     user = get_user(request)
