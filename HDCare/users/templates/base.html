@@ -22,20 +22,27 @@
     
         <div class='d-flex flex-row-reverse align-items-center '>
             {% if user.is_authenticated %}
-                <div class='navigation mr-4' ><a href="/logout">Log out</a></div>
-                <div class='navigation mr-4' >
-                    <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
-                    {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
+                <div class='navigation mr-4 nav-item dropdown' >
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
+                        {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
+                    </a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/profile">My Profile</a>
+                        <a class="dropdown-item" href="/appointments">My Appointments</a>
+                        <a class="dropdown-item" href="/logout">Log out</a>
+                      </div>
                 </div>
-                <div class='navigation mr-4' ><a href="/appointments">My Appointments</a></div>
-                <div class='navigation mr-4' ><a href="/profile">My Profile</a></div>
             {% else %}
                 <div class='navigation mr-4'><a href="/signup">Register</a></div>
                 <div class='navigation mr-4'><a href="/login">Login</a></div>
             {% endif %}
-            
-            <div class='navigation mr-4'><a href="/doctors">Doctors</a></div>
-            <div class='navigation mr-4' ><a href="/hospitals">Hospitals</a></div>
+
+            {% if not user.is_doctor%}
+                <div class='navigation mr-4'><a href="/doctors">Doctors</a></div>
+                <div class='navigation mr-4' ><a href="/hospitals">Hospitals</a></div>
+            {% endif %}
+
         </div>
          
     </nav>

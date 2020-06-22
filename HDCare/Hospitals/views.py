@@ -11,16 +11,25 @@ from datetime import date
 from django.http import HttpResponseRedirect
 
 
-def hospitals(request,sort=1):
+def hospitals(request):
+
+    specialize_hospital = Specializaiton.objects.all().values('name').distinct()
     url_parameter = request.GET.get('q')
-    # print(url_parameter)
+    url_speciality = request.GET.get('s')
+    url_city = request.GET.get('c')
+    
     if url_parameter:
         hospitals = Hospital.objects.filter(name__icontains=url_parameter)
+
+    elif url_speciality:
+        ids = Specializaiton.objects.filter(name__icontains = url_speciality).values_list("hospital") 
+        hospitals = Hospital.objects.filter(id__in = ids)
+
+    elif url_city:
+        hospitals = Hospital.objects.filter(location__icontains=url_city)
+
     else:
-        if sort == "location":
-            hospitals = Hospital.objects.all().order_by('location')
-        else:
-            hospitals = Hospital.objects.all()
+        hospitals = Hospital.objects.all()
     
     page = request.GET.get('page', 1)
     paginator = Paginator(hospitals, 6)
@@ -34,19 +43,21 @@ def hospitals(request,sort=1):
     except EmptyPage:
         hospitals = paginator.page(paginator.num_pages)
     
-    context = {'hospitals': hospitals}
+    context = {'hospitals': hospitals , 'specialize_hospital':specialize_hospital}
 
     # ajax search
     if request.is_ajax():
         html = render_to_string(
             template_name="hospitals-partial.html", 
-            context={'hospitals': hospitals}
+            context={'hospitals': hospitals , 'specialize_hospital':specialize_hospital}
         )
 
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
 
     return render(request,'all_hospitals.html', context)
+
+
 
 
 def hospital(request, id):
@@ -63,6 +74,7 @@ def hospital(request, id):
     return render(request,'hospital.html', context)
 
 
+@login_required
 def hospital_books(request, id):
     if request.user.is_authenticated:
     # hospital = Hospital.objects.get(id=id)
@@ -78,11 +90,13 @@ def hospital_books(request, id):
 
     return render(request,'books.html',context)
 
+
+
 def book_redirect(request, id):
     user = get_user(request)
     book = Book.objects.get(id=id)
     User_Book.objects.create(user=user, book=book)
-    messages.info(request,"your book has been placed susccessfully")
+    messages.info(request,"Your book has been placed successfully")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -96,8 +110,9 @@ def add_review(request,id):
                 context= request.POST.get('context')
                 Review.objects.create(context= context,user_id = user_id, hospital_id = id)
     except:
-        messages.error(request, "You have already commented to this doctor before!")
+        messages.error(request, "You have already commented to this hospital before!")
     return redirect('hospital', id)
+
 
 
 def remove_review(request, id):
@@ -105,6 +120,8 @@ def remove_review(request, id):
     hospital_id = review.hospital.id
     review.delete()
     return redirect('hospital', hospital_id)
+
+
 
 def edit_review(request, id):
     if request.method == 'POST':
@@ -119,13 +136,15 @@ def edit_review(request, id):
 def add_complaint(request,id):
     if request.method == 'POST':
         if request.POST.get('context') == '':
-            messages.error(request, "Invalid complain,Complain can't be empty")
+            messages.error(request, "Invalid complaint,Complaint cannot be empty")
         else:
             user_id = request.user.id
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
-            messages.info(request,"we have received your complain")
+            messages.info(request,"We have received your complaint")
     return redirect('hospital', id)
+
+
 
 def rate_hospital(request,id):
     try:

@@ -1,20 +1,17 @@
 .navigation >a{
     color: white;
-    font-weight:bold;
     text-decoration: none;
 
 }
 
 .navigation > a:hover{
     color: red;
-    font-weight:bold;
     text-decoration: none;
 
 }
 
 .navigation {
     color: white;
-    font-weight:bold;
 }
 
 nav {

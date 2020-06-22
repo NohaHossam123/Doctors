@@ -9,21 +9,49 @@
         <i class="fa fa-filter "></i>  Filter
     </div>
     <div class="card-body">
-        <a href="{% url 'doctors' %}" class="btn btn-primary btn-md btn-block">
-          <i class="fa fa-list text-white" aria-hidden="true"></i> All
-        </a>
+      <button id="dall" class="btn btn-primary btn-block bg-white text-dark text-left border-light">
+        All Doctors
+    </button>
         <hr/>
         <div class="dropdown">
-          <button class="btn btn-primary btn-md btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-graduation-cap text-white" aria-hidden="true"></i> Title
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="/doctors/filterd?q=lecturer">lecturer</a>
-              <a class="dropdown-item" href="/doctors/filterd?q=professor">professor</a>
-              <a class="dropdown-item" href="/doctors/filterd?q=specialist">specialist</a>
-            </div>
+          <select  class="form-control border-light" id="title">
+              <option>Title</option>
+              <option value="lecturer">lecturer</option>
+              <option value="professor">professor</option>
+              <option value="specialist">specialist</option>
+              <option value="consultant">consultant</option>
+          </select>
+        </div>
+        <hr/>
+            <!-- cities section -->
+            <div class="dropdown">
+              <select  class="form-control border-light" id="city">
+                  <option>City</option>
+                  <option value="Cairo">Cairo</option>
+                  <option value="Giza">Giza</option>
+                  <option value="Alexandria">Alexandria</option>
+                  <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                  <option value="Ismailia">Ismailia</option>
+                  <option value="Gharbia">Gharbia</option>
+                  <option value="Dakahlia">Dakahlia</option>
+                  <option value="Monufia">Monufia</option>
+                  <option value="Damietta">Damietta</option>
+                  <option value="Suez">Suez</option>
+                  <option value="Port Said">Port Said</option>
+                  <option value="Qalyubia">Qalyubia</option>
+                  <option value="Sharqia">Sharqia</option>
+                  <option value="Beheira">Beheira</option>
+                  <option value="Aswan">Aswan</option>
+                  <option value="Qena">Qena</option>
+                  <option value="Faiyum">Faiyum</option>
+                  <option value="Minya">Minya</option>
+                  <option value="Sohag">Sohag</option>
+                  <option value="Asyut">Asyut</option>
+                  <option value="Beni Suef">Beni Suef</option>
+                  <option value="Luxor">Luxor</option>
+              </select>
           </div>
-    </div>
+        </div>
     <div class="card-footer bg-dark">
     </div>
     </div>
@@ -41,7 +69,6 @@
 </div>
 <div class="col-md">
   <strong class="text-info">Doctor </strong><a href="/doctors/doctor/{{ doctor.id }}">{{ doctor.first_name |add:" "|add:doctor.last_name }}</a>
-  <div>{{ doctor.bio }}</div>
   <div>
     {% if doctor.avg_rating %}
     {% for i in rating %}
@@ -52,6 +79,11 @@
     {% endif %}
     {% endfor %}
     {% endif %} 
+  </div>
+  <div>
+      {% if doctor.avg_rating %}
+      <span>Overall Rating From {{ doctor.count_rating }} Visitors</span>
+      {% endif %}
   </div>
   <div><i class="fa fa-stethoscope text-info" aria-hidden="true"></i> {{ doctor.specialization }}</div>
   <div><i class="fa fa-map-marker text-info" aria-hidden="true"></i> {{ doctor.clinic_address }}</div>

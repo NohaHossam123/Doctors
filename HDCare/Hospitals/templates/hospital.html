@@ -5,6 +5,13 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static '/css/style.css' %}">
 <link rel="stylesheet" href="{% static '/css/rating.css' %}">
+<style>
+    .modalCenter{
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    transform:translateX(-100%) !important;
+    }
+</style>
 {% endblock %}
 {% block content %}  
 
@@ -38,6 +45,7 @@
                     {% if rate %}
                     <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
                     {% endif %}
+            <div><i class="fas fa-clock text-danger"></i> &nbsp;Open 24 hours</div>
             <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
             <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
         </div>
@@ -75,7 +83,7 @@
                 <div class="card-body row">
                     <p class="h5 text-secondary">
                         <i class="fa fa-star text-danger"></i>
-                        <strong>Review:</strong> &nbsp;&nbsp;
+                        <strong>Rate the hospital:</strong> &nbsp;&nbsp;
                         <div class="star-rating">
                         <form action={% url 'rate_hospital' hospital.id %} id="rate_form" method="POST">
                             {% csrf_token %}
@@ -142,7 +150,7 @@
                 {% endfor %}
 
                 <div class="modal fade" id="editReview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modalCenter" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="header"></h5>
@@ -187,12 +195,12 @@
             </div>
             <div class="card rounded mb-3 mr-5" style="margin-top:5em; font-size: 20px;">
                 <div class="card-body row ml-2">
-                    If you have any ploblem, please tell us and don't worry only admins read it
+                    If you have any problem, please tell us and don't worry only admins read this
                 </div>
                 <hr>
                 <div class="card ml-4 mr-4 mb-4">
                     <div class="card-header text-white bg-danger">
-                        <p class="h6"><strong>Leave your complain</strong></p>
+                        <p class="h6"><strong>Leave your complaint</strong></p>
                     </div>
                     <div class="card-body">
                         <form action={% url 'add_complaint' hospital.id %} method="POST">

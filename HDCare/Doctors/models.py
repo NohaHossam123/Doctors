@@ -12,12 +12,12 @@ class Doctor(models.Model):
     last_name = models.CharField(max_length=60)
     phone_regex = RegexValidator(regex=r'^[\+2]?(01)(0|1|2|5)([0-9]{8})$', message="the format of phone number must be as : +20 111 111 1111")
     phone = models.CharField(validators=[phone_regex], max_length=13, unique=True)
-    specialization = models.CharField(max_length=60)
+    specialization = models.CharField(max_length=255)
     bio = models.TextField()
-    clinic_address = models.CharField(max_length=100)
+    clinic_address = models.CharField(max_length=255)
     waiting_time = models.CharField(max_length=20, null=True)
-    fees = models.IntegerField(null=True)
-
+    fees = models.IntegerField(null=True, validators = [MinValueValidator(0)])
+    user = models.OneToOneField(User, on_delete=models.CASCADE , blank=True, null=True, limit_choices_to={'is_doctor':True})
 
     def __str__(self):
         return f"{self.first_name}{self.last_name}"
@@ -30,6 +30,7 @@ class Doctor(models.Model):
     @property
     def count_rating(self):
         return self.rate_set.all().count()
+        
 
 class Doctor_Book(models.Model):
     start_time = models.DateTimeField()

@@ -1,6 +1,7 @@
 {% if hospitals|length != 0%}
 
     <div class="row m-5">
+
         <!-- for filters -->
         <div class="col-3">
             <div class="card rounded sticky-top">
@@ -8,17 +9,57 @@
                     <i class="fa fa-filter "></i>  Filter
                 </div>
                 <div class="card-body">
-                    <a href="{% url 'hospitals' %}" class="btn btn-primary btn-block">
-                        <i class="fa fa-list text-white" aria-hidden="true"></i> All
-                    </a>
+                    <button id="all" class="btn btn-primary btn-block bg-white text-dark text-left border-light">
+                        All Hospitals
+                    </button>
                     <hr/>
-                    <a href="/hospitals/location" class="btn btn-primary btn-block">Location</a>
+                        <!-- cities section -->
+                        <div class="dropdown">
+                            <select  class="form-control border-light" id="cities">
+                                <option>City</option>
+                                <option value="Cairo">Cairo</option>
+                                <option value="Giza">Giza</option>
+                                <option value="Alexandria">Alexandria</option>
+                                <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                                <option value="Ismailia">Ismailia</option>
+                                <option value="Gharbia">Gharbia</option>
+                                <option value="Dakahlia">Dakahlia</option>
+                                <option value="Monufia">Monufia</option>
+                                <option value="Damietta">Damietta</option>
+                                <option value="Suez">Suez</option>
+                                <option value="Port Said">Port Said</option>
+                                <option value="Qalyubia">Qalyubia</option>
+                                <option value="Sharqia">Sharqia</option>
+                                <option value="Beheira">Beheira</option>
+                                <option value="Aswan">Aswan</option>
+                                <option value="Qena">Qena</option>
+                                <option value="Faiyum">Faiyum</option>
+                                <option value="Minya">Minya</option>
+                                <option value="Sohag">Sohag</option>
+                                <option value="Asyut">Asyut</option>
+                                <option value="Beni Suef">Beni Suef</option>
+                                <option value="Luxor">Luxor</option>
+                            </select>
+                        </div>
+
+                    <hr>
+                    <!-- specializations section -->
+                    <div class="dropdown">
+                        <select  class="form-control border-light" id="options">
+                            <option> Specilizations </option>
+                            
+                            {% for spcialize in specialize_hospital %}
+                            <option value="{{spcialize.name}}">{{spcialize.name}}</option>
+                            {% endfor %}
+                            
+                        </select>
+                        </div>                        
+                    </div>
                 </div>
                 <div class="card-footer bg-dark">
                 </div>
             </div>
             
-        </div>
         <!-- for hospitals -->
         <div class="col-9">
             <h5>All Hospitals</h5>
@@ -43,7 +84,13 @@
                             {% endfor %}  
                             {% endif %}
                         </p>
+                        <p>
+                            {% if hospital.avg_rate %}
+                            <span>Overall Rating From {{ hospital.count_rating }} Visitors</span>
+                            {% endif %}
+                        </p>
                         <p> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</p>
+                        <p><i class="fas fa-clock text-danger"></i> &nbsp;Open 24 hours</p>
                         <p> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</p>
                         <p> <i class="fa fa-stethoscope	text-danger"></i> &nbsp;Available Specilizations:</p>
                         <ul>
