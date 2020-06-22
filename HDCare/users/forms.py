@@ -11,7 +11,7 @@ class RegisterationForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'gender', 'phone', 'city', 'birthdate']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'gender', 'phone', 'city', 'birthdate', 'is_doctor']
         labels = {
             'first_name': 'First Name',
             'last_name': 'Last Name',
@@ -27,6 +27,7 @@ class RegisterationForm(UserCreationForm):
             'gender': forms.RadioSelect(attrs={'class':'form-check-input mr-2'}),
             'city': forms.Select(attrs={'class': 'custom-select my-1 mr-sm-2'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_doctor': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id' : 'doctor_check'})
 
         }
 

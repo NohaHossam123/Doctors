@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -12,10 +12,9 @@ from django.utils import timezone
 import datetime
 from django.utils.crypto import get_random_string
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
 from Doctors.models import *
 from Hospitals.models import *
-from django.contrib.auth import get_user
+
 
 
 def unauthenticated_user(view_func):
@@ -127,7 +126,10 @@ def profile(request):
             'phone': user.phone,
 
             })
-    return render(request,'personalPage.html', {'form': form})
+    if user.is_doctor:
+        return render(request,'doctor_profile.html', {'form': form})
+    else:    
+        return render(request,'user_profile.html', {'form': form})
 
 
 @login_required

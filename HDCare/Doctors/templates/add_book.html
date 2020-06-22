@@ -1,0 +1,143 @@
+{% extends 'doc_base.html' %}
+{% block title %} Books Details {% endblock %}
+{% block styles %}
+{% endblock %}
+{% block doctor %}
+
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+            {% if 'success' in message.tags %}
+                <div class="form-group alert alert-success" role="alert">
+            {% else %}
+                <div class="form-group alert alert-danger" role="alert">
+            {% endif %}
+                <div>
+                    {{message}}
+                </div>
+            </div>
+            {% endfor %}
+    {% endif %}
+
+
+        <div>
+            <h4 class="mt-4 mb-4 text-secondary">
+                <i class="fa fa-calendar-plus-o"></i>
+                Add You Books times:
+            </h4>
+        
+            <hr/>
+        <form method="POST"  enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="col form-group">
+                <label>Start Time</label>
+                 
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="start"/>
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                
+            </div>
+            </div> 
+            <div class="col form-group">
+                <label>End Time</label>
+                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" name="end"/>
+                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div> 
+            </div> 
+        </div>
+    
+          
+        
+        <div class="text-center mt-3 mb-5">
+            <button type="submit" class="btn btn-dark btn-block"> Add Book  </button>
+        </div>   
+    </form>
+
+    {% if form.errors %}
+    <div class="form-group alert alert-danger" role="alert">
+        {% for field in form %}
+        {% for error in field.errors %}
+            <div>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+      {%endif%}
+
+
+</div>
+<hr/>
+    <div>
+        <h4 class="mt-5 text-secondary">
+            <i class="fa fa-calendar"></i>
+            All your available 'upcoming' books:
+        </h4>
+
+        <hr/>
+        <div class="d-flex flex-wrap">
+            {%for book in books%}
+            <div>
+                <div class="card m-4">
+                    <div class="card-header bg-dark text-white">
+                        <div class="row">
+                        <div class="col-10">Book Times</div>
+                        <div class="col-2">
+                            <a class="confirm-delete text-danger" href="{% url 'delete_book' book.id %}" title="delete book">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        </div> 
+                    </div>
+                   
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary">
+                        <div>
+                            <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                            <small>Start Time: {{book.start_time}}</small> 
+                        </div>
+                        <div>
+                            <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                            <small>End Time: {{book.end_time}}</small>
+                        </div>
+                
+                    </div>
+            
+                    </div>
+                  </div>
+            </div>
+
+            
+            {% endfor%}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+<script>
+    $(function () {
+      $("#datetimepicker1").datetimepicker({
+          format: "YYYY-MM-DD HH:MM"
+      });
+      $("#datetimepicker2").datetimepicker({
+        format: "YYYY-MM-DD HH:MM"
+      });
+
+    });
+
+    $(document).on('click', '.confirm-delete', function(){
+    return confirm('Are you sure you want to delete this?');
+})
+  </script>
+
+{% endblock %}
