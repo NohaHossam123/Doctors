@@ -16,8 +16,8 @@ class Doctor(models.Model):
     bio = models.TextField()
     clinic_address = models.CharField(max_length=255)
     waiting_time = models.CharField(max_length=20, null=True)
-    fees = models.IntegerField(null=True)
-
+    fees = models.IntegerField(null=True, validators = [MinValueValidator(0)])
+    user = models.OneToOneField(User, on_delete=models.CASCADE , blank=True, null=True, limit_choices_to={'is_doctor':True})
 
     def __str__(self):
         return f"{self.first_name}{self.last_name}"
@@ -30,6 +30,7 @@ class Doctor(models.Model):
     @property
     def count_rating(self):
         return self.rate_set.all().count()
+        
 
 class Doctor_Book(models.Model):
     start_time = models.DateTimeField()

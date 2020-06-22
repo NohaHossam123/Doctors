@@ -43,6 +43,7 @@ class User(AbstractUser):
     phone = models.CharField(validators=[phone_regex], unique=True, max_length=11, null=True, blank=True)
     city = models.CharField(max_length=30, choices=CITIES, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    is_doctor = models.BooleanField(default=False)
     
 class Activation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation')
