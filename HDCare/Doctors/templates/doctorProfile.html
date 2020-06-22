@@ -118,18 +118,18 @@
                                 <div class= "text-secondary">
                                     {{ comment.user.first_name| title }}&nbsp;{{ comment.user.last_name| title }}
                                 </div>
-                                <!-- <p>
+                                <p>
                                     <div class="editContext" data-type="comment">{{ comment.context }}</div>
-                                </p> -->
-                                <div>{{ comment.context }}</div>
+                                </p>
+                                <!-- <div>{{ comment.context }}</div> -->
                                 <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
                             </div>
                             {%if user.id == comment.user_id %}
                                 <div>
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editComment" data-action="{% url 'edit_comment' comment.id %}"
-                                    data-message="{{ comment.context }}" data-header="Edit Comment" data-button="save changes"><i  class="fa fa-edit"></i></button>
-                                    <!-- <button class="btn btn-primary" id="update_btn"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-primary" id="save_btn" style="display:none">Save</button> -->
+                                    <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editComment" data-action="{% url 'edit_comment' comment.id %}"
+                                    data-message="{{ comment.context }}" data-header="Edit Comment" data-button="save changes"><i  class="fa fa-edit"></i></button> -->
+                                    <button class="btn btn-primary" id="update_btn"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-primary" id="save_btn" style="display:none">Save</button>
                                     <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_comment' comment.id %}">
                                     <i class="fa fa-trash"></i></a>
 
@@ -174,7 +174,7 @@
                         </div>
                 </div>
             {% endif %}
-                <div class="modal fade" id="editComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <!-- <div class="modal fade" id="editComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modalCenter" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -198,7 +198,7 @@
                     </div>
                   </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="col-5">
             <div class="card rounded px-3">

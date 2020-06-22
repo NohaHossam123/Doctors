@@ -185,9 +185,6 @@ def rate_doctor(request,id):
         rate = Rate.objects.get(user_id= request.user.id,doctor_id=id)
         rate.rate = int(request.POST.get('rate')) 
         rate.save()
-<<<<<<< HEAD
-    return redirect('doctor', id)
-=======
     return redirect('doctor', id)
 
 # def filter_doctors(request):
@@ -285,4 +282,3 @@ def reservation_details(request):
     
     return render(request, 'doctor_reservations.html',{'books': books, 'count': count})
 
->>>>>>> 7c09e80c76f8a19235dc0ac3fb52656183fe2c35
