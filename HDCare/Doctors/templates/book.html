@@ -38,9 +38,6 @@
       <div class="card bg-white">
           <div class="card-header text-center bg-dark" style="color: white;">
             {{ book.end_time | date:"l d M" }}
-            {% if book.id in books %}
-            <a href="/doctors/doctor/{{ book.id }}/cancelAppointment" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
-            {% endif %}
           </div>
         <div class="card-body text-center">
           From <p class="card-text">{{ book.start_time | date:"h:i a" }}</p>
@@ -50,7 +47,7 @@
             {% if not book.id in books %}
               <a href="/doctors/doctor/{{ book.id }}/book" class="btn btn-primary btn-sm btn-block">Book</a>
             {% else %}
-              <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-block">Already booked</a>
+              <a href="javascript:void(0)" class="btn btn-warning btn-sm btn-block" style="cursor: progress;">Already booked</a>
             {% endif %}
         </div>
       </div> 

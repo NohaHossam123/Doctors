@@ -12,5 +12,4 @@ urlpatterns = [
     path('<id>/rate',rate_hospital,name="rate_hospital"),
     path('<id>/addComplaint',add_complaint,name="add_complaint"),
     path('book_hospital/<int:id>', book_redirect,name="hospital_book_redirect"),
-    path('book_hospital/<int:id>/cancelAppointment', delete_appointment,name="hospital_delete_appointment"),
 ]

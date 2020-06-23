@@ -165,3 +165,24 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
+
+def facebook(request):
+    return render(request,'facebook.html')
+
+def twitter(request):
+    return render(request,'twitter.html')
+
+def hospital_delete_appointment(request, id):
+    user = get_user(request)
+    appointment = User_Book.objects.filter(user=user, id=id)
+    appointment.delete()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def doctor_delete_appointment(request, id):
+    user = get_user(request)
+    appointment = UserBook.objects.get(user=user, id=id)
+    appointment.delete()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
