@@ -5,13 +5,6 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static '/css/style.css' %}">
 <link rel="stylesheet" href="{% static '/css/rating.css' %}">
-<style>
-    .modalCenter{
-    top:50% !important;
-    transform:translateY(-50%) !important;
-    transform:translateX(-100%) !important;
-    }
-</style>
 {% endblock %}
 {% block content %}  
 
@@ -133,47 +126,19 @@
                         </div>
                         {%if user.id == review.user_id %}
                         <div class=" col-4 text-center">
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editReview" data-action="{% url 'edit_review' review.id %}"
-                            data-message="{{ review.context }}" data-header="Edit Review" data-button="save changes"><i  class="fa fa-edit"></i></button>
+                            <button class="btn btn-primary" id="update_btn"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-primary" id="save_btn" url = {% url "edit_review" review.id %} style="display:none" >Save</button>
                             
                             <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_review' review.id %}">
                             <i class="fa fa-trash"></i></a>
                         </div>
                         {%endif%}
                     </div>
-                    <div>
-                        {{ review.context }}  
-                    </div>
+                    <div class="editContext">{{ review.context  }}</div>
                     <div class="text-secondary">{{ review.updated_at|default_if_none:review.created_at }}</div>    
                 </div>
                 <hr/>
                 {% endfor %}
-
-                <div class="modal fade" id="editReview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modalCenter" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="header"></h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form  method="POST" id="form" action="">
-                            <div class="form-group">
-                              <label for="review" class="col-form-label" id="text_label"></label>
-                              <textarea class="form-control" id="review" name="context"></textarea>
-                              {% csrf_token %}
-                            </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-info" id="edit_button" form="form"></button>
-                        </div>
-                      </div>
-                    </div>
-                </div>
             </div>
             </div>
             {% else %}
