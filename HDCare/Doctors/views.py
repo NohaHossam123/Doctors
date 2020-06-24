@@ -99,12 +99,11 @@ def remove_comment(request, id):
     comment.delete()
     return redirect('doctor', doctor_id)
 
-# @csrf_exempt
 def edit_comment(request, id):
     if request.method == 'POST':
         comment = Comment.objects.get(id=id)
-        # comment.context = request.POST.get('data')
-        comment.context = request.POST.get('context')
+        comment.context = request.POST.get('data')
+        print(comment.context)
         if comment.context == '':
             messages.error(request, "Invalid comment,Comment can't be empty")
         else:  

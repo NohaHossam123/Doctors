@@ -126,7 +126,7 @@ def remove_review(request, id):
 def edit_review(request, id):
     if request.method == 'POST':
         review = Review.objects.get(id=id)
-        review.context = request.POST.get('context')
+        review.context = request.POST.get('data')
         if review.context == '':
             messages.error(request, "Invalid review,review can't be empty")
         else:  

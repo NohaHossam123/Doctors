@@ -1,27 +1,36 @@
+// delete comment
 
-    // $("#editComment").on("show.bs.modal", function (e) {
-    //     var button = $(e.relatedTarget)
-    //     var action = button.data('action')
-    //     var modal = $(this)
-    //     modal.find("#form").attr('action', action)
-    //     modal.find("#comment").val(button.data('message'))
-    //     modal.find("#header").text(button.data('header'))
-    //     modal.find("#submit_button").text(button.data('button'))
-    // });
-    
 $(document).on('click', '.confirm-delete', function(){
-    return confirm('Are you sure you want to delete this?');
+    return confirm('Are you sure you want to delete this comment?');
 })
 
+// function get cookie of csrftoken
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+// update comment
 $("#update_btn").click(function(){
     $("#update_btn").hide();
     $("#save_btn").show();
     $(".editContext").each(function(){
         var value = $(this).text();
-        // var types = $(this).data('type')
-        var data = "<input type='text' name='context' class='form-control input_ input_data' value='"+value+"'>";
+        var data = "<input type='text' class='form-control input_data' value='"+value+"'>";
         $(this).html(data);
-        console.log($(this).html(data));
     });
 });
 $("#save_btn").click(function(){
@@ -29,25 +38,24 @@ $("#save_btn").click(function(){
     $("#update_btn").show();
     var json_data = [];
     $(".input_data").each(function(){
-        var value = $(this).val();
+        var context = $(this).val();
         var parent_html = $(this).parent();
-        parent_html.html(value);
+        parent_html.html(context);
         $(this).remove();
     });
     $(".editContext").each(function(){
         var context = $(this).text();
-        var single_data={"context":context}
+        console.log(context)
+        var single_data = context;
         json_data.push(single_data);
     });
-    var string_data = JSON.stringify(json_data)
+    var string_data = json_data[0]
     $.ajax({
-        url:'{% url "edit_comment" %}',
+        url:$(this).attr("url"),
         type: 'POST',
-        headers: {
-            "X-CSRFToken": '{{csrf_token}}'
-       },
         data:{
             data:string_data,
+            csrfmiddlewaretoken: csrftoken,
         }
     })
 })

@@ -5,6 +5,20 @@
 <link rel="stylesheet" href="{% static '/css/home.css' %}">
 {% endblock %}
 {% block content %}
+
+{% if messages %}
+{% for message in messages %}
+    {% if 'success' in message.tags %}
+        <div class="form-group alert alert-success mb-0" role="alert">
+    {% else %}
+        <div class="form-group alert alert-danger" role="alert">
+    {% endif %}
+        <div>
+            {{message}}
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
 <div class="container col-12">
     <div class="row imgs">
         <img src="{% static 'images/doctors.jpg' %}" class="slider">
@@ -18,12 +32,12 @@
     </div>
     <div class="row sperator"></div>
 </div>
-<div class="container">
+<div class="container" style="align-items: center;">
 
     <div class="row m-5">
         <p class="center">How To Book with HDCare?</p>
     </div>
-    <div class="row m-5">
+    <div class="row" style="margin-left: 10em;">
         <div class="col-6">
             <i class="fa fa-search text-info icon" aria-hidden="true"></i>
         </div>
@@ -31,7 +45,7 @@
             <i class="fa fa-calendar text-info icon" aria-hidden="true"></i>
         </div>
     </div>
-    <div class="row col-12">
+    <div class="row col-12 mt-4">
         <div class="col-6 font">
             Search for doctors and hospitals
         </div>
