@@ -16,7 +16,8 @@
     {% endif %}
 {% endfor %}
 {% endif %} 
-
+<a href="/doctors/doctor/urgent_book" style="float: right; " class="btn btn-info mt-3 text-white">
+  You are busy book an urgent appointment today</a>
 <div class="container mt-5">
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
         
@@ -27,7 +28,7 @@
       <h2>
         {% if books_count == 0 %}
         <img src="/static/images/copoun.png" width="50px">for the first book
-        {% elif books_count == 1 %}
+        {% elif not copoun.is_used %}
          <a href="{% url 'activate_copoun' token %}" class="btn btn-primary">Activate discount now</a>
         {% endif %}
       </h2>

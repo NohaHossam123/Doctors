@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator , MaxValueValidator , MinValueValidator
 from users.models import User
-from datetime import date
+import datetime
+from django.utils import timezone
 from users.models import User
 from django.db.models import Avg
 
@@ -39,11 +40,19 @@ class Doctor_Book(models.Model):
 
     @property
     def is_expired(self):
-        return date.today() > self.end_time.date()
+        return datetime.date.today() > self.end_time.date()
+    
+    
 
 class UserBook(models.Model):
     doctor_book = models.ForeignKey(Doctor_Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_urgent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_cancelable(self):
+        return (timezone.now() - self.created_at) < datetime.timedelta(hours=24)
 
     class Meta:
         unique_together = ('doctor_book','user')

@@ -4,15 +4,16 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-  <h2 class="mb-3 mt-5" style="text-decoration: underline;">Appointment with doctors</h2>
+  
+  <h2 class="mb-3 mt-5" style="text-decoration: underline;">Upcomming Appointment with doctors</h2>
   {% for book in doctor_book %}
     <div class="card mt-3">
         <div class="card-header bg-dark text-white">
           {{ book.doctor_book.end_time | date:"l d M" }}
-          {% if book.doctor_book.is_expired %}
-          <button class="btn btn-secondary btn-sm text-white" style="float: right;" disabled>expired</button>
-          {% else %}
+          {% if book.is_cancelable %}
           <a href="{% url 'delete_appointment' book.id %}" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
+          {% else %}
+          <button class="btn btn-secondary btn-sm" style="float: right;" disabled>Be ready for appointment</button>
           {% endif %}
         </div>
         <div class="card-body">
@@ -38,19 +39,47 @@
         </div>
       </div>
       {% empty %}
-  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no appointments right now</h2>
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no upcomming appointments right now</h2>
       {% endfor %}
 
-      <h2 class="mb-3 mt-5" style="text-decoration: underline;">Appointment with hospitals</h2>
+
+      <h2 class="mb-3 mt-5" style="text-decoration: underline;">Last Appointment with doctors</h2>
+  {% for book in expired_doctor_book %}
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+          {{ book.doctor_book.end_time | date:"l d M" }}
+        </div>
+        <div class="card-body">
+          <div class="text-secondary row col-12">
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>Start Time: {{book.doctor_book.start_time | date:"h:i a" }}</small> 
+            </div>
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>End Time: {{book.doctor_book.end_time | date:"h:i a" }}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-user-md	text-danger"></i>&nbsp;
+              <small>Doctor: {{book.doctor_book.doctor.first_name}}&nbsp;{{book.doctor_book.doctor.last_name}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-money	text-danger"></i>&nbsp;
+              <small>Fees: {{book.doctor_book.doctor.fees}}</small>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      {% empty %}
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no last appointments right now</h2>
+      {% endfor %}
+
+      <h2 class="mb-3 mt-5" style="text-decoration: underline;">Upcomming Appointment with hospitals</h2>
       {% for book in hospital_book %}
     <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
           {{ book.book.end_time | date:"l d M" }}
-          {% if book.book.is_expired %}
-          <button class="btn btn-secondary btn-sm text-white" style="float: right;" disabled>expired</button>
-          {% else %}
-          <a href="{% url 'hospital_delete_appointment' book.id %}" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
-          {% endif %}
         </div>
         <div class="card-body">
           <div class="text-secondary row col-12">
@@ -75,7 +104,40 @@
         </div>
       </div>
       {% empty %}
-  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no appointments right now</h2>
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no upcomming appointments right now</h2>
+      {% endfor %}
+
+
+      <h2 class="mb-3 mt-5" style="text-decoration: underline;">Last Appointment with hospitals</h2>
+      {% for book in expired_hospital_book %}
+    <div class="card mt-3 mb-3">
+        <div class="card-header bg-dark text-white">
+          {{ book.book.end_time | date:"l d M" }}
+        </div>
+        <div class="card-body">
+          <div class="text-secondary row col-12">
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>Start Time: {{book.book.start_time | date:"h:i a"}}</small> 
+            </div>
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>End Time: {{book.book.end_time | date:"h:i a"}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-hospital-o	text-danger"></i>&nbsp;
+              <small>Hospital: {{book.book.hospital.name}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-money	text-danger"></i>&nbsp;
+              <small>Fees: {{book.book.fees}}</small>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      {% empty %}
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no last appointments right now</h2>
       {% endfor %}
 </div>
 {% endblock %}

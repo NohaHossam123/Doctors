@@ -136,7 +136,7 @@ def book_appointment(request,id):
         token = None
         if copoun:
             token = copoun.token
-        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token}
+        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token, 'copoun': copoun}
 
         return render(request, 'book.html', context)
     else:
@@ -279,4 +279,14 @@ def reservation_details(request):
         books = UserBook.objects.filter(doctor_book__in = ids ).order_by('doctor_book__start_time')
     
     return render(request, 'doctor_reservations.html',{'books': books, 'count': count})
+
+def urgent_book_redirect(request):
+    user = get_user(request)
+    UserBook.objects.create(user=user, is_urgent=True)
+    # book_id = Doctor_Book.objects.get(id=id)
+    messages.info(request,"your urgent book has been placed susccessfully, go now to your doctor")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # return redirect('appointments')
+
+    # return render(request, 'doctor_reservations.html',{'books': books})
 

@@ -152,10 +152,11 @@ def password(request):
 @login_required
 def appointments(request):
     user = get_user(request)
-    doctor_book = UserBook.objects.filter(user=user)
-    hospital_book = User_Book.objects.filter(user=user)
-
-    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book}
+    doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__gte = datetime.date.today(), is_urgent=False)
+    hospital_book = User_Book.objects.filter(user=user, book__end_time__date__gte = datetime.date.today())
+    expired_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__lt = datetime.date.today())
+    expired_hospital_book = User_Book.objects.filter(user=user, book__end_time__date__lt = datetime.date.today())
+    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book, 'expired_doctor_book': expired_doctor_book, 'expired_hospital_book': expired_hospital_book}
 
     return render(request, "appointments.html", context)
 
