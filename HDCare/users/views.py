@@ -156,7 +156,8 @@ def appointments(request):
     hospital_book = User_Book.objects.filter(user=user, book__end_time__date__gte = datetime.date.today())
     expired_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__lt = datetime.date.today())
     expired_hospital_book = User_Book.objects.filter(user=user, book__end_time__date__lt = datetime.date.today())
-    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book, 'expired_doctor_book': expired_doctor_book, 'expired_hospital_book': expired_hospital_book}
+    urgent_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__gte = datetime.date.today(), is_urgent=True)
+    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book, 'expired_doctor_book': expired_doctor_book, 'expired_hospital_book': expired_hospital_book, 'urgent_doctor_book': urgent_doctor_book}
 
     return render(request, "appointments.html", context)
 

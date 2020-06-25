@@ -16,8 +16,11 @@
     {% endif %}
 {% endfor %}
 {% endif %} 
-<a href="/doctors/doctor/urgent_book" style="float: right; " class="btn btn-info mt-3 text-white">
+{% if show_urgent %}
+<a href="{% url 'urgent_book_redirect' book_info.0.doctor.id %}" style="float: right; " class="btn btn-info mt-3 text-white">
   You are busy book an urgent appointment today</a>
+{% endif %}
+
 <div class="container mt-5">
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
         

@@ -128,6 +128,14 @@ def book_appointment(request,id):
         books = user.userbook_set.all()
         books = [i.doctor_book_id for i in books]
         books_count = len(books)
+        doctor_books = Doctor_Book.objects.filter(end_time__date=date.today())
+        book_urgent = UserBook.objects.filter(
+            doctor_book=doctor_books[0].id,created_at__date=date.today(), is_urgent=True
+        )
+        if book_urgent:
+            show_urgent = False
+        else:
+            show_urgent = True  
         book_info = Doctor_Book.objects.filter(
             doctor_id=id, end_time__date__gte = date.today()
         )
@@ -135,7 +143,7 @@ def book_appointment(request,id):
         token = None
         if copoun:
             token = copoun.token
-        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token, 'copoun': copoun}
+        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token, 'copoun': copoun, 'show_urgent': show_urgent}
 
         return render(request, 'book.html', context)
     else:
@@ -279,13 +287,16 @@ def reservation_details(request):
     
     return render(request, 'doctor_reservations.html',{'books': books, 'count': count})
 
-def urgent_book_redirect(request):
+def urgent_book_redirect(request,id):
     user = get_user(request)
-    UserBook.objects.create(user=user, is_urgent=True)
-    # book_id = Doctor_Book.objects.get(id=id)
-    messages.info(request,"your urgent book has been placed susccessfully, go now to your doctor")
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    # return redirect('appointments')
+    doctor = Doctor.objects.filter(id=id)
+    print(datetime.datetime.now())
+    doctor_books = Doctor_Book.objects.filter(end_time__gt=datetime.datetime.now(), end_time__date=date.today())
+    print(doctor_books)
+    UserBook.objects.create(user=user, doctor_book=doctor_books[0], is_urgent=True)
+    messages.info(request,"your urgent book has been placed susccessfully")
+    # return redirect("appointments")
 
-    # return render(request, 'doctor_reservations.html',{'books': books})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 

@@ -31,6 +31,10 @@ class Doctor(models.Model):
     @property
     def count_rating(self):
         return self.rate_set.all().count()
+
+    @property
+    def new_fees(self):
+        return self.fees * 2
         
 
 class Doctor_Book(models.Model):

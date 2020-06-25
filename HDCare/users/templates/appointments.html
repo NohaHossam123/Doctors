@@ -3,8 +3,57 @@
 {% block styles %}
 {% endblock %}
 {% block content %}
+
+
+{% if messages %}
+{% for message in messages %}
+    {% if 'success' in message.tags %}
+    <div class="alert alert-success m-2">{{message}} </div>
+    {% elif 'info' in message.tags %}
+    <div class="alert alert-info m-2">{{message}} </div>
+    {% else %}
+    <div class="alert alert-danger m-2">{{message}} </div>
+    {% endif %}
+{% endfor %}
+{% endif %} 
+
+
 <div class="container">
+
+
+  <h2 class="mb-3 mt-5" style="text-decoration: underline;">urgent Appointment with doctors</h2>
+  {% for book in urgent_doctor_book %}
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+          {{ book.doctor_book.end_time | date:"l d M" }}
+        </div>
+        <div class="card-body">
+          <div class="text-secondary row col-12">
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>Start Time: {{book.doctor_book.start_time | date:"h:i a" }}</small> 
+            </div>
+            <div class="col-12">
+                <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                <small>End Time: {{book.doctor_book.end_time | date:"h:i a" }}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-user-md	text-danger"></i>&nbsp;
+              <small>Doctor: {{book.doctor_book.doctor.first_name}}&nbsp;{{book.doctor_book.doctor.last_name}}</small>
+            </div>
+            <div class="col-12">
+              <i class="fa fa-money	text-danger"></i>&nbsp;
+              <small>Fees: {{ book.doctor_book.doctor.new_fees }}</small>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      {% empty %}
+  <h2 class="card-body bg-dark text-center" style="color: white;"><i class='fas fa-info-circle' style='font-size:32px;color:red'></i> There is no upcomming appointments right now</h2>
+      {% endfor %}
   
+
   <h2 class="mb-3 mt-5" style="text-decoration: underline;">Upcomming Appointment with doctors</h2>
   {% for book in doctor_book %}
     <div class="card mt-3">
