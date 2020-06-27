@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import  MaxValueValidator , MinValueValidator
-from datetime import date
+from django.utils import timezone
+from datetime import date, datetime, timedelta
 from users.models import User
 from django.db.models import Avg
 from smart_selects.db_fields import ChainedForeignKey 
@@ -103,6 +104,12 @@ class Complaint(models.Model):
 class User_Book(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    @property
+    def is_old(self):
+        return (timezone.now() - self.created_at) < timedelta(hours=24)
 
     class Meta:
         unique_together = ('book','user')
