@@ -8,7 +8,11 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user
 from datetime import date
+from datetime import datetime
 from django.http import HttpResponseRedirect
+from .forms import *
+from users.models import *
+from django.db.models import Q
 
 
 def hospitals(request):
@@ -141,7 +145,7 @@ def add_complaint(request,id):
             user_id = request.user.id
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
-            messages.info(request,"We have received your complaint")
+            messages.info(request,"We have received your complain")
     return redirect('hospital', id)
 
 
@@ -156,3 +160,163 @@ def rate_hospital(request,id):
         rate.rate = request.POST.get('rate') 
         rate.save()
     return redirect('hospital', id)
+    
+@login_required
+def hospital_info(request):
+    form = AddHospital()
+    hospital_info = None
+    if Hospital.objects.filter(user_id = request.user.id).exists():
+        hospital_info = Hospital.objects.get(user_id= request.user.id)
+        if request.method == 'POST':
+            form = AddHospital(request.POST , request.FILES, instance=hospital_info)
+            if form.is_valid():
+                hospital = form.save(commit = False)
+                hospital.save()
+                messages.success(request, "Your hospital information updated successfully")
+                redirect('hospital')
+        else:
+            form = AddHospital(initial={
+                'name': hospital_info.name.capitalize(),
+                'phone': hospital_info.phone,
+                'location': hospital_info.location,
+                'about': hospital_info.about,
+                'image': hospital_info.image,
+                })
+    else:
+        if request.method == 'POST':
+            form = AddHospital(request.POST , request.FILES)
+            if form.is_valid():
+                hospital = form.save(commit=False)
+                hospital.user = request.user
+                hospital.save()
+                messages.success(request, "Your hospital information saved successfully")
+                redirect('hospital')
+
+    if request.user.is_hospital:
+        return render(request, 'hospital_info.html', {'form': form , 'hospital_info' : hospital_info} )
+    else:    
+        return redirect('home')
+
+@login_required
+def add_specialize(request):
+    url_specialize = request.GET.get('q')
+    try:
+        if url_specialize:
+            speciality = Specializaiton.objects.filter(name__icontains= url_specialize)
+        else:
+            speciality = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
+        if request.method == 'POST':
+            name = request.POST.get('speialize')
+            if name == '':
+                messages.error(request,"Specialization name can't be empty")
+            else:
+                Specializaiton.objects.create(hospital_id=request.user.hospital.id,name=name)
+    except:
+        messages.error(request, "This specialization is already exist")
+
+    # ajax search
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="hos_specialize_partial.html",
+            context = {'speciality':speciality} 
+        )
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
+
+    if request.user.is_hospital:
+        return render(request, 'specialization.html',{'speciality': speciality})
+    else:
+        return('home')
+
+@login_required
+def delete_specialize(request,id):
+    specialize = Specializaiton.objects.get(id=id)
+    specialize.delete()
+    return redirect('addspecialization')
+
+@login_required
+def edit_specialize(request,id):
+    if request.method == 'POST':
+        speciality = Specializaiton.objects.get(id=id)
+        speciality.name = request.POST.get('data')
+        if speciality.name == '':
+            messages.error(request, "Name can't be empty!")
+        else:  
+            speciality.save()
+    return redirect('addspecialization')
+
+@login_required
+def add_book(request):
+    url_parameter = request.GET.get('q')
+    specializations = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
+
+    if url_parameter:
+        books = Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+    else:
+        books = Book.objects.filter(hospital_id= request.user.hospital.id, end_time__gte = date.today())
+
+    if request.method == 'POST':
+        start = request.POST.get('start')
+        end = request.POST.get('end')
+        fees = request.POST.get('fees')
+        doctor = request.POST.get('doctor')
+        waiting_time = request.POST.get('wating')
+        speciality = request.POST.get('choose')
+        specializaiton = Specializaiton.objects.get(id=speciality)
+        start_time = datetime.strptime(start, "%Y-%m-%d %H:%M")
+        end_time = datetime.strptime(end, "%Y-%m-%d %H:%M")
+        Date = datetime.now().strftime("%Y-%m-%d %H:%M")
+        today = datetime.strptime(Date, "%Y-%m-%d %H:%M")
+        if end_time < start_time:
+            messages.error(request, "Error: End date should be after start date")
+        elif start_time < today or end_time < today:
+            messages.error(request, "Error: Start and end date cannot be before today")
+        else: 
+            Book.objects.create(hospital_id=request.user.hospital.id, start_time=start, end_time=end , fees=fees , doctor=doctor , waiting_time=waiting_time , specializaiton= specializaiton) 
+            messages.success(request, "Book added successfully")
+        return redirect('addbook')
+
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="hos_book_partial.html",
+            context = {'books':books}
+        )
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
+
+    if request.user.is_hospital:
+        return render(request, 'addbook.html',{'books':books ,'specializations':specializations})
+    else:
+        return redirect('home')
+
+@login_required
+def delete_book(request, id):
+    book = Book.objects.get(id=id)
+    book.delete()
+    return redirect('addbook')
+
+@login_required
+def reservation_details(request):
+    url_parameter = request.GET.get('q')
+    url_reservation = request.GET.get('r')
+    ids = Book.objects.filter(hospital_id= request.user.hospital.id).values_list("id") 
+    count = User_Book.objects.filter(book__in = ids, book__start_time__gte=date.today())
+    
+    if url_parameter:
+        if url_parameter == 'up':
+            books = count
+    elif url_reservation:
+        books = User_Book.objects.filter(book__in = ids , book__start_time__icontains=url_reservation)   
+    else:
+        books = User_Book.objects.filter(book__in = ids ).order_by('book__start_time')
+
+    #ajax search
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="hos_res_partial.html",
+            context = {'books':books}
+        )
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
+
+    return render(request, 'hospitalReservation.html',{'books': books, 'count': count})

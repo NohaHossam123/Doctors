@@ -1,0 +1,83 @@
+{% extends 'hospital_base.html' %}
+{% block title %} Hospital Information {% endblock %}
+{% block styles %}
+<style>
+    .content{
+        font-size: large;
+    }
+</style>
+{% endblock %}
+{% block hospital %}
+
+<div class="mt-4 ml-4 content">
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'success' in message.tags %}
+                <div class="alert alert-success m-2">{{message}} </div>
+            {% elif 'info' in message.tags %}
+                <div class="alert alert-info m-2">{{message}} </div>
+            {% else %}
+                <div class="alert alert-danger m-2">{{message}} </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <h3>
+        Hospital Information
+        {% if hospital_info %}
+        <a href="/hospitals/h/{{hospital_info.id}}" class="float-right btn btn-info px-2 pb-0"><p style="font-size: large;margin-bottom: 6px;">Hospital Page</p></a>
+        {% endif %}
+    </h3>
+    <hr/>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col form-group">
+                <label>Name:</label>
+                {{form.name}}
+            </div> 
+        </div>
+
+        <div class="form-group">
+            <label>About:</label>
+            {{form.about}}
+        </div>
+        <div class="form-group">
+            <label>Address:</label>
+            {{form.location}}
+        </div>
+        <div class="form-group">
+            <label>phone</label>
+            {{form.phone}}
+        </div>
+        <hr/>
+        <div class="form-group mb-4">
+            <label><strong>
+                <i class="fa fa-user-md"></i>
+                Upload Hospital Image:
+            </strong></label>
+             &nbsp; &nbsp; &nbsp;
+            {{form.image}}
+        </div>
+
+        <small class="text-info">Note: This informations is what our visitors see.</small>      
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-dark btn-block"> Save </button>
+        </div>   
+    </form>
+
+    {% if form.errors %}
+    <div class="form-group alert alert-danger" role="alert">
+        {% for field in form %}
+        {% for error in field.errors %}
+            <div>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+      {%endif%}
+
+
+</div>
+
+{% endblock %}

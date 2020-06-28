@@ -1,0 +1,52 @@
+{% extends 'hospital_base.html' %}
+{% load static %}
+{% block title %} Resevations {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
+<style>
+    .cont{
+        font-size: large;
+    }
+</style>
+{% endblock %}
+{% block hospital %}
+<div class="mt-4 cont">
+
+    <div class="container h-50">
+        <div class="d-flex justify-content-center h-100">
+          <div class="searchbar">
+            <input id="reservations_search" class="search_input" type="text" placeholder="Search by date...">
+            <a href="#" class="search_icon" id="search_icon"><i class="fas fa-search"></i></a>
+          </div>
+        </div>
+    </div>
+
+<h4 class="text-secondary mt-5">
+    <i class="fa fa-list-alt"></i>
+    PATIENTS RESEVATIONS
+    <a href="/hospitals/reservation?q=up" class="float-right btn btn-info px-2 pb-0"><p style="font-size: large; margin-bottom: 3px; ">Upcoming</p></a>
+    <a href="/hospitals/reservation" class="float-right btn btn-info px-2 pb-0 mr-2 px-3"><p style="font-size: large; margin-bottom: 3px;">All</p></a>
+</h4>
+<hr/>
+
+<div>
+    <i class="fa fa-check-square text-danger"></i>
+    Total Number of Reservations:
+    {{books|length}}
+</div>
+<div>
+    <i class="fa fa-check-square text-danger"></i>
+    Upcoming Number of Reservations:
+    {{count|length}}
+</div>
+
+<div id="replace_content">
+    {% include 'hos_res_partial.html' %}
+</div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static '/javascript/ajax.js' %}"></script>
+{% endblock %}

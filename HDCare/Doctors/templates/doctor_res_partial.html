@@ -1,0 +1,52 @@
+{% if books %}
+<div id="all" style="display: block;">
+    {% for book in books %}
+        <div class="card mt-4 mb-4">
+            <div class="card-header bg-dark text-white">
+                <div class="row">
+                    <div class="col-9">
+                        Reservation Details
+                    </div>
+                    {% for c in count%}
+                    {% if c.id == book.id%}
+                    <div class="col-3 text-danger">
+                       <strong>Upcoming</strong> 
+                    </div>
+                    {% endif %}
+                    {%endfor%}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <small>Start Date: {{book.doctor_book.start_time}}</small> 
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <small>Start Date: {{book.doctor_book.end_time}}</small> 
+                </div>
+                <div>
+                    <i class="fa fa-bed	text-danger"></i>&nbsp;
+                    <small>Patient Name: {{book.user.first_name|title}}&nbsp;{{book.user.last_name|title}}</small> 
+                </div>
+                <div>
+                    <i class="fa fa-intersex text-danger"></i>&nbsp;
+                    <small>Patient Gender: {{book.user.gender}}</small> 
+                </div>
+                <div>
+                    <i class="fa fa-phone text-danger"></i>&nbsp;
+                    <small>Contact with Patient: {{book.user.phone|default_if_none:"N/A"}}</small> 
+                </div>
+            </div>
+    
+        </div>
+
+    {% endfor%}
+</div>
+{% else %}
+<div class="m-5">
+    <h6 class="text-secondary "> search results:</h6>
+    <h4 class="mb-5">No results found..</h4>
+</div>
+{% endif %}

@@ -1,0 +1,68 @@
+{% if books %}
+<div>
+    <h4 class="mt-5 text-secondary">
+        <i class="fa fa-calendar"></i>
+        All your available 'upcoming' books:
+    </h4>
+
+    <hr/>
+
+    {% for book in books %}
+    <div class="card mt-4 mb-4">
+        <div class="card-header bg-dark text-white">
+            <div class="row">
+                <div class="col-10">Book Times</div>
+                <div class="col-2">
+                    <a class="confirm-delete text-danger" href="{% url 'deletebook' book.id %}" title="delete book">
+                    <i class="fa fa-trash"></i>
+                </a>
+                </div> 
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="text-secondary">
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span>Start Time: {{book.start_time}}</span> 
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span>End Time: {{book.end_time}}</span>
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span> Specializaiton: {{book.specializaiton}} </span>
+
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span>Doctor: {{book.doctor}}</span>
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span>Fees:{{book.fees}} EGP</span>
+
+                </div>
+                <div>
+                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                    <span>Waiting time:{{book.waiting_time}} Min</span>
+
+                </div>
+        
+            </div>
+    
+            </div>
+    
+    
+        </div>
+        {% endfor %}
+
+    </div>
+    
+{% else %}
+    <div class="m-5">
+        <h6 class="text-secondary "> search results:</h6>
+        <h4 class="mb-5">No results found..</h4>
+    </div>
+{% endif %}

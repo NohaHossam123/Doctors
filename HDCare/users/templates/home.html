@@ -11,7 +11,7 @@
     {% if 'success' in message.tags %}
         <div class="form-group alert alert-success mb-0" role="alert">
     {% else %}
-        <div class="form-group alert alert-danger" role="alert">
+        <div class="form-group alert alert-danger mb-0" role="alert">
     {% endif %}
         <div>
             {{message}}
@@ -57,7 +57,7 @@
 <div class="container col-12 footer">
     <div class="row col-12-md">
         <div class="col-3 mt-4">
-            <p class="text-info">About Us</p>
+            <p class="text-info" id="aboutUs">About Us</p>
             <p>HDCare is a website that helps you to find the best doctors and hospitals and you can book the doctors in just one minute. </p>
         </div>
         <div class="col-4 copy">

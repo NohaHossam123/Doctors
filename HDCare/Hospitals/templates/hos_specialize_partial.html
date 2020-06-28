@@ -1,0 +1,29 @@
+{% if speciality %}
+<div>
+    <h4 class="mt-5 text-secondary">
+        <i class="fa fa-stethoscope"></i>
+            All specializations:
+    </h4>
+    <hr/>
+        {% for specialize in speciality %}
+            <div class="row mt-4">
+                <div class="col-8 edit_specialize">{{ specialize.name }}</div>
+                <div class="col-4">
+                    <button class="btn btn-primary" id="update_btn">
+                    <i class="fa fa-edit"></i></button>
+                    <button class="btn btn-primary" url={% url "edit_specialize" specialize.id %} id="save_btn" style="display:none">
+                        Save</button>
+                    <button class="delete btn btn-danger" href="{% url 'delete_specialize' specialize.id %}" title="delete specialize">
+                    <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+</div>
+
+{% else %}
+<div class="m-5">
+    <h6 class="text-secondary "> search results:</h6>
+    <h4 class="mb-5">No results found..</h4>
+</div>
+{% endif %}

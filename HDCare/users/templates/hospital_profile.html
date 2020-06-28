@@ -1,8 +1,13 @@
-{% extends 'doc_base.html' %}
+{% extends 'hospital_base.html' %}
 {% block title %} Personal informations {% endblock %}
 {% block styles %}
+<style>
+    .container{
+        font-size:large;
+    }
+</style>
 {% endblock %}
-{% block doctor %}
+{% block hospital %}
 
     <div class="container">
         {% if messages %}
@@ -22,8 +27,8 @@
                 <p>Add information about yourself</p>
             </div>
                 <h4 class="mt-4 mb-4">
-                    WELCOME DR : {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
-                    <a href="/change-password" class="float-right btn btn-danger px-2 pb-0"><p style="font-size: small; margin-bottom: 6px;">change password</p></a>
+                    WELCOME MR/MS: {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
+                    <a href="/change-password" class="float-right btn btn-danger px-2 pb-0"><p style="font-size: larger; margin-bottom: 6px;">change password</p></a>
                 </h4>
                 <hr/>
                 <form method="POST">
@@ -71,7 +76,7 @@
                             {{form.phone}}
                         </div> 
                     </div>
-                    <small class="form-text text-muted mb-3">Note: This is update your personal account information, not your clinic information.</small>
+                    <small class="form-text text-muted mb-3">Note: This is update your personal account information, not your hospital information.</small>
                 
                     <div class="form-group">
                         <button type="submit" class="btn btn-dark btn-block"> Edit Your Profile  </button>
@@ -91,7 +96,4 @@
                     {%endif%}
                 </div>
             </div>
-
-    </div>
-
 {% endblock %}

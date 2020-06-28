@@ -1,10 +1,23 @@
 {% extends 'doc_base.html' %}
+{% load static %}
 {% block title %} Resevations {% endblock %}
 {% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
 {% endblock %}
 {% block doctor %}
+
 <div class="mt-4">
-<h4 class="text-secondary">
+    
+    <div class="container h-50">
+        <div class="d-flex justify-content-center h-100">
+          <div class="searchbar">
+            <input id="reservations_search" class="search_input" type="text" placeholder="Search by date...">
+            <a href="#" class="search_icon" id="search_icon"><i class="fas fa-search"></i></a>
+          </div>
+        </div>
+    </div>
+
+<h4 class="text-secondary mt-5">
     <i class="fa fa-list-alt"></i>
     PATIENTS RESEVATIONS
     <a href="/doctors/reservation?q=up" class="float-right btn btn-danger px-2 pb-0"><p style="font-size: small; margin-bottom: 6px; ">Upcoming</p></a>
@@ -22,57 +35,12 @@
         Upcoming Number of Reservations: {{count|length}}
     </div>
 
-
-    <div id="all" style="display: block;">
-    {% for book in books %}
-    <div>
-        <div class="card m-4">
-            <div class="card-header bg-dark text-white">
-                <div class="row">
-                    <div class="col-10">
-                        Reservation Details
-                    </div>
-                    {% for c in count%}
-                    {% if c.id == book.id%}
-                    <div class="col-2 text-danger">
-                       <strong>Upcoming</strong> 
-                    </div>
-                    {% endif %}
-                    {%endfor%}
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div>
-                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
-                    <small>Start Date: {{book.doctor_book.start_time}}</small> 
-                </div>
-                <div>
-                    <i class="fa fa-clock-o	text-danger"></i>&nbsp;
-                    <small>Start Date: {{book.doctor_book.end_time}}</small> 
-                </div>
-                <div>
-                    <i class="fa fa-bed	text-danger"></i>&nbsp;
-                    <small>Patient Name: {{book.user.first_name|title}}&nbsp;{{book.user.last_name|title}}</small> 
-                </div>
-                <div>
-                    <i class="fa fa-intersex text-danger"></i>&nbsp;
-                    <small>Patient Gender: {{book.user.gender}}</small> 
-                </div>
-                <div>
-                    <i class="fa fa-phone text-danger"></i>&nbsp;
-                    <small>Contact with Patient: {{book.user.phone|default_if_none:"N/A"}}</small> 
-                </div>
-        
-        
-            </div>
-    
-        </div>
-
-    {% endfor%}
+<div id="replace_content">
+    {% include 'doctor_res_partial.html' %}
 </div>
+</div>
+{% endblock %}
 
-
-
-
+{% block footer %}
+<script type="text/javascript" src="{% static '/javascript/d-ajax.js' %}"></script>
 {% endblock %}

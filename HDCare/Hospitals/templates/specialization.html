@@ -1,0 +1,67 @@
+{% extends 'hospital_base.html' %}
+{% load static %}
+{% block title %} Specialization Details {% endblock %}
+{% block styles %}
+<style>
+    body{
+    font-size: large;
+}
+</style>
+{% endblock %}
+{% block hospital %}
+    {% if messages %}
+    {% for message in messages %}
+        {% if 'success' in message.tags %}
+            <div class="alert alert-success m-2">{{message}} </div>
+        {% elif 'info' in message.tags %}
+            <div class="alert alert-info m-2">{{message}} </div>
+        {% else %}
+            <div class="alert alert-danger m-2">{{message}} </div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <div class="input-group md-form form-sm form-2 pl-0 mt-5">
+        <input class="search_input form-control my-0 py-1 red-border" type="text" placeholder="Search by time..." id="speciality_search">
+        <div class="input-group-append">
+        <a class="input-group-text cyan lighten-3 search_icon" href="#" id="search_speciality"><i class="fas fa-search text-grey"></i></a>
+        </div>
+    </div>
+
+        <div class="mt-5">
+            <div>
+                <h4 class="mb-4 text-secondary specialize">
+                    <i class="fa fa-stethoscope"></i>
+                    Add specialization:
+                </h4>
+                <hr/>
+                <form method="POST">
+                    {% csrf_token %}
+                        <div class=" form-group">
+                            <label>Name: </label>
+                            <div class="input-group"  data-target-input="nearest">
+                                <input type="text" class="form-control" name="speialize"/>
+                            </div>
+                        </div> 
+                        <div class="form-group mt-3">
+                            <button type="submit" class="btn btn-dark btn-block"> Add specialization</button>
+                        </div> 
+                </form>
+        </div>
+    </div>
+
+    <div id="replaceable-content">
+        {% include 'hos_specialize_partial.html' %}
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+<script>
+    $(document).on('click', '.delete', function(){
+    return confirm('Are you sure you want to delete this specialization?');
+})
+</script>
+<script type="text/javascript" src="{% static '/javascript/hospitalBtns.js' %}"></script>
+<script type="text/javascript" src="{% static '/javascript/ajax.js' %}"></script>
+{% endblock %}

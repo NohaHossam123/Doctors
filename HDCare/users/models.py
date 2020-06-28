@@ -44,6 +44,8 @@ class User(AbstractUser):
     city = models.CharField(max_length=30, choices=CITIES, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_doctor = models.BooleanField(default=False)
+    is_hospital = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False)
     
 class Activation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation')

@@ -1,0 +1,49 @@
+{% if books %}
+<div>
+    <h4 class="mt-5 text-secondary">
+        <i class="fa fa-calendar"></i>
+        All your available 'upcoming' books:
+    </h4>
+
+    <hr/>
+    <div class="d-flex flex-wrap">
+        {% for book in books %}
+        <div>
+            <div class="card m-4">
+                <div class="card-header bg-dark text-white">
+                    <div class="row">
+                    <div class="col-10">Book Times</div>
+                    <div class="col-2">
+                        <a class="confirm-delete text-danger" href="{% url 'delete_book' book.id %}" title="delete book">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    </div> 
+                </div>
+               
+                </div>
+                <div class="card-body">
+                  <div class="text-secondary">
+                    <div>
+                        <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                        <small>Start Time: {{book.start_time}}</small> 
+                    </div>
+                    <div>
+                        <i class="fa fa-clock-o	text-danger"></i>&nbsp;
+                        <small>End Time: {{book.end_time}}</small>
+                    </div>
+            
+                </div>
+        
+                </div>
+              </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+
+{% else %}
+<div class="m-5">
+    <h6 class="text-secondary "> search results:</h6>
+    <h4 class="mb-5">No results found..</h4>
+</div>
+{% endif %}

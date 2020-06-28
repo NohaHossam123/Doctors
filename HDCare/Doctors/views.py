@@ -16,7 +16,7 @@ from django.utils.crypto import get_random_string
 from django.http import HttpResponseRedirect
 from .forms import *
 from users.views import home
-
+from datetime import datetime
 
 
 def doctors_page(request):
@@ -118,7 +118,7 @@ def add_complain(request,id):
             user_id = request.user.id
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
-            messages.info(request,"We have received your complaint")
+            messages.info(request,"We have received your complain")
     return redirect('doctor', id)
 
 def book_appointment(request,id):
@@ -192,14 +192,6 @@ def rate_doctor(request,id):
         rate.save()
     return redirect('doctor', id)
 
-# def filter_doctors(request):
-#     url_parameter = request.GET.get('q')
-#     if url_parameter:
-#         doctors = Doctor.objects.filter(Q(specialization__icontains=url_parameter) | Q(clinic_address__icontains=url_parameter))
-#     context = {'doctors': doctors}
-
-#     return render(request, 'allDoctors.html', context)
-
 @login_required
 def clinic_info(request):
     form = AddDoctor()
@@ -243,7 +235,11 @@ def clinic_info(request):
 
 @login_required
 def add_book(request):
-    books = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id, end_time__gte = date.today())
+    url_parameter = request.GET.get('q')
+    if url_parameter:
+        books = Doctor_Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+    else:
+        books = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id, end_time__gte = date.today()) 
     if request.method == 'POST':
         start = request.POST.get('start')
         end = request.POST.get('end')
@@ -262,8 +258,16 @@ def add_book(request):
             messages.success(request, "Book added successfully")
         return redirect('add_book')
 
+    # ajax search 
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="doctor_book_partial.html",
+            context = {'books':books}
+        )
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
     if request.user.is_doctor:
-        return render(request, 'add_book.html',{'books': books})
+        return render(request, 'add_book.html', {'books':books})
     else:    
         return redirect('home')
 
@@ -276,14 +280,26 @@ def delete_book(request, id):
 
 def reservation_details(request):
     url_parameter = request.GET.get('q')
+    url_reservation = request.GET.get('r')
     ids = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id).values_list("id") 
     count = UserBook.objects.filter(doctor_book__in = ids, doctor_book__start_time__gte=date.today())
     
     if url_parameter:
         if url_parameter == 'up':
             books = count
+    elif url_reservation:
+        books = UserBook.objects.filter(doctor_book__in = ids , doctor_book__start_time__icontains=url_reservation)
     else:
         books = UserBook.objects.filter(doctor_book__in = ids ).order_by('doctor_book__start_time')
+
+    #ajax search
+    if request.is_ajax():
+        html = render_to_string(
+            template_name="doctor_res_partial.html",
+            context = {'books':books}
+        )
+        data_dict = {"html_from_view": html}
+        return JsonResponse(data=data_dict, safe=False)
     
     return render(request, 'doctor_reservations.html',{'books': books, 'count': count})
 
@@ -298,5 +314,6 @@ def urgent_book_redirect(request,id):
     # return redirect("appointments")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
 
 

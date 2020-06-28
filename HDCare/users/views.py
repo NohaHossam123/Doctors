@@ -29,6 +29,13 @@ def unauthenticated_user(view_func):
 @unauthenticated_user
 def signup(request):
     form = RegisterationForm()
+    url_parameter = request.GET.get('q')
+    if url_parameter:
+        if url_parameter == 'hospital':
+            form.is_hospital = True
+            print(form.is_hospital)
+        elif url_parameter == 'doctor':
+            form.is_doctor = True
     if request.method == 'POST':
         form = RegisterationForm(request.POST)
         if form.is_valid():
@@ -51,7 +58,7 @@ def signup(request):
             messages.success(request,
                              f'''Congratulations {username}, your account has been created successfully,
                              Please check your email to activate acccount''')
-            return redirect('signin')
+            return redirect('home')
     else:
         form = RegisterationForm()           
     return render(request, 'register.html', {'form': form})
@@ -70,7 +77,7 @@ def signin(request):
             if user.is_superuser or user.is_staff:
                 return HttpResponseRedirect(reverse('admin:index'))
             else:
-                return redirect('profile')
+                return redirect('home')
         else:
             messages.info(request, 'Username or password is incorrect')
 
@@ -89,10 +96,14 @@ def activate_account(request, token):
         activate_user.save()
         activate_user.user.is_active = True
         activate_user.user.save()
-        messages.success(request, "Congrats, your account has been activated succssefully")
+        user = User.objects.get(pk=activate_user.id)
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        if user is not None:
+            login(request, user)        
+            messages.success(request, "Congrats, your account has been activated succssefully")
     else:
         messages.error(request, "Sorry, your activation is not valid OR may be used before,Please try again later")
-    return redirect("signin")
+    return redirect("home")
 
 #profile
 @login_required
@@ -128,6 +139,8 @@ def profile(request):
             })
     if user.is_doctor:
         return render(request,'doctor_profile.html', {'form': form})
+    elif user.is_hospital:
+        return render(request,'hospital_profile.html', {'form': form})
     else:    
         return render(request,'user_profile.html', {'form': form})
 

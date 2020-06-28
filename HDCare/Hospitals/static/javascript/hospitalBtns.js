@@ -59,3 +59,39 @@ $("#save_btn").click(function(){
         }
     })
 })
+
+// update specialize
+$("#update_btn").click(function(){
+    $("#update_btn").hide();
+    $("#save_btn").show();
+    $(".edit_specialize").val(function(){
+        var value = $(this).text();
+        var data = "<input type='text' class='form-control input_data' value='"+value+"'>";
+        $(this).html(data);
+    });
+});
+$("#save_btn").click(function(){
+    $("#save_btn").hide();
+    $("#update_btn").show();
+    var json_data = [];
+    $(".input_data").val(function(){
+        var speciality = $(this).val();
+        var parent_html = $(this).parent();
+        parent_html.html(speciality);
+        $(this).remove();
+    });
+    $(".edit_specialize").val(function(){
+        var speciality = $(this).text();
+        var single_data = speciality;
+        json_data.push(single_data);
+    });
+    var string_data = json_data[0]
+    $.ajax({
+        url:$(this).attr("url"),
+        type: 'POST',
+        data:{
+            data:string_data,
+            csrfmiddlewaretoken: csrftoken,
+        }
+    })
+})

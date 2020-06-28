@@ -12,6 +12,7 @@ class Hospital(models.Model):
     location = models.CharField(max_length=255, null=False, blank=False)
     phone = models.CharField(max_length=11,unique=True, null=False, blank=False)
     image = models.ImageField(null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE , blank=True, null=True, limit_choices_to={'is_hospital':True})
     
     def __str__(self):
         return str(self.name)

@@ -3,6 +3,19 @@ const user_input = $("#doctors-search")
 const search_icon = $('#d-search-icon')
 const doctors = $('#d-replaceable-content')
 const endpoint = '/doctors/'
+
+//search books
+const book_input = $("#books_search")
+const search = $("#search_icon")
+const books = $("#replace-content")
+const point = '/doctors/addbook'
+
+//search reservations
+const reservations_input = $("#reservations_search")
+const icon_search = $("#search_icon")
+const reservations = $("#replace_content")
+const reservations_point = '/doctors/reservation'
+
 const delay_by_in_ms = 1000
 let scheduled_function = false
 let speciality_value = 'Title';
@@ -23,6 +36,31 @@ let ajax_call = function (endpoint, request_parameters) {
         })
 }
 
+//function ajax to search book
+let call = function (point, request_parameters) {
+    $.getJSON(point, request_parameters)
+        .done(response => {
+            books.fadeTo('200', 0).promise().then(() => {
+                books.html(response['html_from_view'])
+                books.fadeTo('150', 1)
+                search.removeClass('text-white')
+
+            })
+        })
+}
+
+//function ajax to search reesrvations
+let ajax_reservation = function (reservations_point, request_parameters) {
+    $.getJSON(reservations_point, request_parameters)
+        .done(response => {
+            reservations.fadeTo('200', 0).promise().then(() => {
+                reservations.html(response['html_from_view'])
+                reservations.fadeTo('150', 1)
+                icon_search.removeClass('text-white')
+
+            })
+        })
+}
 
 //all filter
 $("body").on('click','#dall',function () {
@@ -57,8 +95,37 @@ user_input.on('keyup', function () {
     scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
 });
 
+// search book
+book_input.on('keyup', function () {
 
+    const request_parameters = {
+        q: $(this).val() 
+    }
 
+    search.addClass('text-white')
+
+    if (scheduled_function) {
+        clearTimeout(scheduled_function)
+    }
+
+    scheduled_function = setTimeout(call, delay_by_in_ms, point, request_parameters)
+});
+
+// search reservations
+reservations_input.on('keyup', function () {
+
+    const request_parameters = {
+        r: $(this).val() 
+    }
+
+    icon_search.addClass('text-white')
+
+    if (scheduled_function) {
+        clearTimeout(scheduled_function)
+    }
+
+    scheduled_function = setTimeout(ajax_reservation, delay_by_in_ms,reservations_point , request_parameters)
+});
 
 // specialty filter
 $("body").on('change','#title',function () {
@@ -83,7 +150,7 @@ $("body").on('change','#title',function () {
         clearTimeout(scheduled_function)
     }
 
-    scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
+    scheduled_function = setTimeout(ajax_reservation, delay_by_in_ms, endpoint, request_parameters)
 
 
 }); 

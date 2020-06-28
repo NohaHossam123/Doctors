@@ -12,4 +12,11 @@ urlpatterns = [
     path('<id>/rate',rate_hospital,name="rate_hospital"),
     path('<id>/addComplaint',add_complaint,name="add_complaint"),
     path('book_hospital/<int:id>', book_redirect,name="hospital_book_redirect"),
+    path('hospital', hospital_info, name="hospital"),
+    path('addspecialization', add_specialize , name="addspecialization"),
+    path('delete_specialize/<id>',delete_specialize , name="delete_specialize"),
+    path('edit_specialize/<id>', edit_specialize , name="edit_specialize"),
+    path('addbook',add_book, name="addbook"),
+    path('delete_book<id>',delete_book, name="deletebook"),
+    path('reservation', reservation_details, name="reservation_details"),
 ]

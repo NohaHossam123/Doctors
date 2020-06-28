@@ -23,7 +23,11 @@
     <div class="card mt-4">
     <header class="card-header">
         <a href="/login" class="float-right btn btn-danger mt-1">Log in</a>
+        {% if not user.is_hospital %}
         <h4 class="card-title mt-1"><strong>Sign up</strong></h4>
+        {% else %}
+        <h4 class="card-title mt-1" style="background-color:#4981b9;"><strong>Sign up</strong></h4>
+        {% endif %}
     </header>
     <article class="card-body">
     <form method="POST">
@@ -73,11 +77,20 @@
         </div>
 
         <div class="form-group ml-4 text-info" id="doctor_div">
-            {{form.is_doctor}} Are You A Doctor ?
+            <a href="/signup?q=doctor">Are You A Doctor ?</a>
         </div> 
+        <div class="form-group ml-4 text-info" id="doctor_div">
+            <a href="/signup?q=hospital">Are you The owner of the hospital ?</a>
+        </div>
+        {% if not user.is_doctor %} 
         <div class="form-group">
-            <button type="submit" class="btn btn-dark btn-block"> Register  </button>
-        </div>   
+            <button type="submit" class="btn btn-dark btn-block"> Register</button>
+        </div> 
+        {% else %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger btn-block"> Register</button>
+        </div>
+        {% endif %}
     </form>
 
     {% if form.errors %}
@@ -107,15 +120,4 @@
 
 
 {% block footer %}
-    <script>
-       $("body").on('change','#doctor_check',function () {
-        if(this.checked) {
-        $('#doctor_div').append("<p id='doc_message'><small class='text-info'>This is your personal account information, you will be prompted next for your clinic information.</small></p>");
-        }else{
-        $('#doc_message').remove()
-        }
-        }); 
-
-
-    </script>
 {% endblock %} 
