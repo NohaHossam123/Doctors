@@ -129,6 +129,11 @@
     <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
           {{ book.book.end_time | date:"l d M" }}
+          {% if book.is_old %}
+          <a href="{% url 'hospital_delete_appointment' book.id %}" class="btn btn-primary btn-sm" style="float: right;">cancel</a>
+          {% else %}
+          <button class="btn btn-secondary btn-sm" style="float: right;" disabled>Be ready for appointment</button>
+          {% endif %}
         </div>
         <div class="card-body">
           <div class="text-secondary row col-12">
