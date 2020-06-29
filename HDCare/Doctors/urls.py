@@ -18,4 +18,5 @@ urlpatterns = [
     path('addbook',add_book, name="add_book"),
     path('deletebook/<id>', delete_book, name="delete_book"),
     path('reservation', reservation_details, name="reservation_details"),
+  
 ]

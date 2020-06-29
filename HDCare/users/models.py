@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator , MaxValueValidator , MinValueValidator
 
 # Create your models here.
 class User(AbstractUser):
@@ -45,7 +45,8 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_doctor = models.BooleanField(default=False)
     is_hospital = models.BooleanField(default=False)
-    is_confirmed = models.BooleanField(default=False)
+    is_confirmed = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)])    
+
     
 class Activation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation')
@@ -55,3 +56,9 @@ class Activation(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+
+class Confirmation(models.Model):
+    document = models.FileField()
+    confirmtion_document = models.FileField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

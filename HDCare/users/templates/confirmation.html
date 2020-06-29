@@ -1,0 +1,51 @@
+{% extends base_variable %}
+{% block title %} Confirmation {% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+        {% if 'success' in message.tags %}
+            <div class="form-group alert alert-success" role="alert">
+        {% else %}
+            <div class="form-group alert alert-danger" role="alert">
+        {% endif %}
+            <div>
+                {{message}}
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="mt-5">
+        <h4 class="mt-4 mb-4 text-secondary">
+          please Add the required document to be able to use our services "prefer to be pdf":
+        </h4>
+        <hr/>
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="my-5">
+        <label><strong>please upload your medical license</strong> </label>
+        <input type="file" id="doc" name="doc" class="form-control" required>
+    </div>
+
+    <div class="my-5">
+        {% if user.is_hospital %}
+        <label > <strong> please upload your hospital licenses</strong> </label>
+        {% else %}
+        <label > <strong> please upload your clinic license</strong> </label>
+        {% endif %}
+        <input type="file" id="clinic" name="clinic" class="form-control" required>
+    </div>
+   
+    <div class="text-center mt-3 mb-5">
+        <button type="submit" class="btn btn-dark btn-block"> Submit </button>
+    </div>   
+</form>
+
+</div>
+
+
+{% endblock %}

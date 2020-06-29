@@ -31,5 +31,7 @@ urlpatterns = [
     path('twitter', twitter, name="twitter"),
     path('<int:id>/cancelHospitalAppointment', hospital_delete_appointment,name="hospital_delete_appointment"),
     path('<int:id>/cancelDoctorAppointment', doctor_delete_appointment,name="delete_appointment"),
+    path('confirm', confirm, name='confirm'),
+    path('waiting', waiting, name='waiting'),
 
 ]

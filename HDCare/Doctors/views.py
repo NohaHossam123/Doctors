@@ -194,6 +194,7 @@ def rate_doctor(request,id):
 
 @login_required
 def clinic_info(request):
+    user = User.objects.get(id=request.user.id)
     form = AddDoctor()
     clinic_info = None
     if Doctor.objects.filter(user_id=request.user.id).exists():
@@ -227,14 +228,19 @@ def clinic_info(request):
                 messages.success(request, "Your clinic information updated successfully")
                 redirect('clinic')
 
-    if request.user.is_doctor:
+    if user.is_doctor and user.is_confirmed == 2:
         return render(request, 'clinc_info.html', {'form': form , 'clinic_info' : clinic_info} )
+    elif user.is_doctor and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_doctor and user.is_confirmed == 0:
+        return redirect('confirm')
     else:    
         return redirect('home')
 
 
 @login_required
 def add_book(request):
+    user = User.objects.get(id=request.user.id)
     url_parameter = request.GET.get('q')
     books = ''
     try:
@@ -277,19 +283,25 @@ def add_book(request):
         )
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
-    if request.user.is_doctor:
+    
+    if user.is_doctor and user.is_confirmed == 2:
         return render(request, 'add_book.html', {'books':books})
+    elif user.is_doctor and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_doctor and user.is_confirmed == 0:
+        return redirect('confirm')
     else:    
         return redirect('home')
 
-
+@login_required
 def delete_book(request, id):
     book = Doctor_Book.objects.get(id=id)
     book.delete()
     return redirect('add_book')
 
-
+@login_required
 def reservation_details(request):
+    user = User.objects.get(id=request.user.id)
     url_parameter = request.GET.get('q')
     url_reservation = request.GET.get('r')
     try:
@@ -315,7 +327,17 @@ def reservation_details(request):
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
     
-    return render(request, 'doctor_reservations.html',{'books': books, 'count': count })
+    if user.is_doctor and user.is_confirmed == 2:
+        return render(request, 'doctor_reservations.html',{'books': books, 'count': count })
+    elif user.is_doctor and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_doctor and user.is_confirmed == 0:
+        return redirect('confirm')
+    else:    
+        return redirect('home')
+
+
+
 
 def urgent_book_redirect(request,id):
     user = get_user(request)
@@ -329,5 +351,3 @@ def urgent_book_redirect(request,id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         
-
-

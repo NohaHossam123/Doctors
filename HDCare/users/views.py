@@ -95,13 +95,16 @@ def signin(request):
             if user.is_superuser or user.is_staff:
                 return HttpResponseRedirect(reverse('admin:index'))
             else:
-                if(request.user.is_doctor):
+                if user.is_doctor and user.is_confirmed == 2:
                     return redirect('clinic')
-                if(request.user.is_hospital):
+                elif user.is_hospital and user.is_confirmed ==2:
                     return redirect('hospital')
-                else:
-                    return redirect('clinic')
-
+                elif user.is_hospital and user.is_confirmed ==1 or user.is_hospital and user.is_confirmed == 1:
+                    return redirect('waiting')
+                elif user.is_hospital and user.is_confirmed == 0 or user.is_doctor and user.is_confirmed == 0:
+                    return redirect('confirm')
+                else:    
+                    return render(request,'home')
 
         else:
             messages.info(request, 'Username or password is incorrect')
@@ -162,10 +165,15 @@ def profile(request):
             'phone': user.phone,
 
             })
-    if user.is_doctor:
+
+    if user.is_doctor and user.is_confirmed == 2:
         return render(request,'doctor_profile.html', {'form': form})
-    elif user.is_hospital:
+    elif user.is_hospital and user.is_confirmed ==2:
         return render(request,'hospital_profile.html', {'form': form})
+    elif user.is_doctor and user.is_confirmed ==1 or user.is_hospital and user.is_confirmed == 1:
+        return redirect('waiting')
+    elif user.is_hospital and user.is_confirmed == 0 or user.is_doctor and user.is_confirmed == 0:
+        return redirect('confirm')
     else:    
         return render(request,'user_profile.html', {'form': form})
 
@@ -226,3 +234,34 @@ def doctor_delete_appointment(request, id):
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+@login_required
+def confirm(request):
+    if request.method == 'POST':
+        doctor = request.FILES['doc']
+        clinic = request.FILES['clinic']
+        try: 
+            Confirmation.objects.create(document= doctor,confirmtion_document= clinic, user=request.user)
+        except:
+            docs = Confirmation.objects.get(user_id= request.user.id)
+            docs.document = doctor
+            docs.confirmtion_document = clinic
+            docs.save()
+        user = User.objects.get(id=request.user.id)
+        user.is_confirmed = 1
+        user.save()
+        return redirect('waiting')
+    if request.user.is_doctor:
+        base_variable = 'doc_base.html'
+    if request.user.is_hospital:
+        base_variable = 'hospital_base.html'
+    return render(request, 'confirmation.html', {'base_variable': base_variable})
+
+@login_required
+def waiting(request):
+    if request.user.is_doctor:
+        base_variable = 'doc_base.html'
+    if request.user.is_hospital:
+        base_variable = 'hospital_base.html'
+    data = Confirmation.objects.filter(user_id= request.user.id)
+    return render(request,'waiting.html', {'data': data , 'base_variable': base_variable})

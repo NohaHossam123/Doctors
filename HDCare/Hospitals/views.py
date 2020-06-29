@@ -163,6 +163,7 @@ def rate_hospital(request,id):
     
 @login_required
 def hospital_info(request):
+    user = User.objects.get(id=request.user.id)
     form = AddHospital()
     hospital_info = None
     if Hospital.objects.filter(user_id = request.user.id).exists():
@@ -192,13 +193,18 @@ def hospital_info(request):
                 messages.success(request, "Your hospital information saved successfully")
                 redirect('hospital')
 
-    if request.user.is_hospital:
+    if request.user.is_hospital and user.is_confirmed ==2:
         return render(request, 'hospital_info.html', {'form': form , 'hospital_info' : hospital_info} )
+    elif user.is_hospital and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_hospital and user.is_confirmed == 0:
+        return redirect('confirm')
     else:    
         return redirect('home')
 
 @login_required
 def add_specialize(request):
+    user = User.objects.get(id=request.user.id)
     url_specialize = request.GET.get('q')
     try:
         if url_specialize:
@@ -230,10 +236,14 @@ def add_specialize(request):
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
 
-    if request.user.is_hospital:
+    if user.is_hospital and user.is_confirmed ==2:
         return render(request, 'specialization.html',{'speciality': speciality})
-    else:
-        return('home')
+    elif user.is_hospital and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_hospital and user.is_confirmed == 0:
+        return redirect('confirm')
+    else:    
+        return redirect('home')
 
 @login_required
 def delete_specialize(request,id):
@@ -254,6 +264,7 @@ def edit_specialize(request,id):
 
 @login_required
 def add_book(request):
+    user = User.objects.get(id=request.user.id)
     url_parameter = request.GET.get('q')
     try:
         specializations = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
@@ -298,10 +309,15 @@ def add_book(request):
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
 
-    if request.user.is_hospital:
+    if request.user.is_hospital and user.is_confirmed ==2:
         return render(request, 'addbook.html',{'books':books ,'specializations':specializations})
-    else:
+    elif user.is_hospital and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_hospital and user.is_confirmed == 0:
+        return redirect('confirm')
+    else:    
         return redirect('home')
+
 
 @login_required
 def delete_book(request, id):
@@ -311,6 +327,7 @@ def delete_book(request, id):
 
 @login_required
 def reservation_details(request):
+    user = User.objects.get(id=request.user.id)
     url_parameter = request.GET.get('q')
     url_reservation = request.GET.get('r')
     try:
@@ -335,4 +352,16 @@ def reservation_details(request):
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
 
-    return render(request, 'hospitalReservation.html',{'books': books, 'count': count})
+    
+    if request.user.is_hospital and user.is_confirmed ==2:
+        return render(request, 'hospitalReservation.html',{'books': books, 'count': count})
+    elif user.is_hospital and user.is_confirmed ==1:
+        return redirect('waiting')
+    elif user.is_hospital and user.is_confirmed == 0:
+        return redirect('confirm')
+    else:    
+        return redirect('home')
+
+    
+
+

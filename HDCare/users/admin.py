@@ -4,4 +4,4 @@ from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
 admin.site.register(User, UserAdmin)
-UserAdmin.fieldsets += ('Custom fields set', {'fields': ('birthdate', 'gender', 'phone','city')}),
+UserAdmin.fieldsets += ('Custom fields set', {'fields': ('birthdate', 'gender', 'phone','city', 'is_doctor', 'is_hospital', 'is_confirmed')}),
