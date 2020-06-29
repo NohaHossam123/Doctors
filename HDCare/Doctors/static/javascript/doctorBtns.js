@@ -24,28 +24,28 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 // update comment
-$("#update_btn").click(function(){
-    $("#update_btn").hide();
-    $("#save_btn").show();
-    $(".editContext").each(function(){
+$(".update_btn").click(function(){
+    $(this).hide();
+    $(this).next().show()
+    $(this).parent().prev('div').children('.editContext').val(function(){
         var value = $(this).text();
         var data = "<input type='text' class='form-control input_data' value='"+value+"'>";
         $(this).html(data);
     });
+    console.log($(this).parent().prev('div').children('.editContext'))
 });
-$("#save_btn").click(function(){
-    $("#save_btn").hide();
-    $("#update_btn").show();
+$(".save_btn").click(function(){
+    $(this).hide();
+    $(this).prev().show()
     var json_data = [];
-    $(".input_data").each(function(){
+    $(".input_data").val(function(){
         var context = $(this).val();
         var parent_html = $(this).parent();
         parent_html.html(context);
         $(this).remove();
     });
-    $(".editContext").each(function(){
+    $(this).parent().prev('div').children('.editContext').val(function(){
         var context = $(this).text();
-        console.log(context)
         var single_data = context;
         json_data.push(single_data);
     });

@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %} Specialization Details {% endblock %}
 {% block styles %}
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
 <style>
     body{
     font-size: large;
@@ -21,10 +22,12 @@
     {% endfor %}
     {% endif %}
 
-    <div class="input-group md-form form-sm form-2 pl-0 mt-5">
-        <input class="search_input form-control my-0 py-1 red-border" type="text" placeholder="Search by time..." id="speciality_search">
-        <div class="input-group-append">
-        <a class="input-group-text cyan lighten-3 search_icon" href="#" id="search_speciality"><i class="fas fa-search text-grey"></i></a>
+    <div class="container h-50 mt-5">
+        <div class="d-flex justify-content-center h-100">
+          <div class="searchbar">
+            <input id="speciality_search" class="search_input" type="text" placeholder="Search by speciality...">
+            <a href="#" class="search_icon" id="search_speciality"><i class="fas fa-search"></i></a>
+          </div>
         </div>
     </div>
 

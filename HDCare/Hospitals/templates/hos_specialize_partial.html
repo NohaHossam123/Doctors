@@ -9,13 +9,12 @@
             <div class="row mt-4">
                 <div class="col-8 edit_specialize">{{ specialize.name }}</div>
                 <div class="col-4">
-                    <button class="btn btn-primary" id="update_btn">
+                    <button class="btn btn-primary update_btn">
                     <i class="fa fa-edit"></i></button>
-                    <button class="btn btn-primary" url={% url "edit_specialize" specialize.id %} id="save_btn" style="display:none">
+                    <button class="btn btn-primary save_btn" url={% url "edit_specialize" specialize.id %} style="display:none">
                         Save</button>
-                    <button class="delete btn btn-danger" href="{% url 'delete_specialize' specialize.id %}" title="delete specialize">
-                    <i class="fa fa-trash"></i>
-                    </button>
+                    <a type="button" class="btn btn-danger delete" href="{% url 'delete_specialize' specialize.id %}"  title="delete specialize">
+                        <i class="fa fa-trash"></i></a>
                 </div>
             </div>
             {% endfor %}

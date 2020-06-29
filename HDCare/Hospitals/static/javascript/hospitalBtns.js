@@ -24,28 +24,28 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 // update comment
-$("#update_btn").click(function(){
-    $("#update_btn").hide();
-    $("#save_btn").show();
-    $(".editContext").each(function(){
+$(".update_btn").click(function(){
+    $(this).hide();
+    $(this).next().show();
+
+    $(this).parent().parent().next().children('.editContext').val(function(){
         var value = $(this).text();
         var data = "<input type='text' class='form-control input_data' value='"+value+"'>";
         $(this).html(data);
     });
 });
-$("#save_btn").click(function(){
-    $("#save_btn").hide();
-    $("#update_btn").show();
+$(".save_btn").click(function(){
+    $(this).hide();
+    $(this).prev().show()
     var json_data = [];
-    $(".input_data").each(function(){
+    $(".input_data").val(function(){
         var context = $(this).val();
         var parent_html = $(this).parent();
         parent_html.html(context);
         $(this).remove();
     });
-    $(".editContext").each(function(){
+    $(this).parent().parent().next().children('.editContext').val(function(){
         var context = $(this).text();
-        console.log(context)
         var single_data = context;
         json_data.push(single_data);
     });
@@ -61,18 +61,19 @@ $("#save_btn").click(function(){
 })
 
 // update specialize
-$("#update_btn").click(function(){
-    $("#update_btn").hide();
-    $("#save_btn").show();
-    $(".edit_specialize").val(function(){
+$(".update_btn").click(function(){
+    $(this).hide();
+    $(this).next().show()
+    $(this).parent().prev('div').val(function(){
         var value = $(this).text();
         var data = "<input type='text' class='form-control input_data' value='"+value+"'>";
         $(this).html(data);
+        
     });
 });
-$("#save_btn").click(function(){
-    $("#save_btn").hide();
-    $("#update_btn").show();
+$(".save_btn").click(function(){
+    $(this).hide();
+    $(this).prev().show()
     var json_data = [];
     $(".input_data").val(function(){
         var speciality = $(this).val();
@@ -80,7 +81,7 @@ $("#save_btn").click(function(){
         parent_html.html(speciality);
         $(this).remove();
     });
-    $(".edit_specialize").val(function(){
+    $(this).parent().prev('div').val(function(){
         var speciality = $(this).text();
         var single_data = speciality;
         json_data.push(single_data);

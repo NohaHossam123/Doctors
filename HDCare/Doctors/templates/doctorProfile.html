@@ -108,13 +108,13 @@
                                 <div class= "text-secondary">
                                     {{ comment.user.first_name| title }}&nbsp;{{ comment.user.last_name| title }}
                                 </div>
-                                <div class="editContext mt-3 mb-3">{{ comment.context }}</div>
+                                <span class="editContext mt-4 mb-3">{{ comment.context }}</span>
                                 <div class="text-secondary">{{ comment.updated_at|default_if_none:comment.created_at }}</div>
                             </div>
                             {%if user.id == comment.user_id %}
-                                <div>
-                                    <button class="btn btn-primary" id="update_btn"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-primary" id="save_btn" url = {% url "edit_comment" comment.id %} style="display:none">Save</button>
+                                <div class="mt-5">
+                                    <button class="btn btn-primary update_btn"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-primary save_btn" url = {% url "edit_comment" comment.id %} style="display:none">Save</button>
                                     <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_comment' comment.id %}">
                                     <i class="fa fa-trash"></i></a>
 

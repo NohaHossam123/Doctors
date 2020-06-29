@@ -8,176 +8,177 @@
 {% endblock %}
 {% block content %}
 
-    {% if messages %}
-        {% for message in messages %}
-        {% if 'success' in message.tags %}
-            <div class="alert alert-success mx-5 mt-1">{{message}}</div>
-        {% elif 'info' in message.tags %}
-            <div class="alert alert-info mx-5 mt-1">{{message}}</div>
+{% if messages %}
+{% for message in messages %}
+{% if 'success' in message.tags %}
+<div class="alert alert-success mx-5 mt-1">{{message}}</div>
+{% elif 'info' in message.tags %}
+<div class="alert alert-info mx-5 mt-1">{{message}}</div>
+{% else %}
+<div class="alert alert-danger mx-5 mt-1">{{message}} </div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<div class="row mt-5 mx-5 ">
+    <div class="col-3 text-center">
+        <img src="/media/{{hospital.image}}" class="rounded-circle" width="100%" height="270px" />
+    </div>
+    <div class="col-9">
+        <h2 class="text-secondary mt-4">{{hospital.name|title}}</h2>
+        {% if hospital.avg_rate %}
+        {% for i in '12345'%}
+        {% if i|add:0 <=  hospital.avg_rate %}
+        <span class="fa fa-star text-warning"></span>
         {% else %}
-        <div class="alert alert-danger mx-5 mt-1">{{message}} </div>
+        <span class="fa fa-star"></span>
         {% endif %}
         {% endfor %}
-    {% endif %}
+        {% endif %}
+        {% if rate %}
+        <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
+        {% endif %}
+        <div><i class="fas fa-clock text-danger"></i> &nbsp;Open 24 hours</div>
+        <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
+        <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
+    </div>
+</div>
 
-    <div class="row mt-5 mx-5 ">
-        <div class="col-3 text-center">
-            <img src="/media/{{hospital.image}}" class="rounded-circle" width="100%" height="270px"/>
+<div class="row mt-5 mx-4">
+    <div class="col-9">
+        <!-- about  section -->
+        <div class="card rounded mb-3 mr-5 px-3">
+            <div class="card-body row">
+                <p class="h5 text-secondary">
+                    <i class="fa fa-info text-danger"></i> &nbsp;
+                    <strong>About the hospital :</strong>
+                </p>
+                <p>{{hospital.about}}</p>
+            </div>
         </div>
-        <div class="col-9">
-            <h2 class="text-secondary mt-4">{{hospital.name|title}}</h2>
-                    {% if hospital.avg_rate %}
-                    {% for i in '12345'%}
-                    {% if i|add:0 <=  hospital.avg_rate %} 
+        <!-- specializations section -->
+        <div class="card rounded mb-3 mr-5 px-3">
+            <div class="card-body row">
+                <p class="h5 text-secondary">
+                    <i class="fa fa-stethoscope text-danger"></i> &nbsp;
+                    <strong>Available Specilizations:</strong>
+                </p>
+                <ul>
+                    {% for special in hospital.specializaiton_set.all %}
+                    <li>{{special.name| title}}</li>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+        <!-- reviews section -->
+        {% if user.is_authenticated %}
+        <div class="card rounded mb-3 mr-5 px-3">
+            <div class="card-body row">
+                <p class="h5 text-secondary">
+                    <i class="fa fa-star text-danger"></i>
+                    <strong>Rate the hospital:</strong> &nbsp;&nbsp;
+                <div class="star-rating">
+                    <form action={% url 'rate_hospital' hospital.id %} id="rate_form" method="POST">
+                        {% csrf_token %}
+                        {% for i in '54321'%}
+                        <input id="star-{{i}}" type="radio" name="rate" value="{{i}}" {% if i|add:0 == user_rate %}
+                            checked {% endif %} />
+                        <label for="star-{{i}}" title="{{i}} star">
+                            <i class="active fa fa-star" aria-hidden="true"></i>
+                        </label>
+                        {% endfor %}
+                        <input id="star-0" type="radio" name="rate" value="0" />
+                        <label for="star-0" title="0 star">
+                            <i class="active fa fa-star vs" aria-hidden="true"></i>
+                        </label>
+                    </form>
+                </div>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- patients reviews -->
+        {% if reviews %}
+        <div class="card rounded mb-3 mr-5 px-3">
+            <div class="card-body">
+                <span>
+                    <i class="fa fa-comments text-danger"></i><strong class="text-secondary"> Patients Reviews:
+                    </strong>
+                </span>
+                <hr>
+                {% for review in reviews %}
+                <div class="text-secondary">
+                    {% for every_rate in rate %}
+                    {% if every_rate.user_id == review.user.id %}
+                    {% for i in '12345' %}
+                    {% if i|add:0 <= every_rate.rate %}
                     <span class="fa fa-star text-warning"></span>
                     {% else %}
                     <span class="fa fa-star"></span>
                     {% endif %}
                     {% endfor %}
                     {% endif %}
-                    {% if rate %}
-                    <div>Overall Rating From {{ hospital.count_rating }} Visitors</div>
-                    {% endif %}
-            <div><i class="fas fa-clock text-danger"></i> &nbsp;Open 24 hours</div>
-            <div> <i class="fa fa-map-marker text-danger"></i> &nbsp;{{hospital.location}}</div>
-            <div> <i class="fa fa-phone text-danger"></i> &nbsp;{{hospital.phone}}</div>
-        </div>
-    </div>
-
-    <div class="row mt-5 mx-4">
-        <div class="col-9">
-            <!-- about  section -->
-            <div class="card rounded mb-3 mr-5 px-3">
-                <div class="card-body row">
-                    <p class="h5 text-secondary">
-                        <i class="fa fa-info text-danger"></i> &nbsp;
-                        <strong>About the hospital :</strong>
-                    </p>
-                    <p>{{hospital.about}}</p>
+                    {% endfor %}
                 </div>
-            </div>
-            <!-- specializations section -->
-            <div class="card rounded mb-3 mr-5 px-3">
-                <div class="card-body row">
-                    <p class="h5 text-secondary">
-                        <i class="fa fa-stethoscope text-danger"></i> &nbsp;
-                        <strong>Available Specilizations:</strong>
-                    </p>
-                    <ul>
-                        {% for special in hospital.specializaiton_set.all %}
-                            <li>{{special.name| title}}</li>
-                        {%endfor%}
-                    </ul> 
+                <div class="mt-3 text-secondary">
+                    {{review.user.first_name|title}}&nbsp;{{review.user.last_name|title}}
                 </div>
-            </div>
-            <!-- reviews section -->
-            {% if user.is_authenticated %}
-            <div class="card rounded mb-3 mr-5 px-3">
-                <div class="card-body row">
-                    <p class="h5 text-secondary">
-                        <i class="fa fa-star text-danger"></i>
-                        <strong>Rate the hospital:</strong> &nbsp;&nbsp;
-                        <div class="star-rating">
-                        <form action={% url 'rate_hospital' hospital.id %} id="rate_form" method="POST">
-                            {% csrf_token %}
-                            {% for i in '54321'%}
-                            <input id="star-{{i}}" type="radio" name="rate" value="{{i}}"
-                            {% if i|add:0 == user_rate %} checked {% endif %}/>
-                            <label for="star-{{i}}" title="{{i}} star">
-                              <i class="active fa fa-star" aria-hidden="true"></i>
-                            </label>
-                            {% endfor %}
-                            <input id="star-0" type="radio" name="rate" value="0" />
-                            <label for="star-0" title="0 star">
-                              <i class="active fa fa-star vs" aria-hidden="true"></i>
-                            </label>  
-                        </form> 
-                        </div>
-                    </p>
-                </div>
-            </div>
-            {% endif %}
-            <!-- patients reviews -->
-            {% if reviews %}
-            <div class="card rounded mb-3 mr-5 px-3">
-            <div class="card-body">
-                <span>
-                    <i class="fa fa-comments text-danger"></i><strong class="text-secondary"> Patients Reviews: </strong> 
-                </span>
-                <hr>
-                {% for review in reviews %}
-                <div>
-                    <div class="row">
-                        <div class="col-8 text-secondary">
-                        {% for every_rate in rate %}
-                        {% if every_rate.user_id == review.user.id %}
-                            {% for i in '12345' %}
-                                {% if i|add:0 <= every_rate.rate %}
-                                    <span class="fa fa-star text-warning"></span>
-                                {% else %}
-                                    <span class="fa fa-star"></span>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        {% endfor %}
-                        </div>
-                        <div class="col-8 text-secondary">
-                            {{review.user.first_name|title}}&nbsp;{{review.user.last_name|title}}
-                        </div>
-                        {%if user.id == review.user_id %}
-                        <div class=" col-4 text-center">
-                            <button class="btn btn-primary" id="update_btn"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-primary" id="save_btn" url = {% url "edit_review" review.id %} style="display:none" >Save</button>
-                            
-                            <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_review' review.id %}">
-                            <i class="fa fa-trash"></i></a>
-                        </div>
-                        {%endif%}
+                <div class="row">
+                    <div class="col-8 editContext mt-3">
+                    {{ review.context  }}
                     </div>
-                    <div class="editContext">{{ review.context  }}</div>
-                    <div class="text-secondary">{{ review.updated_at|default_if_none:review.created_at }}</div>    
+                    {% if user.id == review.user_id %}
+                    <div class="col-4 text-center mt-3">
+                        <button class="btn btn-primary update_btn"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-primary save_btn" url = {% url "edit_review" review.id %} style="display:none" >Save</button>
+                        <a type="button" class="btn btn-danger confirm-delete" href="{% url 'remove_review' review.id %}">
+                        <i class="fa fa-trash"></i></a>
+                    </div>
+                    {% endif %}
                 </div>
-                <hr/>
+                <span class="text-secondary">{{ review.updated_at|default_if_none:review.created_at }}</span>
+                <hr/>    
                 {% endfor %}
             </div>
+        </div>
+        {% endif %}
+
+        <!-- review form -->
+        {% if user.is_authenticated %}
+        <div class="card rounded mb-3 mr-5">
+            <div class="card-header text-white bg-dark">
+                <p class="h6"><strong>Leave your Review</strong></p>
             </div>
-            {% else %}
-            <br/><br/>
-            {%endif%}
-            <!-- review form -->
-            {% if user.is_authenticated %}
-             <div class="card rounded mb-3 mr-5">
-                <div class="card-header text-white bg-dark">
-                    <p class="h6"><strong>Leave your Review</strong></p>
+            <div class="card-body">
+                <form action={% url 'add_review' hospital.id %} method="POST">
+                    {% csrf_token %}
+                    <textarea name="context" rows="3" class="form-control" placeholder="Your Review..."></textarea>
+                    <button class="btn btn-info mt-2" type="submit">Add Review</button>
+                </form>
+            </div>
+        </div>
+        <div class="card rounded mb-3 mr-5" style="margin-top:5em; font-size: 20px;">
+            <div class="card-body row ml-2">
+                If you have any problem, please tell us and don't worry only admins read this
+            </div>
+            <hr>
+            <div class="card ml-4 mr-4 mb-4">
+                <div class="card-header text-white bg-danger">
+                    <p class="h6"><strong>Leave your complaint</strong></p>
                 </div>
                 <div class="card-body">
-                    <form action={% url 'add_review' hospital.id %} method="POST">
+                    <form action={% url 'add_complaint' hospital.id %} method="POST">
                         {% csrf_token %}
-                        <textarea name="context" rows="3" class="form-control" placeholder="Your Review..."></textarea>
-                        <button class="btn btn-info mt-2" type="submit">Add Review</button>
+                        <textarea name="context" rows="3" class="form-control"
+                            placeholder="Your Complain..."></textarea>
+                        <button class="btn btn-danger mt-2" type="submit">Send complain</button>
                     </form>
                 </div>
             </div>
-            <div class="card rounded mb-3 mr-5" style="margin-top:5em; font-size: 20px;">
-                <div class="card-body row ml-2">
-                    If you have any problem, please tell us and don't worry only admins read this
-                </div>
-                <hr>
-                <div class="card ml-4 mr-4 mb-4">
-                    <div class="card-header text-white bg-danger">
-                        <p class="h6"><strong>Leave your complaint</strong></p>
-                    </div>
-                    <div class="card-body">
-                        <form action={% url 'add_complaint' hospital.id %} method="POST">
-                            {% csrf_token %}
-                            <textarea name="context" rows="3" class="form-control" placeholder="Your Complain..."></textarea>
-                            <button class="btn btn-danger mt-2" type="submit">Send complain</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-    </div>        
+        </div>
+        {% endif %}
+    </div>
     <!-- books section -->
     <div class="col-3 ">
         <div class="card rounded px-3">
@@ -188,8 +189,9 @@
                 </p>
                 <p>Choose a specilization to book your appointment:</p>
                 {% for special in hospital.specializaiton_set.all %}
-                <a role="button" class="btn btn-dark mt-3 w-100" href="/hospitals/books/{{special.id}}">{{special.name| title}}</a> 
-            {%endfor%}
+                <a role="button" class="btn btn-dark mt-3 w-100"
+                    href="/hospitals/books/{{special.id}}">{{special.name| title}}</a>
+                {%endfor%}
             </div>
         </div>
     </div>
@@ -197,6 +199,6 @@
 {% endblock %}
 
 {% block footer %}
-    <script type="text/javascript" src="{% static '/javascript/hospitalBtns.js' %}"></script>
-    <script type="text/javascript" src="{% static '/javascript/rating.js' %}"></script>
+<script type="text/javascript" src="{% static '/javascript/hospitalBtns.js' %}"></script>
+<script type="text/javascript" src="{% static '/javascript/rating.js' %}"></script>
 {% endblock %}
