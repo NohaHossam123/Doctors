@@ -3,6 +3,7 @@
     
 {% block title %} Sign Up {% endblock %}
 {% block styles %}
+{% if both %}
     <link rel="stylesheet" href="{% static '/css/register.css' %}"/>
     <style>
         .card {
@@ -12,109 +13,129 @@
             background-color: #343a40;
             color: white;
         }
+        .card-footer {
+            background-color: #343a40;
+            color: white;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
     </style>
+{% else %}
+    <link rel="stylesheet" href="{% static '/css/doc.css' %}"/>
+{% endif %}
 {% endblock %}
+
 {% block content %}
-<div class="row mr-5">
-    <div class="col-4"></div>
-<div class="col-8">
-    <div class="row justify-content-end mr-5">
-    <div class="col-md-8">
-    <div class="card mt-4">
-    <header class="card-header">
-        <a href="/login" class="float-right btn btn-danger mt-1">Log in</a>
-        {% if not user.is_hospital %}
-        <h4 class="card-title mt-1"><strong>Sign up</strong></h4>
-        {% else %}
-        <h4 class="card-title mt-1" style="background-color:#4981b9;"><strong>Sign up</strong></h4>
-        {% endif %}
-    </header>
-    <article class="card-body">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            {{form.username}}
-        </div>
-        <div class="form-row">
-            <div class="col form-group">
-                {{form.first_name}}
-            </div> 
-            <div class="col form-group">
-                {{form.last_name}}
-            </div> 
-        </div>
-        <div class="form-group">
-            {{form.email}}
-        </div>
-        <div class="form-row">
-            <div class="col form-group">
-                {{form.password1}}
-            </div> 
-            <div class="col form-group">
-                {{form.password2}}
-            </div> 
-        </div>
-        <div class="form-row">
-            {% for radio in form.gender %}
-            <div class="col form-group">
-                <span style="margin-left:20px ;"> {{ radio.tag }}</span></span>{{ radio.choice_label }}</span>
+     {% if both %}
+     <div class="row mr-5">
+        <div class="col-4"></div>
+        <div class="col-8">
+        <div class="row justify-content-end mr-5">
+            <div class="col-md-8">
+    {% else %}
+    <div class="row ml-5">
+    {% endif %}
+    <div class="card mt-4 mb-5 rounded">
+            <header class="card-header">
+                <a href="/login" class="float-right btn btn-danger mt-1">Log in</a>
+                <h4 class="card-title mt-1"><strong>Sign up</strong></h4>
+                    </header>
+            <article class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{form.username}}
+                </div>
+                <div class="form-row">
+                    <div class="col form-group">
+                        {{form.first_name}}
+                    </div> 
+                    <div class="col form-group">
+                        {{form.last_name}}
+                    </div> 
+                </div>
+                <div class="form-group">
+                    {{form.email}}
+                </div>
+                <div class="form-row">
+                    <div class="col form-group">
+                        {{form.password1}}
+                    </div> 
+                    <div class="col form-group">
+                        {{form.password2}}
+                    </div> 
+                </div>
+                <div class="form-row">
+                    {% for radio in form.gender %}
+                    <div class="col form-group">
+                        <span style="margin-left:20px ;"> {{ radio.tag }}</span></span>{{ radio.choice_label }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label>Birth date</label>
+                    {{form.birthdate}}
+                </div>
+                <div class="form-row">
+                    <div class="col form-group">
+                        <label>City</label>
+                        {{ form.city}}
+                    </div> 
+                    <div class="col form-group">
+                        <label>Phone</label>
+                        {{form.phone}}
+                    </div> 
+                </div>
+
+                {% if both %} 
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark btn-block"> Register</button>
+                </div> 
+                {% else %}
+                <p id='doc_message'><small class='text-info'>This is your personal account information, you will be prompted next for your clinic information.</small></p>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-ligth btn-block"> Register</button>
+                </div>
+                {% endif %}
+            </form>
+                
+
+            {% if form.errors %}
+                <div class="form-group alert alert-danger" role="alert">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div>
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {%endif%}
+            </article> 
+
+    {% if both %}
+            <div class="card-footer p-0">
+                <div >
+                    <div class="form-group ml-4 mt-2 mb-0" id="doctor_div">
+                        <a href="/signup?q=doctor">Are You A Doctor ?</a>
+                    </div> 
+                    <div class="form-group ml-4 mt-0 mb-3" id="doctor_div">
+                        <a href="/signup?q=hospital">Are You Owner of A Hospital ?</a>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label>Birth date</label>
-            {{form.birthdate}}
-        </div>
-        <div class="form-row">
-            <div class="col form-group">
-                <label>City</label>
-                {{ form.city}}
-            </div> 
-            <div class="col form-group">
-                <label>Phone</label>
-                {{form.phone}}
-            </div> 
-        </div>
-
-        <div class="form-group ml-4 text-info" id="doctor_div">
-            <a href="/signup?q=doctor">Are You A Doctor ?</a>
         </div> 
-        <div class="form-group ml-4 text-info" id="doctor_div">
-            <a href="/signup?q=hospital">Are you The owner of the hospital ?</a>
-        </div>
-        {% if not user.is_doctor %} 
-        <div class="form-group">
-            <button type="submit" class="btn btn-dark btn-block"> Register</button>
-        </div> 
-        {% else %}
-        <div class="form-group">
-            <button type="submit" class="btn btn-danger btn-block"> Register</button>
-        </div>
-        {% endif %}
-    </form>
-
-    {% if form.errors %}
-    <div class="form-group alert alert-danger" role="alert">
-        {% for field in form %}
-        {% for error in field.errors %}
-            <div>
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-        {% endfor %}
     </div>
-      {%endif%}
+    </div>   
+    </div>
+    {% endif %}
+
+    </div>
 
 
-    </article> 
-    </div> 
-    </div>
-    </div>    
-    </div> 
-    </div>
-  
-    
-    
 
 {% endblock %}
 

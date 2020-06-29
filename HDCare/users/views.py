@@ -30,16 +30,28 @@ def unauthenticated_user(view_func):
 def signup(request):
     form = RegisterationForm()
     url_parameter = request.GET.get('q')
+    hospital = False
+    doctor = False
+    both = True
     if url_parameter:
         if url_parameter == 'hospital':
-            form.is_hospital = True
-            print(form.is_hospital)
+            hospital = True
+            both = False
+
         elif url_parameter == 'doctor':
-            form.is_doctor = True
+            Doctor = True
+            both = False
+
     if request.method == 'POST':
         form = RegisterationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            if url_parameter:
+                if url_parameter == 'hospital':
+                    user.is_hospital = True
+                elif url_parameter == 'doctor':
+                    user.is_doctor = True
+
             user.is_active = False
             user.save()
             token = get_random_string(length=40)
@@ -60,8 +72,14 @@ def signup(request):
                              Please check your email to activate acccount''')
             return redirect('home')
     else:
-        form = RegisterationForm()           
-    return render(request, 'register.html', {'form': form})
+        form = RegisterationForm()
+    context = {
+        'form': form,
+        'hospital': hospital,
+        'doctor': doctor,
+        'both': both
+        }           
+    return render(request, 'register.html', context)
 
 
 #login
@@ -77,7 +95,14 @@ def signin(request):
             if user.is_superuser or user.is_staff:
                 return HttpResponseRedirect(reverse('admin:index'))
             else:
-                return redirect('home')
+                if(request.user.is_doctor):
+                    return redirect('clinic')
+                if(request.user.is_hospital):
+                    return redirect('hospital')
+                else:
+                    return redirect('clinic')
+
+
         else:
             messages.info(request, 'Username or password is incorrect')
 

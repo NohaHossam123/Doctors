@@ -205,14 +205,21 @@ def add_specialize(request):
             speciality = Specializaiton.objects.filter(name__icontains= url_specialize)
         else:
             speciality = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
-        if request.method == 'POST':
+    except:
+        speciality = ''
+
+    if request.method == 'POST':
+        try: 
             name = request.POST.get('speialize')
             if name == '':
                 messages.error(request,"Specialization name can't be empty")
             else:
                 Specializaiton.objects.create(hospital_id=request.user.hospital.id,name=name)
-    except:
-        messages.error(request, "This specialization is already exist")
+        except:
+            if speciality == '':
+                messages.error(request, "You have to add your hospital info first")
+            else:    
+                messages.error(request, "This specialization is already exist")
 
     # ajax search
     if request.is_ajax():
@@ -248,32 +255,39 @@ def edit_specialize(request,id):
 @login_required
 def add_book(request):
     url_parameter = request.GET.get('q')
-    specializations = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
+    try:
+        specializations = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
 
-    if url_parameter:
-        books = Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
-    else:
-        books = Book.objects.filter(hospital_id= request.user.hospital.id, end_time__gte = date.today())
-
+        if url_parameter:
+            books = Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+        else:
+            books = Book.objects.filter(hospital_id= request.user.hospital.id, end_time__gte = date.today())
+    except:
+        books = ''
+        specializations = ''
+    
     if request.method == 'POST':
-        start = request.POST.get('start')
-        end = request.POST.get('end')
-        fees = request.POST.get('fees')
-        doctor = request.POST.get('doctor')
-        waiting_time = request.POST.get('wating')
-        speciality = request.POST.get('choose')
-        specializaiton = Specializaiton.objects.get(id=speciality)
-        start_time = datetime.strptime(start, "%Y-%m-%d %H:%M")
-        end_time = datetime.strptime(end, "%Y-%m-%d %H:%M")
-        Date = datetime.now().strftime("%Y-%m-%d %H:%M")
-        today = datetime.strptime(Date, "%Y-%m-%d %H:%M")
-        if end_time < start_time:
-            messages.error(request, "Error: End date should be after start date")
-        elif start_time < today or end_time < today:
-            messages.error(request, "Error: Start and end date cannot be before today")
-        else: 
-            Book.objects.create(hospital_id=request.user.hospital.id, start_time=start, end_time=end , fees=fees , doctor=doctor , waiting_time=waiting_time , specializaiton= specializaiton) 
-            messages.success(request, "Book added successfully")
+        try:
+            start = request.POST.get('start')
+            end = request.POST.get('end')
+            fees = request.POST.get('fees')
+            doctor = request.POST.get('doctor')
+            waiting_time = request.POST.get('wating')
+            speciality = request.POST.get('choose')
+            specializaiton = Specializaiton.objects.get(id=speciality)
+            start_time = datetime.strptime(start, "%Y-%m-%d %H:%M")
+            end_time = datetime.strptime(end, "%Y-%m-%d %H:%M")
+            Date = datetime.now().strftime("%Y-%m-%d %H:%M")
+            today = datetime.strptime(Date, "%Y-%m-%d %H:%M")
+            if end_time < start_time:
+                messages.error(request, "Error: End date should be after start date")
+            elif start_time < today or end_time < today:
+                messages.error(request, "Error: Start and end date cannot be before today")
+            else: 
+                Book.objects.create(hospital_id=request.user.hospital.id, start_time=start, end_time=end , fees=fees , doctor=doctor , waiting_time=waiting_time , specializaiton= specializaiton) 
+                messages.success(request, "Book added successfully")
+        except:
+            messages.error(request, "Error: You have to add the hospital information first")
         return redirect('addbook')
 
     if request.is_ajax():
@@ -299,17 +313,19 @@ def delete_book(request, id):
 def reservation_details(request):
     url_parameter = request.GET.get('q')
     url_reservation = request.GET.get('r')
-    ids = Book.objects.filter(hospital_id= request.user.hospital.id).values_list("id") 
-    count = User_Book.objects.filter(book__in = ids, book__start_time__gte=date.today())
-    
-    if url_parameter:
-        if url_parameter == 'up':
-            books = count
-    elif url_reservation:
-        books = User_Book.objects.filter(book__in = ids , book__start_time__icontains=url_reservation)   
-    else:
-        books = User_Book.objects.filter(book__in = ids ).order_by('book__start_time')
-
+    try:
+        ids = Book.objects.filter(hospital_id= request.user.hospital.id).values_list("id") 
+        count = User_Book.objects.filter(book__in = ids, book__start_time__gte=date.today())
+        if url_parameter:
+            if url_parameter == 'up':
+                books = count
+        elif url_reservation:
+            books = User_Book.objects.filter(book__in = ids , book__start_time__icontains=url_reservation)   
+        else:
+            books = User_Book.objects.filter(book__in = ids ).order_by('book__start_time')
+    except:
+        books = ''
+        count = ''
     #ajax search
     if request.is_ajax():
         html = render_to_string(

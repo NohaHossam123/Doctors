@@ -1,66 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static '/css/base.css' %}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{% static '/css/base.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    />
     <title>HDCare - {%block title %}{% endblock %}</title>
     {% block styles %}{% endblock %}
     <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'images/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
-            <strong> HDCare </strong>
-        </a>
-    
-        <div class='d-flex flex-row-reverse align-items-center '>
-            {% if user.is_authenticated %}
-                <div class='navigation mr-4 nav-item dropdown' >
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
-                        {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}
-                    </a>
-                    {% if not user.is_doctor or user.is_hospital %}
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/profile">My Profile</a>
-                        <a class="dropdown-item" href="/appointments">My Appointments</a>
-                        <a class="dropdown-item" href="/logout">Log out</a>
-                      </div>
-                    {% else %}
-                      <div class="dropdown-menu">
-                         <a class="dropdown-item" href="/profile">My Profile</a>
-                         <a class="dropdown-item" href="/logout">Log out</a>
-                       </div>
-                    {% endif %}
-                </div>
-            {% else %}
-                <div class='navigation mr-4'><a href="/signup">Register</a></div>
-                <div class='navigation mr-4'><a href="/login">Login</a></div>
-            {% endif %}
+      <a class="navbar-brand" href="/">
+        <img
+          src="{% static 'images/logo.png' %}"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt=""
+        />
+        <strong> HDCare </strong>
+      </a>
 
-            {% if not user.is_doctor or user.is_hospital %}
-                <div class='navigation mr-4'><a href="/doctors">Doctors</a></div>
-                <div class='navigation mr-4' ><a href="/hospitals">Hospitals</a></div>
-                <div class='navigation mr-4' ><a href="#aboutUs">About us</a></div>
-            {% endif %}
-
+      <div class="d-flex flex-row-reverse align-items-center">
+        {% if user.is_authenticated %}
+        <div class="navigation mr-4 nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <img
+              src="{% static 'images/user.png' %}"
+              width="25"
+              height="25"
+              class="d-inline-block align-top"
+              alt=""
+            />
+            {{ request.user.first_name|title |add:" "|add:request.user.last_name|title }}
+          </a>
+          {% if not user.is_doctor or user.is_hospital %}
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/profile">My Profile</a>
+            <a class="dropdown-item" href="/appointments">My Appointments</a>
+            <a class="dropdown-item" href="/logout">Log out</a>
+          </div>
+          {% else %}
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/profile">My Profile</a>
+            <a class="dropdown-item" href="/logout">Log out</a>
+          </div>
+          {% endif %}
         </div>
-         
+        {% else %}
+        <div class="navigation mr-4"><a href="/signup">Register</a></div>
+        <div class="navigation mr-4"><a href="/login">Login</a></div>
+        {% endif %} {% if not user.is_doctor or user.is_hospital %}
+        <div class="navigation mr-4"><a href="/doctors">Doctors</a></div>
+        <div class="navigation mr-4"><a href="/hospitals">Hospitals</a></div>
+        <div class="navigation mr-4"><a href="#aboutUs">About us</a></div>
+        {% endif %}
+      </div>
     </nav>
-</head>
-<body>
-{% block content %}
-{% endblock %}
-
-{% block footer %}
-{% endblock %} 
-
-</body>
+  </head>
+  <body>
+    {% block content %} {% endblock %} {% block footer %} {% endblock %}
+  </body>
 </html>

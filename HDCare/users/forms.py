@@ -11,13 +11,14 @@ class RegisterationForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'gender', 'phone', 'city', 'birthdate', 'is_doctor','is_hospital']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'gender', 'phone', 'city', 'birthdate']
         labels = {
             'first_name': 'First Name',
             'last_name': 'Last Name',
             'email': 'Email',
             'birthdate': 'Birth Date',
         }
+
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name*'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control' , 'placeholder': 'Last Name*'}),

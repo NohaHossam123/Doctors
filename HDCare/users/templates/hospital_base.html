@@ -1,112 +1,132 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static '/css/doc_base.css' %}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{% static '/css/doc_base.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"
+      integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+      integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
+      crossorigin="anonymous"
+    ></script>
 
- 
     <title>HDCare - {%block title %}{% endblock %}</title>
     {% block styles %}{% endblock %}
 
     <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'images/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
-            <strong> HDCare </strong>
-        </a>
-        <div class='d-flex flex-row-reverse align-items-center '>
-            {% if user.is_authenticated %}
-                <div class='navigation mr-4' ><a href="/logout">Log out</a></div>
-                <div class='navigation mr-4' >
-                    <img src="{% static 'images/user.png' %}" width="25" height="25" class="d-inline-block align-top" alt="">
-                    <a href="/profile"> {{ request.user.first_name|title |add:" "|add:request.user.last_name|title  }}</a>
-                </div>
-            {% else %}
-                <div class='navigation mr-4'><a href="/signup">Register</a></div>
-                <div class='navigation mr-4'><a href="/login">Login</a></div>
-            {% endif %}
-
+      <a class="navbar-brand" href="/">
+        <img
+          src="{% static 'images/logo.png' %}"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt=""
+        />
+        <strong> HDCare </strong>
+      </a>
+      <div class="d-flex flex-row-reverse align-items-center">
+        {% if user.is_authenticated %}
+        <div class="navigation mr-4"><a href="/logout">Log out</a></div>
+        <div class="navigation mr-4">
+          <img
+            src="{% static 'images/user.png' %}"
+            width="25"
+            height="25"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <a href="/profile">
+            {{ request.user.first_name|title |add:" "|add:request.user.last_name|title }}</a
+          >
         </div>
-         
+        {% else %}
+        <div class="navigation mr-4"><a href="/signup">Register</a></div>
+        <div class="navigation mr-4"><a href="/login">Login</a></div>
+        {% endif %}
+      </div>
     </nav>
-</head>
-<body>
-
-
+  </head>
+  <body>
     <div class="d-flex">
-        
-        <!-- Sidebar -->
-        <div class="left mr-3">
-            <div class="item">
-                <span class="fa fa-th-large"></span>
-                Menu
-            </div>
-            <a href="/profile"> 
-            <div class="item active">
-                <span class="fa fa-user"></span>
-                Personal information
-            </div> 
-            </a>   
-
-            <a href="/hospitals/hospital"> 
-            <div class="item">
-                <span class="fa fa-heartbeat"></span>
-                Hospital information
-            </div>
-            </a>
-
-            <a href="/hospitals/addspecialization"> 
-                <div class="item">
-                    <span class="fa fa-stethoscope"></span>
-                    Specializations 
-                </div>
-            </a>
-
-            <a href="/hospitals/addbook">             
-            <div class="item">
-                <span class="fa fa-pencil-square"></span>
-                Add Books
-            </div> 
-            </a>
-
-            <a href="/hospitals/reservation">             
-            <div class="item">
-                <span class="fa fa-calendar"></span>
-                Reservations details
-            </div>
-            </a>
-
+      <!-- Sidebar -->
+      <div class="left mr-3">
+        <div class="item">
+          <span class="fa fa-th-large"></span>
+          Menu
         </div>
+        <a href="/profile">
+          <div class="item active">
+            <span class="fa fa-user"></span>
+            Personal information
+          </div>
+        </a>
 
-        <!-- Page Content -->
+        <a href="/hospitals/hospital">
+          <div class="item">
+            <span class="fa fa-heartbeat"></span>
+            Hospital information
+          </div>
+        </a>
+
+        <a href="/hospitals/addspecialization">
+          <div class="item">
+            <span class="fa fa-stethoscope"></span>
+            Specializations
+          </div>
+        </a>
+
+        <a href="/hospitals/addbook">
+          <div class="item">
+            <span class="fa fa-pencil-square"></span>
+            Add Books
+          </div>
+        </a>
+
+        <a href="/hospitals/reservation">
+          <div class="item">
+            <span class="fa fa-calendar"></span>
+            Reservations details
+          </div>
+        </a>
+      </div>
+
+      <!-- Page Content -->
       <div class="right align-items-center mt-3">
-
         <div>
-        {% block hospital %}
-        {% endblock %}
+          {% block hospital %} {% endblock %}
         </div>
-        
-      </div>             
-</div>
-                        
+      </div>
+    </div>
 
-
-
-
-{% block footer %}
-{% endblock %} 
-
-</body>
+    {% block footer %} {% endblock %}
+  </body>
 </html>

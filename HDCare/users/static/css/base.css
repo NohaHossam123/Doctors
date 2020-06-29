@@ -12,6 +12,7 @@
 
 .navigation {
     color: white;
+    position: sticky;
 }
 
 nav {
@@ -20,4 +21,8 @@ nav {
 
 .card {
     box-shadow: 0.5px 1px 1px 0.5px hsla(0, 0%, 60%, 0.253) !important;  
+}
+
+body{
+    margin-bottom: 0;
 }

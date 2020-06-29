@@ -236,26 +236,37 @@ def clinic_info(request):
 @login_required
 def add_book(request):
     url_parameter = request.GET.get('q')
-    if url_parameter:
-        books = Doctor_Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
-    else:
-        books = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id, end_time__gte = date.today()) 
+    books = ''
+    try:
+        if url_parameter:
+            books = Doctor_Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+        else:
+            books = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id, end_time__gte = date.today()) 
+    except:
+        books = ''
+
     if request.method == 'POST':
-        start = request.POST.get('start')
-        end = request.POST.get('end')
-        start_time = datetime.strptime(start, "%Y-%m-%d %H:%M")
-        end_time = datetime.strptime(end, "%Y-%m-%d %H:%M")
-        x = datetime.now().strftime("%Y-%m-%d %H:%M")
-        today = datetime.strptime(x, "%Y-%m-%d %H:%M")
+        try:
+            start = request.POST.get('start')
+            end = request.POST.get('end')
+            start_time = datetime.strptime(start, "%Y-%m-%d %H:%M")
+            end_time = datetime.strptime(end, "%Y-%m-%d %H:%M")
+            x = datetime.now().strftime("%Y-%m-%d %H:%M")
+            today = datetime.strptime(x, "%Y-%m-%d %H:%M")
 
-        if end_time < start_time:
-            messages.error(request, "Error: End date should be after start date")
-        elif start_time < today or end_time < today:
-            messages.error(request, "Error: Start and end date cannot be before today")
+            if end_time < start_time:
+                messages.error(request, "Error: End date should be after start date")
+            elif start_time < today or end_time < today:
+                messages.error(request, "Error: Start and end date cannot be before today")
 
-        else:     
-            Doctor_Book.objects.create(doctor_id=request.user.doctor.id, start_time=start, end_time=end) 
-            messages.success(request, "Book added successfully")
+            else:     
+                Doctor_Book.objects.create(doctor_id=request.user.doctor.id, start_time=start, end_time=end) 
+        
+                messages.success(request, "Book added successfully")
+        except:
+            messages.error(request, "Error: You have to add you clinc information first")
+
+
         return redirect('add_book')
 
     # ajax search 
@@ -281,17 +292,20 @@ def delete_book(request, id):
 def reservation_details(request):
     url_parameter = request.GET.get('q')
     url_reservation = request.GET.get('r')
-    ids = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id).values_list("id") 
-    count = UserBook.objects.filter(doctor_book__in = ids, doctor_book__start_time__gte=date.today())
-    
-    if url_parameter:
-        if url_parameter == 'up':
-            books = count
-    elif url_reservation:
-        books = UserBook.objects.filter(doctor_book__in = ids , doctor_book__start_time__icontains=url_reservation)
-    else:
-        books = UserBook.objects.filter(doctor_book__in = ids ).order_by('doctor_book__start_time')
+    try:
+        ids = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id).values_list("id") 
+        count = UserBook.objects.filter(doctor_book__in = ids, doctor_book__start_time__gte=date.today())
+        if url_parameter:
+            if url_parameter == 'up':
+                books = count
+        elif url_reservation:
+            books = UserBook.objects.filter(doctor_book__in = ids , doctor_book__start_time__icontains=url_reservation)
+        else:
+            books = UserBook.objects.filter(doctor_book__in = ids ).order_by('doctor_book__start_time')
 
+    except:
+        books = ''
+        count = ''
     #ajax search
     if request.is_ajax():
         html = render_to_string(
@@ -301,7 +315,7 @@ def reservation_details(request):
         data_dict = {"html_from_view": html}
         return JsonResponse(data=data_dict, safe=False)
     
-    return render(request, 'doctor_reservations.html',{'books': books, 'count': count})
+    return render(request, 'doctor_reservations.html',{'books': books, 'count': count })
 
 def urgent_book_redirect(request,id):
     user = get_user(request)

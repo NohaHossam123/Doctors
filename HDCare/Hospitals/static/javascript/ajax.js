@@ -27,6 +27,7 @@ let speciality_value = 'Specilizations';
 let city_value = 'City';
 
 
+
 let ajax_call = function (endpoint, request_parameters) {
     $.getJSON(endpoint, request_parameters)
         .done(response => {
