@@ -208,7 +208,7 @@ def add_specialize(request):
     url_specialize = request.GET.get('q')
     try:
         if url_specialize:
-            speciality = Specializaiton.objects.filter(name__icontains= url_specialize)
+            speciality = Specializaiton.objects.filter(name__icontains= url_specialize,hospital_id= request.user.hospital.id)
         else:
             speciality = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
     except:
@@ -270,7 +270,7 @@ def add_book(request):
         specializations = Specializaiton.objects.filter(hospital_id= request.user.hospital.id)
 
         if url_parameter:
-            books = Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+            books = Book.objects.filter((Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter)),hospital_id= request.user.hospital.id)
         else:
             books = Book.objects.filter(hospital_id= request.user.hospital.id, end_time__gte = date.today())
     except:

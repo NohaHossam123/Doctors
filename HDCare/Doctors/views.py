@@ -245,7 +245,7 @@ def add_book(request):
     books = ''
     try:
         if url_parameter:
-            books = Doctor_Book.objects.filter(Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter))
+            books = Doctor_Book.objects.filter((Q(start_time__icontains=url_parameter) |Q(end_time__icontains=url_parameter)),doctor_id= request.user.doctor.id)
         else:
             books = Doctor_Book.objects.filter(doctor_id= request.user.doctor.id, end_time__gte = date.today()) 
     except:
