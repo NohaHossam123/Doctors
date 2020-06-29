@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from django.utils.crypto import get_random_string
 from django.contrib.auth.forms import PasswordChangeForm
 from Doctors.models import *
@@ -115,7 +115,8 @@ def home(request):
 
 def activate_account(request, token):
     activate_user = get_object_or_404(Activation, token=token)
-    is_valid = (timezone.now() - activate_user.created_at) < datetime.timedelta(hours=24)
+    is_valid = (timezone.now() - activate_user.created_at) < timedelta(hours=24)
+    user = User.objects.get(pk=activate_user.id)
     if is_valid and not activate_user.is_used:
         activate_user.is_used = True
         activate_user.save()
@@ -128,7 +129,12 @@ def activate_account(request, token):
             messages.success(request, "Congrats, your account has been activated succssefully")
     else:
         messages.error(request, "Sorry, your activation is not valid OR may be used before,Please try again later")
-    return redirect("home")
+    if user.is_doctor:
+        return redirect ('clinic')
+    elif user.is_hospital:
+        return redirect('hospital')
+    else:
+        return redirect("home")
 
 #profile
 @login_required
