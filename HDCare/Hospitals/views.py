@@ -85,7 +85,7 @@ def hospital_books(request, id):
         user = get_user(request)
         all_books = user.user_book_set.all()
         all_books = [i.book_id for i in all_books]
-        books = Book.objects.filter(specializaiton_id= id, end_time__date__gte = date.today())
+        books = Book.objects.filter(specializaiton_id= id, end_time__gte = date.today())
     
     else:
         return redirect("signin")
@@ -298,7 +298,12 @@ def add_book(request):
                 Book.objects.create(hospital_id=request.user.hospital.id, start_time=start, end_time=end , fees=fees , doctor=doctor , waiting_time=waiting_time , specializaiton= specializaiton) 
                 messages.success(request, "Book added successfully")
         except:
-            messages.error(request, "Error: You have to add the hospital information first")
+            try:
+                if request.user.doctor.id:
+                    messages.error(request, "Error: Empty data... please try again")
+            except:
+                messages.error(request, "Error: You have to add the hospital information first")
+                
         return redirect('addbook')
 
     if request.is_ajax():

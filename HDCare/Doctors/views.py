@@ -140,7 +140,7 @@ def book_appointment(request,id):
         except:
             show_urgent = True
         book_info = Doctor_Book.objects.filter(
-            doctor_id=id, end_time__date__gte = date.today()
+            doctor_id=id, end_time__gte = date.today()
         )
         copoun = user.copoun.last()
         token = None
@@ -270,10 +270,13 @@ def add_book(request):
 
             else:     
                 Doctor_Book.objects.create(doctor_id=request.user.doctor.id, start_time=start, end_time=end) 
-        
                 messages.success(request, "Book added successfully")
         except:
-            messages.error(request, "Error: You have to add your clinc information first")
+            try:
+                if request.user.doctor.id:
+                    messages.error(request, "Error: Empty data... please try again")
+            except:
+                messages.error(request, "Error: You have to add your clinc information first")
 
 
         return redirect('add_book')

@@ -204,12 +204,12 @@ def password(request):
 @login_required
 def appointments(request):
     user = get_user(request)
-    doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__gte = date.today(), is_urgent=False)
-    hospital_book = User_Book.objects.filter(user=user, book__end_time__date__gte = date.today())
-    expired_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__lt = date.today())
-    expired_hospital_book = User_Book.objects.filter(user=user, book__end_time__date__lt = date.today())
-    urgent_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__gte = date.today(), is_urgent=True)
-    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book, 'expired_doctor_book': expired_doctor_book, 'expired_hospital_book': expired_hospital_book, 'urgent_doctor_book': urgent_doctor_book}
+    doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__gte = date.today(), is_urgent=False)
+    hospital_book = User_Book.objects.filter(user=user, book__end_time__gte = date.today())
+    expired_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__lt = date.today())
+    expired_hospital_book = User_Book.objects.filter(user=user, book__end_time__lt = date.today())
+    # urgent_doctor_book = UserBook.objects.filter(user=user, doctor_book__end_time__date__gte = date.today(), is_urgent=True)
+    context = {'doctor_book': doctor_book, 'hospital_book': hospital_book, 'expired_doctor_book': expired_doctor_book, 'expired_hospital_book': expired_hospital_book}
 
     return render(request, "appointments.html", context)
 
@@ -261,7 +261,10 @@ def confirm(request):
         base_variable = 'doc_base.html'
     if request.user.is_hospital:
         base_variable = 'hospital_base.html'
-    return render(request, 'confirmation.html', {'base_variable': base_variable})
+    if request.user.is_confirmed == 2:
+        return redirect('profile')
+    else:
+        return render(request, 'confirmation.html', {'base_variable': base_variable})
 
 @login_required
 def waiting(request):
@@ -270,4 +273,7 @@ def waiting(request):
     if request.user.is_hospital:
         base_variable = 'hospital_base.html'
     data = Confirmation.objects.filter(user_id= request.user.id)
-    return render(request,'waiting.html', {'data': data , 'base_variable': base_variable})
+    if request.user.is_confirmed == 2:
+        return redirect('profile')
+    else:
+        return render(request,'waiting.html', {'data': data , 'base_variable': base_variable})
