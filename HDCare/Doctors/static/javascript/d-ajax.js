@@ -150,7 +150,7 @@ $("body").on('change','#title',function () {
         clearTimeout(scheduled_function)
     }
 
-    scheduled_function = setTimeout(ajax_reservation, delay_by_in_ms, endpoint, request_parameters)
+    scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
 
 
 }); 
