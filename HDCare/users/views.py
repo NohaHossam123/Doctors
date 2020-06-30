@@ -104,7 +104,7 @@ def signin(request):
                 elif user.is_hospital and user.is_confirmed == 0 or user.is_doctor and user.is_confirmed == 0:
                     return redirect('confirm')
                 else:    
-                    return render(request,'home')
+                    return render(request,'home.html')
 
         else:
             messages.info(request, 'Username or password is incorrect')

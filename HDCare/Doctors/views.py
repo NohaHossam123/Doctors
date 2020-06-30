@@ -118,7 +118,7 @@ def add_complain(request,id):
             user_id = request.user.id
             contain = request.POST.get('contain')
             Complain.objects.create(contain= contain,user_id = user_id, doctor_id = id)
-            messages.info(request,"We have received your complain")
+            messages.info(request,"We have received your complaint")
     return redirect('doctor', id)
 
 def book_appointment(request,id):
@@ -129,13 +129,16 @@ def book_appointment(request,id):
         books = [i.doctor_book_id for i in books]
         books_count = len(books)
         doctor_books = Doctor_Book.objects.filter(end_time__date=date.today())
-        book_urgent = UserBook.objects.filter(
-            doctor_book=doctor_books[0].id,created_at__date=date.today(), is_urgent=True
-        )
-        if book_urgent:
-            show_urgent = False
-        else:
-            show_urgent = True  
+        try:
+            book_urgent = UserBook.objects.filter(
+                doctor_book=doctor_books[0].id,created_at__date=date.today(), is_urgent=True
+            )
+            if book_urgent:
+                show_urgent = False
+            else:
+                show_urgent = True  
+        except:
+            show_urgent = True
         book_info = Doctor_Book.objects.filter(
             doctor_id=id, end_time__date__gte = date.today()
         )
@@ -143,7 +146,7 @@ def book_appointment(request,id):
         token = None
         if copoun:
             token = copoun.token
-        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token, 'copoun': copoun, 'show_urgent': show_urgent}
+        context = {'book_info': book_info, "books": books, 'books_count': books_count, 'token': token, 'copoun': copoun}
 
         return render(request, 'book.html', context)
     else:
@@ -160,9 +163,9 @@ def book_redirect(request,id):
     if get_count_book_o < 10:
         UserBook.objects.create(user=user, doctor_book_id=id)
         # book_id = Doctor_Book.objects.get(id=id)
-        messages.info(request,"your book has been placed susccessfully")
+        messages.info(request,"Your book has been placed successfully")
     else:
-        messages.info(request,"sorry this appointment is fully booked")
+        messages.info(request,"Sorry this appointment is fully booked")
 
     # return redirect('appointment', book_id.doctor_id)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -225,7 +228,7 @@ def clinic_info(request):
                 doctor = form.save(commit=False)
                 doctor.user = request.user
                 doctor.save()
-                messages.success(request, "Your clinic information updated successfully")
+                messages.success(request, "Your clinic information saved successfully")
                 redirect('clinic')
 
     if user.is_doctor and user.is_confirmed == 2:
@@ -270,7 +273,7 @@ def add_book(request):
         
                 messages.success(request, "Book added successfully")
         except:
-            messages.error(request, "Error: You have to add you clinc information first")
+            messages.error(request, "Error: You have to add your clinc information first")
 
 
         return redirect('add_book')
@@ -339,15 +342,17 @@ def reservation_details(request):
 
 
 
-def urgent_book_redirect(request,id):
-    user = get_user(request)
-    doctor = Doctor.objects.filter(id=id)
-    print(datetime.datetime.now())
-    doctor_books = Doctor_Book.objects.filter(end_time__gt=datetime.datetime.now(), end_time__date=date.today())
-    print(doctor_books)
-    UserBook.objects.create(user=user, doctor_book=doctor_books[0], is_urgent=True)
-    messages.info(request,"your urgent book has been placed susccessfully")
-    # return redirect("appointments")
+# def urgent_book_redirect(request,id):
+#     # user = get_user(request)
+#     # doctor = Doctor.objects.filter(id=id)
+#     # try:
+#     #     doctor_books = Doctor_Book.objects.filter(end_time__gt=datetime.now(), end_time__date=date.today())
+#     #     print(doctor_books)
+#     #     UserBook.objects.create(user=user, doctor_book=doctor_books[0], is_urgent=True)
+#     #     messages.info(request,"your urgent book has been placed susccessfully")
+#     # # return redirect("appointments")
+#     # except:
+#     #     messages(request,"sorry")
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         

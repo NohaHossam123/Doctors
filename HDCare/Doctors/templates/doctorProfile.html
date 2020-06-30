@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and not user.is_doctor %}
             <div class="row">
                 <div class="card rounded m-4 px-3 col-md">
                     <div class="card-body row">
@@ -136,13 +136,17 @@
                         <form action={% url 'add_comment' doctor.id %} method="POST" class="form-inline">
                             {% csrf_token %}
                             <textarea name="context" rows="3"  cols="150" class="form-control m-3" placeholder="Your Comment..."></textarea>
+                            {% if not user.is_doctor %}
                             <button class="btn btn-info m-3" type="submit">Add comment</button>
+                            {% else %}
+                            <button disabled class="btn btn-info m-3" type="submit">Add comment</button>
+                            {% endif %}
                         </form>
                     </div>
                 </div>
                 <div class="card rounded" style="margin-top:4em;font-size: 20px;">
                         <div class="card-body row ml-2">
-                            If you have any problem, please tell us and don't worry only admins read this
+                            If you have any problem, please tell us and don't worry only admins read this.
                         </div>
                         <hr>
                         <div class="card ml-4 mr-4 mb-4">
@@ -153,7 +157,11 @@
                                 <form action={% url 'add_complain' doctor.id %} method="POST" class="form-inline">
                                     {% csrf_token %}
                                     <textarea name="contain" rows="3"  cols="150" class="form-control m-3" placeholder="Your Complain..."></textarea>
-                                <button class="btn btn-danger mt-3" type="submit">Send complain</button>
+                                    {% if not user.is_doctor %}
+                                    <button class="btn btn-danger mt-3" type="submit">Send complain</button>
+                                    {% else %}
+                                    <button disabled class="btn btn-danger mt-3" type="submit">Send complain</button>
+                                    {% endif %}
                             </form>
                             </div>
                         </div>
@@ -183,7 +191,11 @@
                 </div>
                 <hr>
                 <div class="card-body row" style="display: flex; flex-direction: column;align-items: center;">
+                    {% if not user.is_doctor %}
                     <a href="/doctors/doctor/{{ doctor.id }}/appointment" class="btn btn-primary btn-block">Book an appointment</a>
+                    {% else %}
+                    <a href="/doctors/doctor/{{ doctor.id }}/appointment" class="btn btn-primary btn-block" style="display:none">Book an appointment</a>
+                    {% endif %}
                     <p style="color: red;">Hint: you can't cancel appointment after 24 hours</p>
                 </div>
             </div>

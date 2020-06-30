@@ -145,7 +145,7 @@ def add_complaint(request,id):
             user_id = request.user.id
             context = request.POST.get('context')
             Complaint.objects.create(context= context, user_id = user_id, hosptal_id = id)
-            messages.info(request,"We have received your complain")
+            messages.info(request,"We have received your complaint")
     return redirect('hospital', id)
 
 

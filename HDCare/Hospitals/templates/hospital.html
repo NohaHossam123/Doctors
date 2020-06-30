@@ -71,7 +71,7 @@
             </div>
         </div>
         <!-- reviews section -->
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and not user.is_hospital %}
         <div class="card rounded mb-3 mr-5 px-3">
             <div class="card-body row">
                 <p class="h5 text-secondary">
@@ -154,13 +154,17 @@
                 <form action={% url 'add_review' hospital.id %} method="POST">
                     {% csrf_token %}
                     <textarea name="context" rows="3" class="form-control" placeholder="Your Review..."></textarea>
+                    {% if not user.is_hospital %}
                     <button class="btn btn-info mt-2" type="submit">Add Review</button>
+                    {% else %}
+                    <button disabled class="btn btn-info mt-2" type="submit">Add Review</button>
+                    {% endif %}
                 </form>
             </div>
         </div>
         <div class="card rounded mb-3 mr-5" style="margin-top:5em; font-size: 20px;">
             <div class="card-body row ml-2">
-                If you have any problem, please tell us and don't worry only admins read this
+                If you have any problem, please tell us and don't worry only admins read this.
             </div>
             <hr>
             <div class="card ml-4 mr-4 mb-4">
@@ -172,7 +176,11 @@
                         {% csrf_token %}
                         <textarea name="context" rows="3" class="form-control"
                             placeholder="Your Complain..."></textarea>
+                        {% if not user.is_hospital %}
                         <button class="btn btn-danger mt-2" type="submit">Send complain</button>
+                        {% else %}
+                        <button disabled class="btn btn-danger mt-2" type="submit">Send complain</button>
+                        {% endif %}
                     </form>
                 </div>
             </div>
@@ -188,10 +196,15 @@
                     <strong>Book An Appointment:</strong>
                 </p>
                 <p>Choose a specilization to book your appointment:</p>
+                {% if not user.is_hospital %}
                 {% for special in hospital.specializaiton_set.all %}
                 <a role="button" class="btn btn-dark mt-3 w-100"
                     href="/hospitals/books/{{special.id}}">{{special.name| title}}</a>
                 {%endfor%}
+                {% else %}
+                <a role="button" class="btn btn-dark mt-3 w-100" style="display: none;"
+                href="/hospitals/books/{{special.id}}">{{special.name| title}}</a>
+                {% endif %}
             </div>
         </div>
     </div>
